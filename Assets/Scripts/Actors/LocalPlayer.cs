@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : PlaneController
+public class LocalPlayer : PlaneController
 {
     private bool allowMovement = false;
 

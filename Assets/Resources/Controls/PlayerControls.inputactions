@@ -175,6 +175,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6260f73e-2a24-4471-b3f1-86c0f67095d4",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Middle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "69c0c516-4147-4c9c-bf89-4f64af7a2080",
                     "path": "<HID::Thrustmaster, Inc. USB Game Controllers>/button4",
                     "interactions": "",
