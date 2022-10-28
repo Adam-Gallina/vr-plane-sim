@@ -14,6 +14,7 @@ public class PlaneSimNetworkManager : NetworkManager
     [Header("Prefabs")]
     [SerializeField] private NetworkLobbyPlayer lobbyPlayerPrefab;
     [SerializeField] private NetworkGamePlayer gamePlayerPrefab;
+    [SerializeField] private GameObject avatarSpawnerPrefab;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
@@ -84,7 +85,7 @@ public class PlaneSimNetworkManager : NetworkManager
             {
                 NetworkConnection conn = LobbyPlayers[i].connectionToClient;
                 NetworkGamePlayer p = Instantiate(gamePlayerPrefab);
-                //p.SetDisplayName(LobbyPlayers[i].DisplayName);
+                p.SetDisplayName(LobbyPlayers[i].DisplayName);
 
                 NetworkServer.Destroy(conn.identity.gameObject);
 
@@ -99,8 +100,8 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         switch (sceneName) {
             case Constants.GameSceneName:
-                //GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
-                //NetworkServer.Spawn(playerSpawnSystemInstance);
+                GameObject playerSpawnSystemInstance = Instantiate(avatarSpawnerPrefab);
+                NetworkServer.Spawn(playerSpawnSystemInstance);
                 break;
         }
     }
@@ -108,7 +109,7 @@ public class PlaneSimNetworkManager : NetworkManager
     public override void OnServerReady(NetworkConnection conn)
     {
         base.OnServerReady(conn);
-
+    
         OnServerReadied?.Invoke(conn);
     }
     #endregion

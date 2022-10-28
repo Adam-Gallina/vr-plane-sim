@@ -84,6 +84,6 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     {
         if (Network.LobbyPlayers[0].connectionToClient != connectionToClient) { return; }
 
-        Debug.Log("Start");
+        Network.StartGame();
     }
 }
