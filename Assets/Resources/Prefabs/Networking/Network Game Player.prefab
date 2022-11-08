@@ -63,4 +63,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  avatarPrefab: {fileID: 1265399083062415739, guid: 89f48bd146147fd45b4be76b9115135b, type: 3}
+  avatarPrefab: {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}

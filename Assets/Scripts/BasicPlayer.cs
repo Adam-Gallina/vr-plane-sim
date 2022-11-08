@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class BasicPlayer : NetworkBehaviour
+public class BasicPlayer : NetworkHealthBase
 {
     [SerializeField] private Transform camCenter;
     [SerializeField] private float speed = 10;
 
     private PlayerControls inp;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         inp = new PlayerControls();
+    }
+
+    public override void OnStartClient()
+    {
+        Debug.Log("Client Start, " + hasAuthority);
     }
 
     private void Start()
     {
+        Debug.Log("Start");
         if (hasAuthority)
         {
             Camera.main.transform.SetParent(camCenter, false);

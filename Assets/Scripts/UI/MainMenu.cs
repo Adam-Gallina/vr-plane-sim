@@ -20,6 +20,8 @@ public class MainMenu : MonoBehaviour
     {
         startPagePanel.SetActive(true);
         lobbyPanel.SetActive(false);
+
+        SetPlayerName(nameInputField.text);
     }
 
     private void OnEnable()
@@ -42,8 +44,8 @@ public class MainMenu : MonoBehaviour
 
     public void UpdateButtons()
     {
-        hostButton.interactable = !string.IsNullOrEmpty(name);
-        joinButton.interactable = !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(ipAddressField.text);
+        hostButton.interactable = !string.IsNullOrEmpty(DisplayName);
+        joinButton.interactable = !string.IsNullOrEmpty(DisplayName) && !string.IsNullOrEmpty(ipAddressField.text);
     }
 
     #region Buttons

@@ -2,22 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
-public class LocalPlayer : PlaneController
+public class NetworkPlayerPlane : NetworkPlaneController
 {
-    private bool allowMovement = false;
-
-    [Header("Camera")]
-    [SerializeField] protected Transform cam;
-    [SerializeField] private float speedH = 2.0f;
-    [SerializeField] private float speedV = 2.0f;
-    private float yaw = 0.0f;
-    private float pitch = 0.0f;
+    [SerializeField] private Transform camTarget;
 
     [Header("Combat")]
     [SerializeField] private float fireSpeed;
     private float nextShot;
     private bool firing = false;
+
+    private bool allowMovement = false;
     [SerializeField] private float maxThrustSpeed;
 
     private PlayerControls inp;
@@ -28,6 +24,14 @@ public class LocalPlayer : PlaneController
         base.Awake();
 
         inp = new PlayerControls();
+    }
+
+    public override void OnStartClient()
+    {
+        if (hasAuthority)
+        {
+            CameraController.Instance.SetTarget(camTarget);
+        }
     }
 
     private void OnEnable()
@@ -47,8 +51,8 @@ public class LocalPlayer : PlaneController
         inp.Player.Disable();
 
         inp.Player.Fire.started -= OnStartFire;
-
         inp.Player.Fire.canceled -= OnStopFire;
+
         inp.Player.Middle.started -= ToggleMovement;
 
         //pc.Player.Right.started -= Press4;
@@ -56,6 +60,9 @@ public class LocalPlayer : PlaneController
 
     private void Update()
     {
+        if (!hasAuthority)
+            return;
+
         float speedMod = (-inp.Player.Speed.ReadValue<float>() + 1) / 2; // (1, -1) -> (0, 1)
         float s = thrustSpeed + (maxThrustSpeed - thrustSpeed) * speedMod;
 
@@ -94,19 +101,6 @@ public class LocalPlayer : PlaneController
         }
     }
 
-    private void UpdateCamera()
-    {
-        yaw += speedH * Input.GetAxis("Mouse X");
-        pitch -= speedV * Input.GetAxis("Mouse Y");
-
-        if (pitch > 90)
-            pitch = 90;
-        else if (pitch < -90)
-            pitch = -90;
-
-        cam.localEulerAngles = new Vector3(pitch, yaw, 0.0f);
-    }
-
     #region Input Callbacks
     private void OnStartFire(InputAction.CallbackContext obj)
     {
@@ -123,38 +117,4 @@ public class LocalPlayer : PlaneController
         allowMovement = !allowMovement;
     }
     #endregion
-}
-
-class FixInput
-{
-    private float threshold = 0.5f;
-    private Vector2 lastDir = new Vector2();
-
-    private float VerifyInput(float value, float lastVal)
-    {
-        if (value != 0 || Mathf.Abs(lastVal) < threshold)
-            return value;
-
-        return Mathf.Sign(lastVal);
-    }
-
-    public Vector2 GetCorrectedVec2(Vector2 dir)
-    {
-        if (dir.x > 0)
-            dir.x = 1 - dir.x;
-        else if (dir.x < 0)
-            dir.x = -1 - dir.x;
-
-        if (dir.y > 0)
-            dir.y = 1 - dir.y;
-        else if (dir.y < 0)
-            dir.y = -1 - dir.y;
-
-        dir = new Vector2(VerifyInput(dir.x, lastDir.x),
-                          VerifyInput(dir.y, lastDir.y));
-
-        lastDir = dir;
-
-        return dir;
-    }
 }
