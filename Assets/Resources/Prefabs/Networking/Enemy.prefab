@@ -67,7 +67,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: bb734adce8dd5b645bbab2f958419392
   hasSpawned: 0
 --- !u!114 &8294273329988570477
 MonoBehaviour:
@@ -84,7 +84,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   maxHealth: 10
-  thrustSpeed: 0
+  thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
   bulletSource: []
@@ -95,6 +95,11 @@ MonoBehaviour:
   propellerSpeed: 1000
   joystick: {fileID: 0}
   joystickMod: 0
+  turnSteerMod: 10
+  altSteerMod: 10
+  minDirTime: 1
+  maxDirTime: 3
+  maxHeight: 50
   deathPrefab: {fileID: 7533953259834077275, guid: 1ce014fb91563284dbb1132fea9701e3, type: 3}
 --- !u!114 &8294273329988570476
 MonoBehaviour:

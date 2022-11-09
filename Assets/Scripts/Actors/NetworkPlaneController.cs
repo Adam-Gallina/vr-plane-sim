@@ -43,9 +43,9 @@ public class NetworkPlaneController : NetworkHealthBase
         UpdateModel();
     }
 
-    protected void Steer(Vector2 dir, float speed)
+    protected void Steer(Vector2 dir, float speed, bool ignoreAuthority=false)
     {
-        if (!hasAuthority)
+        if (!hasAuthority && !ignoreAuthority)
             return;
 
         rb.velocity = transform.forward * speed;
@@ -57,9 +57,9 @@ public class NetworkPlaneController : NetworkHealthBase
 
     }
 
-    protected void UpdateModel()
+    protected void UpdateModel(bool ignoreAuthority=false)
     {
-        if (!hasAuthority)
+        if (!hasAuthority && !ignoreAuthority)
             return;
 
         float speed = rb.angularVelocity.y;

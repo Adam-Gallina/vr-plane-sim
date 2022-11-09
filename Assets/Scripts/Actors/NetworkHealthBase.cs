@@ -7,7 +7,7 @@ public class NetworkHealthBase : NetworkBehaviour
 {
     [Header("Health")]
     [SerializeField] protected float maxHealth;
-    [SyncVar(hook = nameof(HandleHealthChanged))]
+    [SyncVar]//(hook = nameof(HandleHealthChanged))]
     protected float currHealth;
     private bool dead = false;
 
@@ -16,14 +16,7 @@ public class NetworkHealthBase : NetworkBehaviour
         currHealth = maxHealth;
     }
 
-    public void HandleHealthChanged(float oldValue, float newValue)
-    {
-        Debug.Log($"{name} {oldValue} -> {newValue}");
-        if (newValue <= 0)
-        {
-            OnDeath();
-        }
-    }
+    public void HandleHealthChanged(float oldValue, float newValue) => Debug.Log($"{name} {oldValue} -> {newValue}");
 
     [ServerCallback]
     public virtual void Damage(float damage)
@@ -44,21 +37,7 @@ public class NetworkHealthBase : NetworkBehaviour
     {
         RpcOnDeath();
         dead = true;
-        //NetworkServer.Destroy(gameObject);
-        //CmdOnDeath();
     }
-
-    protected virtual void OnDeath()
-    {
-
-    }
-
-    /*[Command(requiresAuthority = false)]
-    //[Command]
-    protected virtual void CmdOnDeath()
-    {
-        RpcOnDeath();
-    }*/
 
     [ClientRpc]
     protected virtual void RpcOnDeath()

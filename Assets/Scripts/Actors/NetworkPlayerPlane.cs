@@ -117,4 +117,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
         allowMovement = !allowMovement;
     }
     #endregion
+
+    protected override void RpcOnDeath()
+    {
+        Debug.Log("Boom");
+    }
 }

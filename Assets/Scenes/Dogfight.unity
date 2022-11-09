@@ -637,8 +637,9 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   enemyPrefab: {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
-  spawnCount: 4
-  spawnDir: {x: -10, y: 0, z: 0}
+  spawnCount: 50
+  minSpawnRadius: 250
+  maxSpawnRadius: 500
 --- !u!4 &1062277258
 Transform:
   m_ObjectHideFlags: 0
@@ -647,7 +648,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1062277256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 85, z: 30}
+  m_LocalPosition: {x: 0, y: 125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

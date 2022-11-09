@@ -9,17 +9,13 @@ public class NetworkEnemySpawner : NetworkBehaviour
 
     public GameObject enemyPrefab;
     public int spawnCount;
-    public Vector3 spawnDir;
-    //public float minSpawnRadius;
-    //public float maxSpawnRadius;
+    public float minSpawnRadius;
+    public float maxSpawnRadius;
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        for (int i = 0; i < spawnCount; i++)
-            Gizmos.DrawWireSphere(transform.position + spawnDir * i, 2);
-
-        //Gizmos.DrawWireSphere(transform.position, maxSpawnRadius);
+        Gizmos.DrawWireSphere(transform.position, maxSpawnRadius);
     }
 
     private void Awake()
@@ -31,23 +27,19 @@ public class NetworkEnemySpawner : NetworkBehaviour
     {
         base.OnStartServer();
 
-        for (int i = 0; i < spawnCount; i++)
-            SpawnEnemy(transform.position + spawnDir * i);
-
-        /*float da = 360f / spawnCount;
+        float da = 360f / spawnCount;
         for (int i = 0; i < spawnCount; i++)
         {
             float ang = da * i;
             transform.localEulerAngles = new Vector3(0, ang, 0);
             SpawnEnemy(transform.position + transform.forward * Random.Range(minSpawnRadius, maxSpawnRadius));
-        }*/
+        }
     }
     
     [Server]
     private void SpawnEnemy(Vector3 pos)
     {
-        GameObject o = Instantiate(enemyPrefab, pos, Quaternion.identity);
+        GameObject o = Instantiate(enemyPrefab, pos, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
         NetworkServer.Spawn(o);
-        //o.transform.localEulerAngles = new Vector3(0, Random.Range(0f, 360f), 0);
     }
 }
