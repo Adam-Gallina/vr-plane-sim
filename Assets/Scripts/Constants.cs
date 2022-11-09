@@ -9,4 +9,6 @@ public class Constants
     public const int GameScene = 1;
     //public const string GameSceneName = "Test Game";
     public const string GameSceneName = "Dogfight";
+
+    public enum CamType { Desktop, VR }
 }

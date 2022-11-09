@@ -9,6 +9,8 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     [SyncVar]
     private string displayName = "Loading...";
+    [SyncVar]
+    [HideInInspector] public Constants.CamType CamType;
 
     private PlaneSimNetworkManager network;
     private PlaneSimNetworkManager Network
@@ -38,5 +40,9 @@ public class NetworkGamePlayer : NetworkBehaviour
         this.displayName = displayName;
     }
 
-    
+    [Server]
+    public void SetCamType(Constants.CamType camType)
+    {
+        CamType = camType;
+    }
 }

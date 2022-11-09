@@ -1791,7 +1791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1336527140
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2397,6 +2397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerList: {fileID: 86269169}
+  camType: {fileID: 1336527141}
   startGameButton: {fileID: 1047614735}
 --- !u!1 &1633699040
 GameObject:

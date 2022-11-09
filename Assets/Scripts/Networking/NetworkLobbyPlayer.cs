@@ -14,6 +14,9 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     [SyncVar(hook = nameof(HandleReadyStatusChanged))]
     public bool IsReady = false;
 
+    [SyncVar]
+    public int CamType;
+
     private bool isLeader;
     public bool IsLeader
     {
@@ -46,6 +49,8 @@ public class NetworkLobbyPlayer : NetworkBehaviour
         Network.LobbyPlayers.Add(this);
 
         LobbyUI.Instance.AddPlayer(this);
+
+        LobbyUI.Instance.camType.onValueChanged.AddListener((int val) => CmdSetCamType(val));
     }
 
     public override void OnStopClient()
@@ -53,6 +58,8 @@ public class NetworkLobbyPlayer : NetworkBehaviour
         Network.LobbyPlayers.Remove(this);
 
         LobbyUI.Instance.RemovePlayer(this);
+
+        LobbyUI.Instance.camType.onValueChanged.RemoveAllListeners();
     }
 
     public void HandleReadyStatusChanged(bool oldValue, bool newValue) => LobbyUI.Instance.UpdateDisplay();
@@ -85,5 +92,11 @@ public class NetworkLobbyPlayer : NetworkBehaviour
         if (Network.LobbyPlayers[0].connectionToClient != connectionToClient) { return; }
 
         Network.StartGame();
+    }
+
+    [Command]
+    private void CmdSetCamType(int camType)
+    {
+        CamType = camType;
     }
 }

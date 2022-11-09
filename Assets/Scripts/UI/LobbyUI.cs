@@ -10,6 +10,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private Transform playerList;
     private List<Text> playerNameTexts = new List<Text>();
     private List<Text> playerReadyTexts = new List<Text>();
+    public Dropdown camType;
     public Button startGameButton;
 
     private void Awake()

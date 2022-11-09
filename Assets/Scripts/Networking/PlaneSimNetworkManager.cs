@@ -86,6 +86,7 @@ public class PlaneSimNetworkManager : NetworkManager
                 NetworkConnection conn = LobbyPlayers[i].connectionToClient;
                 NetworkGamePlayer p = Instantiate(gamePlayerPrefab);
                 p.SetDisplayName(LobbyPlayers[i].DisplayName);
+                p.SetCamType((Constants.CamType)LobbyPlayers[i].CamType);
 
                 NetworkServer.Destroy(conn.identity.gameObject);
 
