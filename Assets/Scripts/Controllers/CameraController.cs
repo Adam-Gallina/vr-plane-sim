@@ -14,7 +14,5 @@ public class CameraController : MonoBehaviour
     public void SetTarget(Transform target)
     {
         transform.SetParent(target, false);
-
-        Debug.Log("Watching " + target);
     }
 }

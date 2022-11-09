@@ -22,9 +22,9 @@ public class NetworkBullet : NetworkBehaviour
     {
         if (((1 << other.gameObject.layer) & targetLayer.value) > 0)
         {
-            //HealthBase target = other.gameObject.GetComponentInParent<HealthBase>();
-            //if (target)
-            //    target.Damage(1);
+            NetworkHealthBase target = other.gameObject.GetComponentInParent<NetworkHealthBase>();
+            if (target)
+                target.Damage(1);
 
             NetworkServer.Destroy(gameObject);
         }

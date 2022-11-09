@@ -1027,6 +1027,7 @@ MonoBehaviour:
   - {fileID: 6991280686162805566, guid: 68f910be232adce40b359e954a9c4cae, type: 3}
   - {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}
   - {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
+  - {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   minPlayers: 1
   lobbyPlayerPrefab: {fileID: 8349663456205832488, guid: 4d1397f3a0f061347b3f7fbe05d1cd85, type: 3}
   gamePlayerPrefab: {fileID: 3752450130090303767, guid: 308a1dabb3d4d874a8d2da7334f7e649, type: 3}

@@ -332,13 +332,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653076711583785707}
-  m_LocalRotation: {x: 0.034898166, y: -0.008721149, z: 0.00030454918, w: 0.9993528}
+  m_LocalRotation: {x: 0, y: -0.008726465, z: 0, w: 0.999962}
   m_LocalPosition: {x: 2, y: 0, z: 0.006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1653076710796846465}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 4, y: -1, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -1, z: 0}
 --- !u!82 &1653076711583785709
 AudioSource:
   m_ObjectHideFlags: 0
@@ -395,7 +395,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -542,13 +542,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653076712325322627}
-  m_LocalRotation: {x: 0.034898166, y: 0.008721242, z: -0.00030455244, w: 0.9993528}
+  m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
   m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1653076710796846465}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 4, y: 1, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
 --- !u!82 &1653076712325322629
 AudioSource:
   m_ObjectHideFlags: 0
@@ -605,7 +605,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -764,7 +764,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -819,7 +819,7 @@ GameObject:
   - component: {fileID: 2318525437501457446}
   - component: {fileID: 1544513421990329286}
   m_Layer: 6
-  m_Name: Network Plane Avatar
+  m_Name: Plane Avatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -870,6 +870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  maxHealth: 0
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
@@ -877,8 +878,6 @@ MonoBehaviour:
   - {fileID: 1653076711583785706}
   - {fileID: 1653076712325322626}
   bulletPrefab: {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
-  bulletSpeed: 200
-  crossHair: {fileID: 0}
   model: {fileID: 6582362107965507803}
   modelRotMod: 25
   propeller: {fileID: 6604473420705916484}
