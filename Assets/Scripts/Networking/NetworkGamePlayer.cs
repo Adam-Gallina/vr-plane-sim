@@ -42,11 +42,10 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void OnEnable()
     {
-        if (!hasAuthority)
-        {
+        if (!isLocalPlayer)
             SceneManager.sceneLoaded += SpawnNameTag;
-            return;
-        }
+
+        if (!hasAuthority)  return;
 
         if (avatar)
             avatar.OnPlayerDestroyed += OnAvatarDestroyed;
@@ -54,11 +53,10 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void OnDisable()
     {
-        if (!hasAuthority)
-        {
+        if (!isLocalPlayer)
             SceneManager.sceneLoaded -= SpawnNameTag;
-            return;
-        }
+
+        if (!hasAuthority) return;
 
         if (avatar)
             avatar.OnPlayerDestroyed -= OnAvatarDestroyed;
@@ -66,7 +64,7 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == Constants.MenuScene)
+        if (scene.buildIndex == Constants.MenuScene || isLocalPlayer)
             return;
 
         Instantiate(nametagPrefab, GameObject.Find("Canvas").transform).GetComponent<NametagUI>().SetLinkedPlayer(this);
