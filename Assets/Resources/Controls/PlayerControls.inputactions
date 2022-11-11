@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Right",
+                    "name": "AltFire",
                     "type": "Button",
                     "id": "032f548d-6b31-46be-874c-d7f45a680736",
                     "expectedControlType": "Button",
@@ -176,7 +176,7 @@
                 {
                     "name": "",
                     "id": "6260f73e-2a24-4471-b3f1-86c0f67095d4",
-                    "path": "<Keyboard>/enter",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -191,7 +191,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Right",
+                    "action": "AltFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "439855ca-b5f4-4776-aeac-165d3366d9b4",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AltFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

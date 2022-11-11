@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1777144864192326898}
   - component: {fileID: 5595763645612024201}
   m_Layer: 8
-  m_Name: Bullet
+  m_Name: Player Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &3341252597595530779
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 9d95e4762f1f5e24784b576c645d97ab
+  m_AssetId: cf34bc2d179edc347b4ab934b99837b6
   hasSpawned: 0
 --- !u!114 &1777144864192326898
 MonoBehaviour:
@@ -195,9 +195,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  targetTag: 1
   targetLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 64
+  damage: 1
+  speed: 250
 --- !u!114 &5595763645612024201
 MonoBehaviour:
   m_ObjectHideFlags: 0

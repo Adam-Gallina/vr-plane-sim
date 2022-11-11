@@ -18,9 +18,6 @@ public class NetworkBasicEnemy : NetworkPlaneController
     private float nextDirChange;
     private float h;
 
-    [Header("Death Effect")]
-    [SerializeField] private GameObject deathPrefab;
-
     protected void Start()
     {
         h = transform.position.y;
@@ -51,21 +48,5 @@ public class NetworkBasicEnemy : NetworkPlaneController
 
         Steer(dir, thrustSpeed, isServer);
         UpdateModel(isServer);
-    }
-
-    [ClientRpc]
-    protected override void RpcOnDeath()
-    {
-        GameObject effect = Instantiate(deathPrefab);
-        effect.transform.position = transform.position;
-        effect.transform.localEulerAngles = transform.localEulerAngles;
-
-        effect.transform.GetChild(0).localEulerAngles = model.localEulerAngles;
-
-        Rigidbody erb = effect.GetComponent<Rigidbody>();
-        erb.velocity = rb.velocity;
-        erb.angularVelocity = rb.angularVelocity * 10 + transform.right * 5;
-
-        base.RpcOnDeath();
     }
 }

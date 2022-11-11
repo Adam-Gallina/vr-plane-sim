@@ -5,11 +5,15 @@ using Mirror;
 
 public class NetworkBullet : NetworkBehaviour
 {
+    protected NetworkPlaneController source;
+
+    [SerializeField] protected Constants.Tag targetTag;
     [SerializeField] protected LayerMask targetLayer;
+    [SerializeField] protected float damage = 1;
 
-    [SerializeField] private float speed = 250;
+    [SerializeField] protected float speed = 250;
 
-    private Rigidbody rb;
+    protected Rigidbody rb;
 
     private void Start()
     {
@@ -20,11 +24,17 @@ public class NetworkBullet : NetworkBehaviour
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponentInParent<NetworkPlaneController>() == source)
+            return;
+
         if (((1 << other.gameObject.layer) & targetLayer.value) > 0)
         {
+            if (!other.CompareTag(Constants.TagString(targetTag)))
+                return;
+
             NetworkHealthBase target = other.gameObject.GetComponentInParent<NetworkHealthBase>();
             if (target)
-                target.Damage(1);
+                target.Damage(damage);
 
             NetworkServer.Destroy(gameObject);
         }
@@ -33,4 +43,7 @@ public class NetworkBullet : NetworkBehaviour
             NetworkServer.Destroy(gameObject);
         }
     }
+
+    [Server]
+    public void SetSource(NetworkPlaneController source) => this.source = source; 
 }

@@ -18,7 +18,7 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
-    public static event Action<NetworkConnection> OnServerReadied;
+    public static event Action<NetworkConnection, int> OnServerReadied;
 
     public List<NetworkLobbyPlayer> LobbyPlayers { get; } = new List<NetworkLobbyPlayer>();
     public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
@@ -111,7 +111,7 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         base.OnServerReady(conn);
     
-        OnServerReadied?.Invoke(conn);
+        OnServerReadied?.Invoke(conn, GamePlayers.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
     }
     #endregion
 

@@ -27,8 +27,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0.72302246}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1653076711583785706}
   - {fileID: 1653076712325322626}
+  - {fileID: 1653076711583785706}
+  - {fileID: 3420009011094819388}
   m_Father: {fileID: 7279683740532761866}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -319,7 +320,7 @@ GameObject:
   - component: {fileID: 1653076711583785706}
   - component: {fileID: 1653076711583785709}
   m_Layer: 6
-  m_Name: GameObject
+  m_Name: Right Wing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,7 +338,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1653076710796846465}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -1, z: 0}
 --- !u!82 &1653076711583785709
 AudioSource:
@@ -529,7 +530,7 @@ GameObject:
   - component: {fileID: 1653076712325322626}
   - component: {fileID: 1653076712325322629}
   m_Layer: 6
-  m_Name: GameObject (1)
+  m_Name: Left Wing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -547,7 +548,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1653076710796846465}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
 --- !u!82 &1653076712325322629
 AudioSource:
@@ -659,7 +660,7 @@ GameObject:
   - component: {fileID: 2531693584563425371}
   m_Layer: 6
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -820,7 +821,7 @@ GameObject:
   - component: {fileID: 1544513421990329286}
   m_Layer: 6
   m_Name: Plane Avatar
-  m_TagString: Untagged
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -870,7 +871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 0
+  maxHealth: 10
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
@@ -878,14 +879,18 @@ MonoBehaviour:
   - {fileID: 1653076711583785706}
   - {fileID: 1653076712325322626}
   bulletPrefab: {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
-  model: {fileID: 6582362107965507803}
+  specialSource: {fileID: 3420009011094819388}
+  currSpecial: {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
+  model: {fileID: 2318525436569042146}
   modelRotMod: 25
   propeller: {fileID: 6604473420705916484}
   propellerSpeed: 1000
   joystick: {fileID: 1653076710956479291}
   joystickMod: 20
+  deathPrefab: {fileID: 7533953259834077275, guid: 1ce014fb91563284dbb1132fea9701e3, type: 3}
   camTarget: {fileID: 6688837255019762194}
   fireSpeed: 0.08
+  specialCooldown: 1
   maxThrustSpeed: 60
 --- !u!114 &2318525437501457447
 MonoBehaviour:
@@ -973,6 +978,36 @@ MonoBehaviour:
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
   target: {fileID: 6582362107965507803}
+--- !u!1 &4519372462835074083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3420009011094819388}
+  m_Layer: 6
+  m_Name: Special Source
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3420009011094819388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4519372462835074083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1653076710796846465}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6688837255019762197
 GameObject:
   m_ObjectHideFlags: 0

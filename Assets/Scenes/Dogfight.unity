@@ -508,6 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e30a21a470af33740b649487f9498134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pvp: 1
+  spawnFormat: 1
 --- !u!4 &1025697511
 Transform:
   m_ObjectHideFlags: 0
@@ -554,6 +556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  DEBUG_spawnEnemies: 1
   enemyPrefab: {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   spawnCount: 50
   minSpawnRadius: 250

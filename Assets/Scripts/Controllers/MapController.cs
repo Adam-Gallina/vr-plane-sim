@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SpawnFormation { RoundRobin, Assigned, Random }
 public class MapController : MonoBehaviour
 {
     public static MapController Instance;
@@ -24,14 +25,39 @@ public class MapController : MonoBehaviour
         Instance = this;
     }
 
-    public Transform GetSpawnPos(int pos)
+    public Transform GetSpawnPos(int player)
     {
-        if (pos >= spawnPositions.Length)
+        switch (GameController.Instance.spawnFormat)
         {
-            Debug.LogError($"Missing spawn point {pos}");
+            case SpawnFormation.RoundRobin:
+                return RoundRobin();
+            case SpawnFormation.Assigned:
+                return AssignedSpawn(player);
+            default:
+                Debug.LogWarning($"{GameController.Instance.spawnFormat} has not been implemented, defaulting to RoundRobin");
+                return RoundRobin();
+        }
+    }
+
+    private int nextPos = 0;
+    private Transform RoundRobin()
+    {
+        Transform t = spawnPositions[nextPos];
+
+        if (nextPos++ >= spawnPositions.Length)
+            nextPos = 0;
+
+        return t;
+    }
+
+    private Transform AssignedSpawn(int player)
+    {
+        if (player < 0 || player >= spawnPositions.Length)
+        {
+            Debug.LogWarning($"Missing spawn point {player}");
             return null;
         }
 
-        return spawnPositions[pos];
+        return spawnPositions[player];
     }
 }

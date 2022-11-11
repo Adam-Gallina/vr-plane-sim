@@ -5,7 +5,12 @@ using Mirror;
 
 public class NetworkAvatarSpawner : NetworkBehaviour
 {
-    private int nextSpawn = 0;
+    public static NetworkAvatarSpawner Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public override void OnStartServer()
     {
@@ -19,11 +24,13 @@ public class NetworkAvatarSpawner : NetworkBehaviour
     }
 
     [Server]
-    public void SpawnPlayer(NetworkConnection conn)
+    public void SpawnPlayer(NetworkConnection conn, int player)
     {
-        Transform t = MapController.Instance.GetSpawnPos(nextSpawn);
+        Transform t = MapController.Instance.GetSpawnPos(player);
+
         GameObject avatar = Instantiate(conn.identity.GetComponent<NetworkGamePlayer>().avatarPrefab, t.position, t.rotation);
         NetworkServer.Spawn(avatar, conn);
-        nextSpawn++;
+
+        conn.identity.GetComponent<NetworkGamePlayer>().OnAvatarSpawned(avatar);
     }
 }

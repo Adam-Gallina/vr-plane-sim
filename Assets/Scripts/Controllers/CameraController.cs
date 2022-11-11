@@ -9,6 +9,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private GameObject desktopCamPrefab;
     [SerializeField] private GameObject vrCamPrefab;
 
+    private List<Transform> targets = new List<Transform>();
+
     private void Awake()
     {
         Instance = this;
@@ -44,5 +46,17 @@ public class CameraController : MonoBehaviour
     public void SetTarget(Transform target)
     {
         transform.SetParent(target, false);
+    }
+
+    public void PushTarget(Transform target)
+    {
+        targets.Insert(0, transform.parent);
+        SetTarget(target);
+    }
+
+    public void PopTarget()
+    {
+        SetTarget(targets[0]);
+        targets.RemoveAt(0);
     }
 }

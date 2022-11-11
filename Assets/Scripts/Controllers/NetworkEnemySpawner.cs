@@ -7,6 +7,7 @@ public class NetworkEnemySpawner : NetworkBehaviour
 {
     public static NetworkEnemySpawner Instance;
 
+    public bool DEBUG_spawnEnemies = true;
     public GameObject enemyPrefab;
     public int spawnCount;
     public float minSpawnRadius;
@@ -27,12 +28,15 @@ public class NetworkEnemySpawner : NetworkBehaviour
     {
         base.OnStartServer();
 
-        float da = 360f / spawnCount;
-        for (int i = 0; i < spawnCount; i++)
+        if (DEBUG_spawnEnemies)
         {
-            float ang = da * i;
-            transform.localEulerAngles = new Vector3(0, ang, 0);
-            SpawnEnemy(transform.position + transform.forward * Random.Range(minSpawnRadius, maxSpawnRadius));
+            float da = 360f / spawnCount;
+            for (int i = 0; i < spawnCount; i++)
+            {
+                float ang = da * i;
+                transform.localEulerAngles = new Vector3(0, ang, 0);
+                SpawnEnemy(transform.position + transform.forward * Random.Range(minSpawnRadius, maxSpawnRadius));
+            }
         }
     }
     

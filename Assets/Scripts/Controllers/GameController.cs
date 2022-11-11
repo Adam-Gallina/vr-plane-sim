@@ -5,14 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    public static GameController Instance;
+
+    [Header("Map Rules")]
+    public bool pvp = true;
+    public SpawnFormation spawnFormat = SpawnFormation.Assigned;
+
     private void Awake()
     {
-        if (SceneManager.GetActiveScene().buildIndex == Constants.GameScene && !PlaneSimNetworkManager.Instance)
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MenuScene && !PlaneSimNetworkManager.Instance)
             SceneManager.LoadScene(Constants.MenuScene);
-    }
 
-    void Start()
-    {
-        Physics.IgnoreLayerCollision(Constants.PlayerLayer, Constants.EnvironmentLayer);
+        Instance = this;
     }
 }

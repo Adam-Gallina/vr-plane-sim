@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +14,16 @@ public class NetworkPlayerPlane : NetworkPlaneController
     private float nextShot;
     private bool firing = false;
 
+    [Header("Special")]
+    [SerializeField] private float specialCooldown;
+    private float nextSpecial;
+
     private bool allowMovement = false;
     [SerializeField] private float maxThrustSpeed;
+
+    private bool isQuitting = false;
+
+    public event Action OnPlayerDestroyed;
 
     private PlayerControls inp;
     private FixInput fixJoystick = new FixInput();
@@ -28,10 +37,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     public override void OnStartClient()
     {
-        if (hasAuthority)
-        {
-            CameraController.Instance.SetTarget(camTarget);
-        }
+        gameObject.tag = GameController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
+        model.gameObject.tag = GameController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
     }
 
     private void OnEnable()
@@ -41,9 +48,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.Fire.started += OnStartFire;
         inp.Player.Fire.canceled += OnStopFire;
 
-        inp.Player.Middle.started += ToggleMovement;
+        inp.Player.AltFire.started += OnUseSpecial;
 
-        //pc.Player.Right.started += Press4;
+        inp.Player.Middle.started += ToggleMovement;
     }
 
     private void OnDisable()
@@ -53,9 +60,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.Fire.started -= OnStartFire;
         inp.Player.Fire.canceled -= OnStopFire;
 
-        inp.Player.Middle.started -= ToggleMovement;
+        inp.Player.AltFire.started -= OnUseSpecial;
 
-        //pc.Player.Right.started -= Press4;
+        inp.Player.Middle.started -= ToggleMovement;
     }
 
     private void Update()
@@ -74,9 +81,13 @@ public class NetworkPlayerPlane : NetworkPlaneController
         HandleInput();
 
         UpdateModel();
+    }
 
-        //if (inp.altFire)
-        //    UpdateCamera();
+    private void OnApplicationQuit() => isQuitting = true;
+    private void OnDestroy()
+    {
+        if (hasAuthority && !isQuitting)
+            OnPlayerDestroyed?.Invoke();
     }
 
     private Vector2 HandleMovement()
@@ -112,6 +123,15 @@ public class NetworkPlayerPlane : NetworkPlaneController
         firing = false;
     }
 
+    private void OnUseSpecial(InputAction.CallbackContext obj)
+    {
+        if (currSpecial && Time.time > nextSpecial)
+        {
+            FireSpecial();
+            nextSpecial = Time.time + specialCooldown;
+        }
+    }
+
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
         allowMovement = !allowMovement;
@@ -120,6 +140,10 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     protected override void RpcOnDeath()
     {
-        Debug.Log("Boom");
+        // Host instance doesn't seem to call OnDestroy the same
+        if (isServer)
+            OnPlayerDestroyed?.Invoke();
+
+        base.RpcOnDeath();
     }
 }

@@ -14,6 +14,8 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private Transform[] bulletSource;
     private int nextSource;
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform specialSource;
+    [SerializeField] protected GameObject currSpecial;
 
     [Header("Animations")]
     [SerializeField] protected Transform model;
@@ -23,6 +25,9 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private Transform joystick;
     [SerializeField] private float joystickMod;
 
+    [Header("Death Effect")]
+    [SerializeField] private GameObject deathPrefab;
+
 
     protected Rigidbody rb;
 
@@ -31,6 +36,15 @@ public class NetworkPlaneController : NetworkHealthBase
         base.Awake();
 
         rb = GetComponent<Rigidbody>();
+    }
+
+    [ServerCallback]
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == Constants.EnvironmentLayer)
+        {
+            Death();
+        }
     }
 
     protected void SetDirection(Vector2 dir, float speed = -1)
@@ -78,8 +92,7 @@ public class NetworkPlaneController : NetworkHealthBase
 
     protected void Fire()
     {
-        if (!hasAuthority)
-            return;
+        if (!hasAuthority) return;
 
         CmdSpawnBullet(nextSource);
 
@@ -87,18 +100,51 @@ public class NetworkPlaneController : NetworkHealthBase
             nextSource = 0;
     }
 
+    protected void FireSpecial()
+    {
+        if (!hasAuthority) return;
+
+        CmdSpawnSpecial();
+    }
+
     [Command]
     private void CmdSpawnBullet(int source)
     {
         GameObject b = Instantiate(bulletPrefab, bulletSource[source].position, bulletSource[source].rotation);
         NetworkServer.Spawn(b);
+        b.GetComponent<NetworkBullet>().SetSource(this);
 
         RpcOnSpawnBullet(source);
+    }
+
+    [Command]
+    private void CmdSpawnSpecial()
+    {
+        GameObject b = Instantiate(currSpecial, specialSource.position, specialSource.rotation);
+        NetworkServer.Spawn(b);
+        b.GetComponent<NetworkBullet>().SetSource(this);
+
     }
 
     [ClientRpc]
     private void RpcOnSpawnBullet(int source)
     {
         bulletSource[source].GetComponent<AudioSource>()?.Play();
+    }
+
+    [ClientRpc]
+    protected override void RpcOnDeath()
+    {
+        GameObject effect = Instantiate(deathPrefab);
+        effect.transform.position = transform.position;
+        effect.transform.localEulerAngles = transform.localEulerAngles;
+
+        effect.transform.GetChild(0).localEulerAngles = model.localEulerAngles;
+
+        Rigidbody erb = effect.GetComponent<Rigidbody>();
+        erb.velocity = rb.velocity;
+        erb.angularVelocity = rb.angularVelocity * 10 + transform.right * 5;
+
+        base.RpcOnDeath();
     }
 }
