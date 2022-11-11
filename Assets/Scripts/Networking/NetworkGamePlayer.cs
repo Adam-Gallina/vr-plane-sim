@@ -5,15 +5,16 @@ using Mirror;
 
 public class NetworkGamePlayer : NetworkBehaviour
 {
+    public GameObject nametagPrefab;
     public GameObject avatarPrefab;
     public WatchPlayerDeath avatarDeathEffectPrefab;
 
     [SyncVar]
-    private string displayName = "Loading...";
+    public string displayName = "Loading...";
     [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
 
-    private NetworkPlayerPlane avatar;
+    [HideInInspector] public NetworkPlayerPlane avatar;
 
     private PlaneSimNetworkManager network;
     private PlaneSimNetworkManager Network
@@ -30,6 +31,8 @@ public class NetworkGamePlayer : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
 
         Network.GamePlayers.Add(this);
+
+        Instantiate(nametagPrefab).GetComponent<NametagUI>().SetLinkedPlayer(this);
     }
 
     public override void OnStopClient()

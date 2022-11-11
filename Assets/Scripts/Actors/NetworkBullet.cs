@@ -10,6 +10,7 @@ public class NetworkBullet : NetworkBehaviour
     [SerializeField] protected Constants.Tag targetTag;
     [SerializeField] protected LayerMask targetLayer;
     [SerializeField] protected float damage = 1;
+    [SerializeField] protected GameObject hitEffect;
 
     [SerializeField] protected float speed = 250;
 
@@ -19,6 +20,17 @@ public class NetworkBullet : NetworkBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * speed;
+    }
+
+    private bool isQuitting = false;
+    private void OnApplicationQuit() => isQuitting = true;
+    private void OnDestroy()
+    {
+        if (!isQuitting)
+        {
+            if (hitEffect)
+                Instantiate(hitEffect, transform.position, transform.rotation);
+        }
     }
 
     [ServerCallback]

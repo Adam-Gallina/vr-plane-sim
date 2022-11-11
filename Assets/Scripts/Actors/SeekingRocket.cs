@@ -8,13 +8,15 @@ public class SeekingRocket : NetworkBullet
     [SerializeField] private float turnSpeed;
 
     [Header("Tracking")]
-    [SerializeField] private float range;
+    [SerializeField] private float sphereRange;
+    [SerializeField] private float coneRange = 350;
     [SerializeField] private float angle;
+    [SerializeField] private float targetSpeedAdjustment = 2;
 
     private void OnDrawGizmos()
     {
-        Vector3 away = transform.position + transform.forward * range;
-        float opp = Mathf.Tan(angle * Mathf.Deg2Rad) * range;
+        Vector3 away = transform.position + transform.forward * coneRange;
+        float opp = Mathf.Tan(angle * Mathf.Deg2Rad) * coneRange;
 
         Gizmos.color = Color.blue;
 
@@ -23,6 +25,8 @@ public class SeekingRocket : NetworkBullet
         Gizmos.DrawLine(transform.position, away + transform.up * opp);
         Gizmos.DrawLine(transform.position, away + transform.up * -opp);
         Gizmos.DrawWireSphere(away, opp);
+
+        Gizmos.DrawWireSphere(transform.position, sphereRange);
     }
 
     [ServerCallback]
@@ -32,23 +36,26 @@ public class SeekingRocket : NetworkBullet
 
         if (target)
         {
-            rb.AddForce((target.position - transform.position).normalized * turnSpeed, ForceMode.Impulse);
+            rb.AddForce(((target.position + target.forward * targetSpeedAdjustment)- transform.position).normalized * turnSpeed, ForceMode.Force);
         }
 
         rb.velocity = rb.velocity.normalized * speed;
+        transform.forward = rb.velocity;
     }
 
     private Transform CheckForTargets()
     {
-        Collider[] colls = Physics.OverlapBox(transform.position + transform.forward * range / 2, new Vector3(range, range, range), transform.rotation, targetLayer);
+        List<Collider> colls = new List<Collider>();
+        colls.InsertRange(0, Physics.OverlapSphere(transform.position, sphereRange, targetLayer.value));
+        colls.InsertRange(0, Physics.OverlapBox(transform.position + transform.forward * coneRange / 2, new Vector3(coneRange, coneRange, coneRange), transform.rotation, targetLayer.value));
 
         Collider closest = null;
-        float dist = range + 1;
+        float dist = coneRange + 1;
 
         foreach (Collider c in colls)
         {
-            NetworkPlaneController plane = c.GetComponent<NetworkPlaneController>();
-            if (!plane)
+            NetworkPlaneController plane = c.GetComponentInParent<NetworkPlaneController>();
+            if (!plane || plane == source)
                 continue;
 
             if (!c.CompareTag(Constants.TagString(targetTag)))

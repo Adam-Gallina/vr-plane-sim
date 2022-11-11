@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   despawnTime: 5
-  explosionSystem: {fileID: 3527015238457066487}
+  system: {fileID: 3527015238457066487}
 --- !u!1001 &3624577852226928657
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,26 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathEffect : MonoBehaviour
+public class DeathEffect : SimpleEffect
 {
-    [SerializeField] private float despawnTime = 5;
-    [SerializeField] private ParticleSystem explosionSystem;
-
-    private void Start()
+    protected override void Start()
     {
-        explosionSystem.Play();
+        system.Play();
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == Constants.EnvironmentLayer)
         {
             Invoke("Despawn", despawnTime);
         }
-    }
-
-    private void Despawn()
-    {
-        Destroy(gameObject);
     }
 }
