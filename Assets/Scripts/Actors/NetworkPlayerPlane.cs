@@ -23,7 +23,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private bool isQuitting = false;
 
-    public event Action OnPlayerDestroyed;
+    public event Action<Transform> OnPlayerDestroyed;
 
     private PlayerControls inp;
     private FixInput fixJoystick = new FixInput();
@@ -87,7 +87,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     private void OnDestroy()
     {
         if (hasAuthority && !isQuitting)
-            OnPlayerDestroyed?.Invoke();
+            OnPlayerDestroyed?.Invoke(transform);
     }
 
     private Vector2 HandleMovement()
@@ -142,7 +142,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     {
         // Host instance doesn't seem to call OnDestroy the same
         if (isServer)
-            OnPlayerDestroyed?.Invoke();
+            OnPlayerDestroyed?.Invoke(transform);
 
         base.RpcOnDeath();
     }

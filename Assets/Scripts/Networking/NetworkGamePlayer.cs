@@ -45,7 +45,7 @@ public class NetworkGamePlayer : NetworkBehaviour
         if (!isLocalPlayer)
             SceneManager.sceneLoaded += SpawnNameTag;
 
-        if (!hasAuthority)  return;
+        if (!hasAuthority) return;
 
         if (avatar)
             avatar.OnPlayerDestroyed += OnAvatarDestroyed;
@@ -70,16 +70,14 @@ public class NetworkGamePlayer : NetworkBehaviour
         Instantiate(nametagPrefab, GameObject.Find("Canvas").transform).GetComponent<NametagUI>().SetLinkedPlayer(this);
     }
 
-    private void OnAvatarDestroyed()
+    private void OnAvatarDestroyed(Transform t)
     {
         if (!hasAuthority) return;
 
         CameraController.Instance.SetTarget(null);
 
         WatchPlayerDeath effect = Instantiate(avatarDeathEffectPrefab);
-        effect.SetPosition(avatar.transform.position, avatar.transform.forward);
-
-        avatar = null;
+        effect.SetPosition(t.position, t.forward);
 
         Invoke("RespawnAvatar", effect.duration);
     }
