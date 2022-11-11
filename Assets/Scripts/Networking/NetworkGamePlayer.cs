@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mirror;
 
 public class NetworkGamePlayer : NetworkBehaviour
@@ -13,8 +14,8 @@ public class NetworkGamePlayer : NetworkBehaviour
     public string displayName = "Loading...";
     [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
-
-    [HideInInspector] public NetworkPlayerPlane avatar;
+    [SyncVar]
+    public NetworkPlayerPlane avatar;
 
     private PlaneSimNetworkManager network;
     private PlaneSimNetworkManager Network
@@ -32,7 +33,6 @@ public class NetworkGamePlayer : NetworkBehaviour
 
         Network.GamePlayers.Add(this);
 
-        Instantiate(nametagPrefab).GetComponent<NametagUI>().SetLinkedPlayer(this);
     }
 
     public override void OnStopClient()
@@ -42,7 +42,11 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void OnEnable()
     {
-        if (!hasAuthority) return;
+        if (!hasAuthority)
+        {
+            SceneManager.sceneLoaded += SpawnNameTag;
+            return;
+        }
 
         if (avatar)
             avatar.OnPlayerDestroyed += OnAvatarDestroyed;
@@ -50,10 +54,22 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void OnDisable()
     {
-        if (!hasAuthority) return;
+        if (!hasAuthority)
+        {
+            SceneManager.sceneLoaded -= SpawnNameTag;
+            return;
+        }
 
         if (avatar)
             avatar.OnPlayerDestroyed -= OnAvatarDestroyed;
+    }
+
+    private void SpawnNameTag(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == Constants.MenuScene)
+            return;
+
+        Instantiate(nametagPrefab, GameObject.Find("Canvas").transform).GetComponent<NametagUI>().SetLinkedPlayer(this);
     }
 
     private void OnAvatarDestroyed()
@@ -85,9 +101,10 @@ public class NetworkGamePlayer : NetworkBehaviour
     [ClientRpc]
     public void OnAvatarSpawned(GameObject avatarObj)
     {
+        avatar = avatarObj.GetComponent<NetworkPlayerPlane>();
+
         if (!hasAuthority) return;
 
-        avatar = avatarObj.GetComponent<NetworkPlayerPlane>();
         avatar.OnPlayerDestroyed += OnAvatarDestroyed;
 
         CameraController.Instance.SetTarget(avatar.transform);
