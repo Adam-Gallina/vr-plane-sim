@@ -9,10 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu Desktop.unity
     guid: f5a8b9cc4d1b7da4ca791e54532d4ae6
   - enabled: 0
-    path: Assets/Scenes/Test Game.unity
+    path: Assets/Scenes/Dev/Test Game.unity
     guid: 59bb273b733fd7e46b0290b3ec027c13
   - enabled: 1
-    path: Assets/Scenes/Dogfight.unity
+    path: Assets/Scenes/FFA.unity
     guid: 6048ddd30cf7160498624736d1215975
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: abf8ff8bf9341f741974fdd0c7af4840, type: 2}

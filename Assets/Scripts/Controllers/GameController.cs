@@ -13,8 +13,8 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        if (SceneManager.GetActiveScene().buildIndex != Constants.MenuScene && !PlaneSimNetworkManager.Instance)
-            SceneManager.LoadScene(Constants.MenuScene);
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex && !PlaneSimNetworkManager.Instance)
+            SceneManager.LoadScene(Constants.MainMenu.buildIndex);
 
         Instance = this;
     }

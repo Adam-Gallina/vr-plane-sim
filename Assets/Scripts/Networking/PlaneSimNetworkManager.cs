@@ -39,7 +39,7 @@ public class PlaneSimNetworkManager : NetworkManager
             return;
         }
 
-        if (SceneManager.GetActiveScene().buildIndex != Constants.MenuScene)
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
         {
             conn.Disconnect();
             return;
@@ -67,7 +67,7 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        if (SceneManager.GetActiveScene().buildIndex == Constants.MenuScene)
+        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
         {
             NetworkLobbyPlayer roomPlayerInstance = Instantiate(lobbyPlayerPrefab);
             NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
@@ -78,8 +78,8 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        if (SceneManager.GetActiveScene().buildIndex == Constants.MenuScene && 
-            newSceneName == Constants.GameSceneName)
+        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex && 
+            newSceneName != Constants.MainMenu.name)
         {
             for (int i = LobbyPlayers.Count - 1; i >= 0; i--)
             {
@@ -99,11 +99,14 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnServerSceneChanged(string sceneName)
     {
-        switch (sceneName) {
-            case Constants.GameSceneName:
-                GameObject playerSpawnSystemInstance = Instantiate(avatarSpawnerPrefab);
-                NetworkServer.Spawn(playerSpawnSystemInstance);
-                break;
+        if (sceneName == Constants.MainMenu.name)
+        {
+            Debug.LogWarning("How to return to main?");
+        }
+        else
+        {
+            GameObject playerSpawnSystemInstance = Instantiate(avatarSpawnerPrefab);
+            NetworkServer.Spawn(playerSpawnSystemInstance);
         }
     }
 
@@ -160,11 +163,11 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public void StartGame()
     {
-        if (SceneManager.GetActiveScene().buildIndex == Constants.MenuScene)
+        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
         {
             if (!IsReadyToStart()) { return; }
 
-            ServerChangeScene(Constants.GameSceneName);
+            ServerChangeScene(Constants.FfaTest.name);
         }
     }
     #endregion

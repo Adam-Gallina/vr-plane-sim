@@ -71,6 +71,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CameraPan"",
+                    ""type"": ""Value"",
+                    ""id"": ""44f2878f-daaa-4f99-9e32-5537f06cc59d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AltMouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""e1545ee0-afc3-4af5-94dd-15bd8d559f40"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -238,6 +256,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Speed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6566dd9b-ab6c-446e-8d3f-b1785720fc01"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraPan"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1cfd97d-eba5-4e8e-9322-9e49d91144b0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -251,6 +291,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Middle = m_Player.FindAction("Middle", throwIfNotFound: true);
         m_Player_AltFire = m_Player.FindAction("AltFire", throwIfNotFound: true);
         m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
+        m_Player_CameraPan = m_Player.FindAction("CameraPan", throwIfNotFound: true);
+        m_Player_AltMouse = m_Player.FindAction("AltMouse", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -315,6 +357,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Middle;
     private readonly InputAction m_Player_AltFire;
     private readonly InputAction m_Player_Speed;
+    private readonly InputAction m_Player_CameraPan;
+    private readonly InputAction m_Player_AltMouse;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -324,6 +368,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Middle => m_Wrapper.m_Player_Middle;
         public InputAction @AltFire => m_Wrapper.m_Player_AltFire;
         public InputAction @Speed => m_Wrapper.m_Player_Speed;
+        public InputAction @CameraPan => m_Wrapper.m_Player_CameraPan;
+        public InputAction @AltMouse => m_Wrapper.m_Player_AltMouse;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -348,6 +394,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Speed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
                 @Speed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
                 @Speed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
+                @CameraPan.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraPan;
+                @CameraPan.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraPan;
+                @CameraPan.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraPan;
+                @AltMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
+                @AltMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
+                @AltMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -367,6 +419,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Speed.started += instance.OnSpeed;
                 @Speed.performed += instance.OnSpeed;
                 @Speed.canceled += instance.OnSpeed;
+                @CameraPan.started += instance.OnCameraPan;
+                @CameraPan.performed += instance.OnCameraPan;
+                @CameraPan.canceled += instance.OnCameraPan;
+                @AltMouse.started += instance.OnAltMouse;
+                @AltMouse.performed += instance.OnAltMouse;
+                @AltMouse.canceled += instance.OnAltMouse;
             }
         }
     }
@@ -378,5 +436,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnMiddle(InputAction.CallbackContext context);
         void OnAltFire(InputAction.CallbackContext context);
         void OnSpeed(InputAction.CallbackContext context);
+        void OnCameraPan(InputAction.CallbackContext context);
+        void OnAltMouse(InputAction.CallbackContext context);
     }
 }

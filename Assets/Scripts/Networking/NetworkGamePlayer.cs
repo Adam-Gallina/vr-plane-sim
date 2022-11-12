@@ -64,7 +64,7 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == Constants.MenuScene || isLocalPlayer)
+        if (scene.buildIndex == Constants.MainMenu.buildIndex || isLocalPlayer)
             return;
 
         Instantiate(nametagPrefab, GameObject.Find("Canvas").transform).GetComponent<NametagUI>().SetLinkedPlayer(this);
