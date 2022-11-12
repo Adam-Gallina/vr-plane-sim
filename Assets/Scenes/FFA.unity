@@ -1083,6 +1083,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pvp: 1
   spawnFormat: 1
+  allowAiRespawn: 1
+  allowPlayerRespawn: 1
 --- !u!4 &1025697511
 Transform:
   m_ObjectHideFlags: 0
@@ -1225,9 +1227,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  DEBUG_spawnEnemies: 0
+  DEBUG_spawnEnemies: 1
   enemyPrefab: {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
-  spawnCount: 100
+  spawnCount: 25
   minSpawnRadius: 250
   maxSpawnRadius: 500
 --- !u!4 &1062277258

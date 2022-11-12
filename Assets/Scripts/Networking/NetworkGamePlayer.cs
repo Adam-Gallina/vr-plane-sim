@@ -79,7 +79,8 @@ public class NetworkGamePlayer : NetworkBehaviour
         WatchPlayerDeath effect = Instantiate(avatarDeathEffectPrefab);
         effect.SetPosition(t.position, t.forward);
 
-        Invoke("RespawnAvatar", effect.duration);
+        if (GameController.Instance.allowPlayerRespawn)
+            Invoke("RespawnAvatar", effect.duration);
     }
 
     [Server]

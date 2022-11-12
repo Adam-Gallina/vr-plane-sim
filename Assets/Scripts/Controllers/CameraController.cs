@@ -82,6 +82,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public bool IsTarget(Transform target)
+    {
+        return transform.parent == target;
+    }
+
     public void SetTarget(Transform target)
     {
         transform.SetParent(target, false);

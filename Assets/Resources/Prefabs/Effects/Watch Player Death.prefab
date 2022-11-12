@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123309ce4a3deff459f3fd7f2bf41d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startOffset: 0
   offset: 20
   duration: 2
   camTarget: {fileID: 1128044696953187200}

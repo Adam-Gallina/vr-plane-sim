@@ -49,4 +49,13 @@ public class NetworkBasicEnemy : NetworkPlaneController
         Steer(dir, thrustSpeed, isServer);
         UpdateModel(isServer);
     }
+
+    [ServerCallback]
+    protected override void Death()
+    {
+        if (GameController.Instance.allowAiRespawn)
+            NetworkEnemySpawner.Instance.SpawnRandomEnemy();
+
+        base.Death();
+    }
 }

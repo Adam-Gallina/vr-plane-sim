@@ -39,7 +39,13 @@ public class NetworkEnemySpawner : NetworkBehaviour
             }
         }
     }
-    
+
+    [Server]
+    public void SpawnRandomEnemy()
+    {
+        SpawnEnemy(transform.position + Random.insideUnitSphere * Random.Range(minSpawnRadius, maxSpawnRadius));
+    }
+
     [Server]
     private void SpawnEnemy(Vector3 pos)
     {
