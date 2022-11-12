@@ -13,6 +13,8 @@ public class LobbyUI : MonoBehaviour
     public Dropdown camType;
     public Button startGameButton;
 
+    public Dropdown gameMode;
+
     private void Awake()
     {
         Instance = this;
@@ -71,7 +73,7 @@ public class LobbyUI : MonoBehaviour
         {
             if (p.hasAuthority)
             {
-                p.CmdStartGame();
+                p.CmdStartGame(gameMode.value);
                 break;
             }
         }

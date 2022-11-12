@@ -23,12 +23,12 @@ public class Constants
     public const int EnvironmentLayer = 7;
     public const int BulletLayer = 8;
 
+    public enum CamType { Desktop, VR }
+
     public enum SceneType { MainMenu, FFA, Dogfight, Survival, Race }
     public static GameScene MainMenu = new GameScene(0, "Main Menu Desktop", SceneType.MainMenu);
     public static GameScene FfaTest = new GameScene(1, "FFA", SceneType.FFA);
-
-    
-    public enum CamType { Desktop, VR }
+    public static GameScene DogfightTest = new GameScene(2, "Dogfight", SceneType.Dogfight);
 
     public struct GameScene
     {

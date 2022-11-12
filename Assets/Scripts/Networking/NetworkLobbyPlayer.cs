@@ -25,7 +25,10 @@ public class NetworkLobbyPlayer : NetworkBehaviour
             isLeader = value;
 
             if (hasAuthority)
+            {
                 LobbyUI.Instance.startGameButton.gameObject.SetActive(value);
+                LobbyUI.Instance.gameMode.gameObject.SetActive(value);
+            }
         }
     }
 
@@ -87,11 +90,11 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     }
 
     [Command]
-    public void CmdStartGame()
+    public void CmdStartGame(int map)
     {
         if (Network.LobbyPlayers[0].connectionToClient != connectionToClient) { return; }
 
-        Network.StartGame();
+        Network.StartGame(map);
     }
 
     [Command]

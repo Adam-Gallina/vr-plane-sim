@@ -11,6 +11,7 @@ public class NetworkBullet : NetworkBehaviour
     [SerializeField] protected LayerMask targetLayer;
     [SerializeField] protected float damage = 1;
     [SerializeField] protected GameObject hitEffect;
+    private bool canDamage = true;
 
     [SerializeField] protected float speed = 250;
 
@@ -45,8 +46,11 @@ public class NetworkBullet : NetworkBehaviour
                 return;
 
             NetworkHealthBase target = other.gameObject.GetComponentInParent<NetworkHealthBase>();
-            if (target)
+            if (target && canDamage)
+            {
                 target.Damage(damage);
+                canDamage = false;
+            }
 
             NetworkServer.Destroy(gameObject);
         }

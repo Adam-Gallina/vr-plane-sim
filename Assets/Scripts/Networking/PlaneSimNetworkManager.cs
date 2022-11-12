@@ -161,13 +161,25 @@ public class PlaneSimNetworkManager : NetworkManager
         return true;
     }
 
-    public void StartGame()
+    public void StartGame(int map)
     {
         if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
         {
             if (!IsReadyToStart()) { return; }
 
-            ServerChangeScene(Constants.FfaTest.name);
+            switch (map)
+            {
+                case 0:
+                    ServerChangeScene(Constants.FfaTest.name);
+                    break;
+                case 1:
+                    ServerChangeScene(Constants.DogfightTest.name);
+                    break;
+                default:
+                    Debug.LogWarning("Not sure how to open map " + map + ", switching to FFA Test");
+                    StartGame(0);
+                    return;
+            }
         }
     }
     #endregion
