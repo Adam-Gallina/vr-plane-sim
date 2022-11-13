@@ -125,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawnTime: 5
   system: {fileID: 3527015238457066487}
+  body: {fileID: 6943444140811279103}
 --- !u!82 &3950273356235020727
 AudioSource:
   m_ObjectHideFlags: 0
@@ -456,5 +457,10 @@ PrefabInstance:
 --- !u!4 &8000437959530961276 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
+  m_PrefabInstance: {fileID: 7533953260388466327}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6943444140811279103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 635547659545568360, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
   m_PrefabInstance: {fileID: 7533953260388466327}
   m_PrefabAsset: {fileID: 0}

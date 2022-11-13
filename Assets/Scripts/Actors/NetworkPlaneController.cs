@@ -11,6 +11,7 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float altSpeed;
 
     [Header("Animations")]
+    [SerializeField] public GameObject body;
     [SerializeField] protected Transform model;
     [SerializeField] private float modelRotMod;
     [SerializeField] private Transform propeller;
@@ -89,6 +90,7 @@ public class NetworkPlaneController : NetworkHealthBase
         GameObject effect = Instantiate(deathPrefab);
         effect.transform.position = transform.position;
         effect.transform.localEulerAngles = transform.localEulerAngles;
+        effect.GetComponent<DeathEffect>().body.GetComponent<Renderer>().material.color = body.GetComponent<Renderer>().material.color;
 
         effect.transform.GetChild(0).localEulerAngles = model.localEulerAngles;
 

@@ -6,6 +6,7 @@ using Mirror;
 
 public class NetworkLobbyPlayer : NetworkBehaviour
 {
+    public Image playerColorImage;
     public Text playerNameText;
     public Text playerReadyText;
 
@@ -13,6 +14,8 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     public string DisplayName = "Loading...";
     [SyncVar(hook = nameof(HandleReadyStatusChanged))]
     public bool IsReady = false;
+    [SyncVar(hook = nameof(HandlePlaneColorChanged))]
+    public Color planeColor;
 
     [SyncVar]
     public int CamType;
@@ -71,6 +74,7 @@ public class NetworkLobbyPlayer : NetworkBehaviour
 
     public void HandleReadyStatusChanged(bool oldValue, bool newValue) => LobbyUI.Instance.UpdateDisplay();
     public void HandleDisplayNameChanged(string oldValue, string newValue) => LobbyUI.Instance.UpdateDisplay();
+    public void HandlePlaneColorChanged(Color oldValue, Color newValue) => LobbyUI.Instance.UpdateDisplay();
 
     public void HandleReadyToStart(bool readyToStart)
     {
@@ -83,6 +87,12 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     private void CmdSetDisplayName(string displayName)
     {
         DisplayName = displayName;
+    }
+
+    [Command]
+    public void CmdSetPlaneColor(Color col)
+    {
+        planeColor = col;
     }
 
     [Command]

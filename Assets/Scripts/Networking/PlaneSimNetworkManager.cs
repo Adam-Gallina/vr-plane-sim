@@ -93,10 +93,6 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         changingScenes = true;
 
-        if (newSceneName == Constants.MainMenu.name)
-        {
-            
-        }
         if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex && 
             newSceneName != Constants.MainMenu.name)
         {
@@ -104,6 +100,7 @@ public class PlaneSimNetworkManager : NetworkManager
             {
                 NetworkConnection conn = LobbyPlayers[i].connectionToClient;
                 NetworkGamePlayer p = Instantiate(gamePlayerPrefab);
+                p.SetPlaneColor(LobbyPlayers[i].planeColor);
                 p.SetDisplayName(LobbyPlayers[i].DisplayName);
                 p.SetCamType((Constants.CamType)LobbyPlayers[i].CamType);
                 p.IsLeader = LobbyPlayers[i].IsLeader;
@@ -127,6 +124,7 @@ public class PlaneSimNetworkManager : NetworkManager
             {
                 NetworkConnection conn = GamePlayers[i].connectionToClient;
                 NetworkLobbyPlayer p = Instantiate(lobbyPlayerPrefab);
+                p.CmdSetPlaneColor(GamePlayers[i].planeColor);
                 p.DisplayName = GamePlayers[i].displayName;
                 p.CamType = (int)GamePlayers[i].CamType;
                 p.IsLeader = GamePlayers[i].IsLeader;

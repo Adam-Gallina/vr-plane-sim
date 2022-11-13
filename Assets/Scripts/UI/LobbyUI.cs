@@ -8,10 +8,14 @@ public class LobbyUI : MonoBehaviour
     public static LobbyUI Instance;
 
     [SerializeField] private Transform playerList;
+    private List<Image> playerColorTexts = new List<Image>();
     private List<Text> playerNameTexts = new List<Text>();
     private List<Text> playerReadyTexts = new List<Text>();
     public Dropdown camType;
     public Button startGameButton;
+
+    [SerializeField] private GameObject planeBody;
+    [HideInInspector] public Color planeColor;
 
     public Dropdown gameMode;
 
@@ -30,6 +34,7 @@ public class LobbyUI : MonoBehaviour
     public void AddPlayer(NetworkLobbyPlayer p)
     {
         p.GetComponent<RectTransform>().SetParent(playerList, false);
+        playerColorTexts.Add(p.playerColorImage);
         playerNameTexts.Add(p.playerNameText);
         playerReadyTexts.Add(p.playerReadyText);
 
@@ -38,6 +43,7 @@ public class LobbyUI : MonoBehaviour
 
     public void RemovePlayer(NetworkLobbyPlayer p)
     {
+        playerColorTexts.Remove(p.playerColorImage);
         playerNameTexts.Remove(p.playerNameText);
         playerReadyTexts.Remove(p.playerReadyText);
 
@@ -55,6 +61,7 @@ public class LobbyUI : MonoBehaviour
         for (int i = 0; i < PlaneSimNetworkManager.Instance.LobbyPlayers.Count; i++)
         {
             PlaneSimNetworkManager.Instance.LobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));
+            playerColorTexts[i].color = PlaneSimNetworkManager.Instance.LobbyPlayers[i].planeColor;
             playerNameTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].DisplayName;
             playerReadyTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].IsReady ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
         }
@@ -97,6 +104,26 @@ public class LobbyUI : MonoBehaviour
             default:
                 Debug.LogError("Idk what happened but probably ur trying to make a server now so that's pretty cool");
                 break;
+        }
+    }
+
+    public void OnColorChange(Color col)
+    {
+        planeColor = col;
+        planeBody.GetComponent<Renderer>().material.color = col;
+    }
+
+    public void SelectColor(Color col)
+    {
+        OnColorChange(col);
+
+        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
+        {
+            if (p.hasAuthority)
+            {
+                p.CmdSetPlaneColor(col);
+                break;
+            }
         }
     }
 }

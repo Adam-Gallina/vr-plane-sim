@@ -83,12 +83,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  bulletSource: []
+  bulletPrefab: {fileID: 0}
+  specialSource: {fileID: 0}
+  currSpecial: {fileID: 0}
+  combatName: 
+  damageType: 2
+  player: {fileID: 0}
   maxHealth: 10
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
-  bulletSource: []
-  bulletPrefab: {fileID: 0}
+  body: {fileID: 8920160388699105231}
   model: {fileID: 8294273330429824627}
   modelRotMod: 25
   propeller: {fileID: 8390037024835652307}
@@ -306,6 +312,11 @@ PrefabInstance:
 --- !u!4 &8399658448616006732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
+  m_PrefabInstance: {fileID: 8294273331580945319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8920160388699105231 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 635547659545568360, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
   m_PrefabInstance: {fileID: 8294273331580945319}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8390037024835652307 stripped

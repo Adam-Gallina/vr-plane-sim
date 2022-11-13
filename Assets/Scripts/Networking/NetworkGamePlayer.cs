@@ -10,8 +10,9 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     public WatchPlayerDeath avatarDeathEffectPrefab;
 
     [SyncVar]
+    public Color planeColor;
+    [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
-    //[SyncVar(hook = nameof(IdentifyAvatar))]
     public NetworkPlayerPlane avatar;
 
     private PlaneSimNetworkManager network;
@@ -76,6 +77,11 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     }
 
     [Server]
+    public void SetPlaneColor(Color col)
+    {
+        planeColor = col;
+    }
+    [Server]
     public void SetDisplayName(string displayName)
     {
         this.displayName = displayName;
@@ -93,6 +99,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         avatar = avatarObj.GetComponent<NetworkPlayerPlane>();
         avatar.SetCombatUpdates(this);
         avatar.SetCombatName(displayName);
+
+        avatar.body.GetComponent<Renderer>().material.color = planeColor;
 
         if (!hasAuthority) return;
 

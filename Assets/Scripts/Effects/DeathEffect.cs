@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeathEffect : SimpleEffect
 {
+    public GameObject body;
+
     protected override void Start()
     {
         system.Play();
