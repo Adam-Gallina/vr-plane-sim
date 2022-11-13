@@ -83,4 +83,20 @@ public class LobbyUI : MonoBehaviour
             }
         }
     }
+
+    public void PressLeave()
+    {
+        switch (PlaneSimNetworkManager.Instance.mode)
+        {
+            case Mirror.NetworkManagerMode.ClientOnly:
+                PlaneSimNetworkManager.Instance.StopClient();
+                break;
+            case Mirror.NetworkManagerMode.Host:
+                PlaneSimNetworkManager.Instance.StopHost();
+                break;
+            default:
+                Debug.LogError("Idk what happened but probably ur trying to make a server now so that's pretty cool");
+                break;
+        }
+    }
 }
