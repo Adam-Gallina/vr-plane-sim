@@ -20,6 +20,8 @@ public class PlaneSimNetworkManager : NetworkManager
     public static event Action OnClientDisconnected;
     public static event Action<NetworkConnection, int> OnServerReadied;
 
+    [HideInInspector] public bool changingScenes = false;
+
     public List<NetworkLobbyPlayer> LobbyPlayers { get; } = new List<NetworkLobbyPlayer>();
     public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
 
@@ -89,20 +91,11 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
+        changingScenes = true;
+
         if (newSceneName == Constants.MainMenu.name)
         {
-            for (int i = GamePlayers.Count - 1; i >= 0; i--)
-            {
-                NetworkConnection conn = GamePlayers[i].connectionToClient;
-                NetworkLobbyPlayer p = Instantiate(lobbyPlayerPrefab);
-                p.DisplayName = GamePlayers[i].displayName;
-                p.CamType = (int)GamePlayers[i].CamType;
-                p.IsLeader = GamePlayers[i].IsLeader;
-
-                NetworkServer.Destroy(conn.identity.gameObject);
-
-                NetworkServer.ReplacePlayerForConnection(conn, p.gameObject);
-            }
+            
         }
         if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex && 
             newSceneName != Constants.MainMenu.name)
@@ -126,9 +119,22 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnServerSceneChanged(string sceneName)
     {
+        changingScenes = false;
+
         if (sceneName == Constants.MainMenu.name)
         {
-            Debug.LogWarning("How to return to main?");
+            for (int i = GamePlayers.Count - 1; i >= 0; i--)
+            {
+                NetworkConnection conn = GamePlayers[i].connectionToClient;
+                NetworkLobbyPlayer p = Instantiate(lobbyPlayerPrefab);
+                p.DisplayName = GamePlayers[i].displayName;
+                p.CamType = (int)GamePlayers[i].CamType;
+                p.IsLeader = GamePlayers[i].IsLeader;
+
+                NetworkServer.Destroy(conn.identity.gameObject);
+
+                NetworkServer.ReplacePlayerForConnection(conn, p.gameObject);
+            }
         }
         else
         {

@@ -22,6 +22,11 @@ public class LobbyUI : MonoBehaviour
         startGameButton.gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
+
     public void AddPlayer(NetworkLobbyPlayer p)
     {
         p.GetComponent<RectTransform>().SetParent(playerList, false);

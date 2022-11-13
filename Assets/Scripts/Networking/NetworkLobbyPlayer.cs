@@ -27,12 +27,6 @@ public class NetworkLobbyPlayer : NetworkBehaviour
         set
         {
             isLeader = value;
-
-            if (hasAuthority)
-            {
-                LobbyUI.Instance.startGameButton.gameObject.SetActive(value);
-                LobbyUI.Instance.gameMode.gameObject.SetActive(value);
-            }
         }
     }
 
@@ -48,13 +42,19 @@ public class NetworkLobbyPlayer : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-        CmdSetDisplayName(MainMenu.DisplayName);
+        if (string.Equals(DisplayName, "Loading..."))
+            CmdSetDisplayName(MainMenu.DisplayName);
+
+        LobbyUI.Instance.startGameButton.gameObject.SetActive(IsLeader);
+        LobbyUI.Instance.gameMode.gameObject.SetActive(IsLeader);
     }
 
     public override void OnStartClient()
     {
-        Network.LobbyPlayers.Add(this);
+        DontDestroyOnLoad(gameObject);
 
+        Network.LobbyPlayers.Add(this);
+        
         LobbyUI.Instance.AddPlayer(this);
 
         LobbyUI.Instance.camType.onValueChanged.AddListener((int val) => CmdSetCamType(val));
@@ -86,6 +86,12 @@ public class NetworkLobbyPlayer : NetworkBehaviour
     }
 
     [Command]
+    private void CmdSetCamType(int camType)
+    {
+        CamType = camType;
+    }
+
+    [Command]
     public void CmdReadyUp()
     {
         IsReady = !IsReady;
@@ -99,11 +105,5 @@ public class NetworkLobbyPlayer : NetworkBehaviour
         if (Network.LobbyPlayers[0].connectionToClient != connectionToClient) { return; }
 
         Network.StartGame(map);
-    }
-
-    [Command]
-    private void CmdSetCamType(int camType)
-    {
-        CamType = camType;
     }
 }

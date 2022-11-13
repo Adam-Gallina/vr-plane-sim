@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject startPagePanel;
-    [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] public GameObject startPagePanel;
+    [SerializeField] public GameObject lobbyPanel;
 
     [SerializeField] private InputField nameInputField;
     [SerializeField] private InputField ipAddressField;
@@ -18,10 +18,17 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        startPagePanel.SetActive(true);
-        lobbyPanel.SetActive(false);
-
-        SetPlayerName(nameInputField.text);
+        if (PlaneSimNetworkManager.Instance.mode != Mirror.NetworkManagerMode.Offline)
+        {
+            startPagePanel.SetActive(false);
+            lobbyPanel.SetActive(true);
+        }
+        else
+        {
+            startPagePanel.SetActive(true);
+            lobbyPanel.SetActive(false);
+            SetPlayerName(nameInputField.text);
+        }
     }
 
     private void OnEnable()
