@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class DesktopGameUI : GameUI
 {
+    [Header("Desktop UI")]
     [SerializeField] private Transform deathMessages;
-    [SerializeField] private Text killText;
 
     public override NametagUI SpawnNametag()
     {
@@ -35,8 +35,16 @@ public class DesktopGameUI : GameUI
         }
     }
 
-    public override void SpawnKillMessage(string msg)
+    public override void ShowBannerMessage(string msg)
     {
-        Debug.Log(msg);
+        banner.SetActive(true);
+
+        foreach (Text t in banner.GetComponentsInChildren<Text>())
+            t.text = msg;
+    }
+
+    public override void HideBannerMessage()
+    {
+        banner.SetActive(false);
     }
 }

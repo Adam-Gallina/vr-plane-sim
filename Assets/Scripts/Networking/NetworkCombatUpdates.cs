@@ -21,7 +21,7 @@ public class NetworkCombatUpdates : NetworkBehaviour
             return;
 
         if (hasAuthority)
-            GameUI.Instance.SpawnKillMessage($"Killed {target.GetCombatName()}!");
+            GameUI.Instance.SetBannerMessage($"Killed {target.GetCombatName()}!");
     }
 
     [Server]
