@@ -55,7 +55,7 @@ public class SeekingRocket : NetworkBullet
         foreach (Collider c in colls)
         {
             NetworkPlaneController plane = c.GetComponentInParent<NetworkPlaneController>();
-            if (!plane || plane == source)
+            if (!plane || plane == spawner)
                 continue;
 
             if (!c.CompareTag(Constants.TagString(targetTag)))

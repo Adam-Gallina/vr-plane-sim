@@ -5,7 +5,8 @@ using Mirror;
 
 public class NetworkBullet : NetworkBehaviour
 {
-    protected NetworkPlaneController source;
+    protected NetworkCombatBase spawner;
+    protected DamageSource source;
 
     [SerializeField] protected Constants.Tag targetTag;
     [SerializeField] protected LayerMask targetLayer;
@@ -37,7 +38,7 @@ public class NetworkBullet : NetworkBehaviour
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<NetworkPlaneController>() == source)
+        if (other.GetComponentInParent<NetworkPlaneController>() == spawner)
             return;
 
         if (((1 << other.gameObject.layer) & targetLayer.value) > 0)
@@ -48,7 +49,7 @@ public class NetworkBullet : NetworkBehaviour
             NetworkHealthBase target = other.gameObject.GetComponentInParent<NetworkHealthBase>();
             if (target && canDamage)
             {
-                target.Damage(damage);
+                target.Damage(damage, spawner, source);
                 canDamage = false;
             }
 
@@ -61,5 +62,9 @@ public class NetworkBullet : NetworkBehaviour
     }
 
     [Server]
-    public void SetSource(NetworkPlaneController source) => this.source = source; 
+    public void SetSource(NetworkCombatBase spawner, DamageSource sourceType) 
+    { 
+        this.spawner = spawner;
+        source = sourceType;
+    } 
 }

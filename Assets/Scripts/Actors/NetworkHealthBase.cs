@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class NetworkHealthBase : NetworkBehaviour
+public enum DamageSource { Player, Ground, AI }
+public class NetworkHealthBase : NetworkCombatBase
 {
     [Header("Health")]
     [SerializeField] protected float maxHealth;
@@ -16,10 +17,10 @@ public class NetworkHealthBase : NetworkBehaviour
         currHealth = maxHealth;
     }
 
-    public void HandleHealthChanged(float oldValue, float newValue) => Debug.Log($"{name} {oldValue} -> {newValue}");
+    //public void HandleHealthChanged(float oldValue, float newValue) => Debug.Log($"{name} {oldValue} -> {newValue}");
 
     [ServerCallback]
-    public virtual void Damage(float damage)
+    public virtual void Damage(float damage, NetworkCombatBase source, DamageSource sourceType)
     {
         if (dead)
             return;
@@ -28,19 +29,28 @@ public class NetworkHealthBase : NetworkBehaviour
 
         if (currHealth <= 0 && !dead)
         {
-             Death();
+             Death(source, sourceType);
         }
     }
 
     [ServerCallback]
-    protected virtual void Death()
+    protected virtual void Death(NetworkCombatBase source, DamageSource sourceType)
     {
-        RpcOnDeath();
+        if (dead)
+            return;
+
+        if (player)
+            player.OnAvatarKilled(source, sourceType);
+
+        source.player?.OnEnemyKilled(this, sourceType);
+
+        RpcOnDeath(source, sourceType);
+
         dead = true;
     }
 
     [ClientRpc]
-    protected virtual void RpcOnDeath()
+    protected virtual void RpcOnDeath(NetworkCombatBase source, DamageSource sourceType)
     {
         if (isServer)
             NetworkServer.Destroy(gameObject);

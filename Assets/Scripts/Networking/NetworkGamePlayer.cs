@@ -4,17 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
-public class NetworkGamePlayer : NetworkBehaviour
+public class NetworkGamePlayer : NetworkCombatUpdates
 {
-    public GameObject nametagPrefab;
     public GameObject avatarPrefab;
     public WatchPlayerDeath avatarDeathEffectPrefab;
 
     [SyncVar]
-    public string displayName = "Loading...";
-    [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
-    [SyncVar]
+    //[SyncVar(hook = nameof(IdentifyAvatar))]
     public NetworkPlayerPlane avatar;
 
     private PlaneSimNetworkManager network;
@@ -46,9 +43,6 @@ public class NetworkGamePlayer : NetworkBehaviour
             SceneManager.sceneLoaded += SpawnNameTag;
 
         if (!hasAuthority) return;
-
-        if (avatar)
-            avatar.OnPlayerDestroyed += OnAvatarDestroyed;
     }
 
     private void OnDisable()
@@ -57,9 +51,6 @@ public class NetworkGamePlayer : NetworkBehaviour
             SceneManager.sceneLoaded -= SpawnNameTag;
 
         if (!hasAuthority) return;
-
-        if (avatar)
-            avatar.OnPlayerDestroyed -= OnAvatarDestroyed;
     }
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
@@ -67,20 +58,7 @@ public class NetworkGamePlayer : NetworkBehaviour
         if (scene.buildIndex == Constants.MainMenu.buildIndex || isLocalPlayer)
             return;
 
-        Instantiate(nametagPrefab, GameObject.Find("Canvas").transform).GetComponent<NametagUI>().SetLinkedPlayer(this);
-    }
-
-    private void OnAvatarDestroyed(Transform t)
-    {
-        if (!hasAuthority) return;
-
-        CameraController.Instance.SetTarget(null);
-
-        WatchPlayerDeath effect = Instantiate(avatarDeathEffectPrefab);
-        effect.SetPosition(t.position, t.forward);
-
-        if (GameController.Instance.allowPlayerRespawn)
-            Invoke("RespawnAvatar", effect.duration);
+        GameUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }
 
     [Server]
@@ -99,12 +77,28 @@ public class NetworkGamePlayer : NetworkBehaviour
     public void OnAvatarSpawned(GameObject avatarObj)
     {
         avatar = avatarObj.GetComponent<NetworkPlayerPlane>();
+        avatar.SetCombatUpdates(this);
+        avatar.SetCombatName(displayName);
 
         if (!hasAuthority) return;
 
-        avatar.OnPlayerDestroyed += OnAvatarDestroyed;
-
         CameraController.Instance.SetTarget(avatar.transform);
+    }
+
+    [ClientRpc]
+    protected override void RpcAvatarKilled(NetworkCombatBase source, DamageSource damageType)
+    {
+        base.RpcAvatarKilled(source, damageType);
+
+        if (!hasAuthority) return;
+
+        CameraController.Instance.SetTarget(null);
+
+        WatchPlayerDeath effect = Instantiate(avatarDeathEffectPrefab);
+        effect.SetPosition(avatar.transform.position, avatar.transform.forward);
+
+        if (GameController.Instance.allowPlayerRespawn)
+            Invoke("RespawnAvatar", effect.duration);
     }
 
     [Command]

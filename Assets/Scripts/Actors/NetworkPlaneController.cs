@@ -10,13 +10,6 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float turnSpeed;
     [SerializeField] private float altSpeed;
 
-    [Header("Combat")]
-    [SerializeField] private Transform[] bulletSource;
-    private int nextSource;
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform specialSource;
-    [SerializeField] protected GameObject currSpecial;
-
     [Header("Animations")]
     [SerializeField] protected Transform model;
     [SerializeField] private float modelRotMod;
@@ -43,7 +36,7 @@ public class NetworkPlaneController : NetworkHealthBase
     {
         if (collision.gameObject.layer == Constants.EnvironmentLayer)
         {
-            Death();
+            Death(this, DamageSource.Ground);
         }
     }
 
@@ -90,50 +83,8 @@ public class NetworkPlaneController : NetworkHealthBase
         joystick.localEulerAngles = new Vector3(dir.y, 0, -dir.x) * joystickMod;
     }
 
-    protected void Fire()
-    {
-        if (!hasAuthority) return;
-
-        CmdSpawnBullet(nextSource);
-
-        if (++nextSource >= bulletSource.Length)
-            nextSource = 0;
-    }
-
-    protected void FireSpecial()
-    {
-        if (!hasAuthority) return;
-
-        CmdSpawnSpecial();
-    }
-
-    [Command]
-    private void CmdSpawnBullet(int source)
-    {
-        GameObject b = Instantiate(bulletPrefab, bulletSource[source].position, bulletSource[source].rotation);
-        NetworkServer.Spawn(b);
-        b.GetComponent<NetworkBullet>().SetSource(this);
-
-        RpcOnSpawnBullet(source);
-    }
-
-    [Command]
-    private void CmdSpawnSpecial()
-    {
-        GameObject b = Instantiate(currSpecial, specialSource.position, specialSource.rotation);
-        NetworkServer.Spawn(b);
-        b.GetComponent<NetworkBullet>().SetSource(this);
-
-    }
-
     [ClientRpc]
-    private void RpcOnSpawnBullet(int source)
-    {
-        bulletSource[source].GetComponent<AudioSource>()?.Play();
-    }
-
-    [ClientRpc]
-    protected override void RpcOnDeath()
+    protected override void RpcOnDeath(NetworkCombatBase source, DamageSource sourceType)
     {
         GameObject effect = Instantiate(deathPrefab);
         effect.transform.position = transform.position;
@@ -145,6 +96,6 @@ public class NetworkPlaneController : NetworkHealthBase
         erb.velocity = rb.velocity;
         erb.angularVelocity = rb.angularVelocity * 10 + transform.right * 5;
 
-        base.RpcOnDeath();
+        base.RpcOnDeath(source, sourceType);
     }
 }

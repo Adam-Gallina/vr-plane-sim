@@ -871,16 +871,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 12
-  thrustSpeed: 30
-  turnSpeed: 60
-  altSpeed: 60
   bulletSource:
   - {fileID: 1653076711583785706}
   - {fileID: 1653076712325322626}
   bulletPrefab: {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
   specialSource: {fileID: 3420009011094819388}
   currSpecial: {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
+  damageName: Unknown Player
+  damageType: 0
+  maxHealth: 12
+  thrustSpeed: 30
+  turnSpeed: 60
+  altSpeed: 60
   model: {fileID: 2318525436569042146}
   modelRotMod: 25
   propeller: {fileID: 6604473420705916484}
