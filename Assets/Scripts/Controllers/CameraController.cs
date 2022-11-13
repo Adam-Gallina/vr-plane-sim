@@ -39,6 +39,8 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    
+
     private void OnEnable()
     {
         inp.Player.AltMouse.Enable();

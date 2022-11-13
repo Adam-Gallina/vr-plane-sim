@@ -106,7 +106,7 @@ public abstract class GameUI : MonoBehaviour
 
     public void ReturnToLobbyPressed()
     {
-        
+        PlaneSimNetworkManager.Instance.ReturnToLobby();
     }
 
     private void HandleClientDisconnected()

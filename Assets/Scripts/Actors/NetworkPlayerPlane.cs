@@ -162,3 +162,37 @@ public class NetworkPlayerPlane : NetworkPlaneController
         base.Death(source, sourceType);
     }
 }
+
+class FixInput
+{
+    private float threshold = 0.5f;
+    private Vector2 lastDir = new Vector2();
+
+    private float VerifyInput(float value, float lastVal)
+    {
+        if (value != 0 || Mathf.Abs(lastVal) < threshold)
+            return value;
+
+        return Mathf.Sign(lastVal);
+    }
+
+    public Vector2 GetCorrectedVec2(Vector2 dir)
+    {
+        if (dir.x > 0)
+            dir.x = 1 - dir.x;
+        else if (dir.x < 0)
+            dir.x = -1 - dir.x;
+
+        if (dir.y > 0)
+            dir.y = 1 - dir.y;
+        else if (dir.y < 0)
+            dir.y = -1 - dir.y;
+
+        dir = new Vector2(VerifyInput(dir.x, lastDir.x),
+                          VerifyInput(dir.y, lastDir.y));
+
+        lastDir = dir;
+
+        return dir;
+    }
+}

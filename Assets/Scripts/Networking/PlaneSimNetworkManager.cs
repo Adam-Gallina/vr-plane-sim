@@ -89,6 +89,21 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
+        if (newSceneName == Constants.MainMenu.name)
+        {
+            for (int i = GamePlayers.Count - 1; i >= 0; i--)
+            {
+                NetworkConnection conn = GamePlayers[i].connectionToClient;
+                NetworkLobbyPlayer p = Instantiate(lobbyPlayerPrefab);
+                p.DisplayName = GamePlayers[i].displayName;
+                p.CamType = (int)GamePlayers[i].CamType;
+                p.IsLeader = GamePlayers[i].IsLeader;
+
+                NetworkServer.Destroy(conn.identity.gameObject);
+
+                NetworkServer.ReplacePlayerForConnection(conn, p.gameObject);
+            }
+        }
         if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex && 
             newSceneName != Constants.MainMenu.name)
         {
@@ -172,6 +187,11 @@ public class PlaneSimNetworkManager : NetworkManager
         }
 
         return true;
+    }
+
+    public void ReturnToLobby()
+    {
+        ServerChangeScene(Constants.MainMenu.name);
     }
 
     public void StartGame(int map)
