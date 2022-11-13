@@ -25,6 +25,12 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         base.Awake();
 
         Instance = this;
@@ -48,13 +54,17 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        if (conn.identity != null)
+        if (conn.identity != null && SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
         {
             NetworkLobbyPlayer player = conn.identity.gameObject.GetComponent<NetworkLobbyPlayer>();
-
             LobbyPlayers.Remove(player);
 
             NotifyPlayersOfReadyState();
+        }
+        else
+        {
+            NetworkGamePlayer player = conn.identity.gameObject.GetComponent<NetworkGamePlayer>();
+            GamePlayers.Remove(player);
         }
 
         base.OnServerDisconnect(conn);
@@ -63,6 +73,7 @@ public class PlaneSimNetworkManager : NetworkManager
     public override void OnStopServer()
     {
         LobbyPlayers.Clear();
+        GamePlayers.Clear();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)
@@ -87,6 +98,7 @@ public class PlaneSimNetworkManager : NetworkManager
                 NetworkGamePlayer p = Instantiate(gamePlayerPrefab);
                 p.SetDisplayName(LobbyPlayers[i].DisplayName);
                 p.SetCamType((Constants.CamType)LobbyPlayers[i].CamType);
+                p.IsLeader = LobbyPlayers[i].IsLeader;
 
                 NetworkServer.Destroy(conn.identity.gameObject);
 
@@ -114,7 +126,8 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         base.OnServerReady(conn);
     
-        OnServerReadied?.Invoke(conn, GamePlayers.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
+            OnServerReadied?.Invoke(conn, GamePlayers.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
     }
     #endregion
 

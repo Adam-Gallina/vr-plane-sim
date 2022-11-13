@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public abstract class GameUI : MonoBehaviour
@@ -10,6 +11,7 @@ public abstract class GameUI : MonoBehaviour
     [Header("Pause Menu")]
     [SerializeField] protected GameObject pauseMenu;
     [HideInInspector] public bool pauseOpen = false;
+    public GameObject returnToLobbyBtn;
 
     [Header("Player nametag")]
     [SerializeField] protected GameObject nametagPrefab;
@@ -29,6 +31,16 @@ public abstract class GameUI : MonoBehaviour
         Instance = this;
 
         HideBannerMessage();
+    }
+
+    private void OnEnable()
+    {
+        PlaneSimNetworkManager.OnClientDisconnected += HandleClientDisconnected;
+    }
+
+    private void OnDisable()
+    {
+        PlaneSimNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
     }
 
     private void Update()
@@ -78,11 +90,28 @@ public abstract class GameUI : MonoBehaviour
 
     public void LeaveLobbyPressed()
     {
-
+        switch (PlaneSimNetworkManager.Instance.mode)
+        {
+            case Mirror.NetworkManagerMode.ClientOnly:
+                PlaneSimNetworkManager.Instance.StopClient();
+                break;
+            case Mirror.NetworkManagerMode.Host:
+                PlaneSimNetworkManager.Instance.StopHost();
+                break;
+            default:
+                Debug.LogError("Idk what happened but probably ur trying to make a server now so that's pretty cool");
+                break;
+        }
     }
 
     public void ReturnToLobbyPressed()
     {
+        
+    }
 
+    private void HandleClientDisconnected()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
+            SceneManager.LoadScene(Constants.MainMenu.buildIndex);
     }
 }

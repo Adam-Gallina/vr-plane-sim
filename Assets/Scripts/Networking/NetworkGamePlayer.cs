@@ -24,6 +24,24 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         }
     }
 
+    private bool isLeader;
+    public bool IsLeader
+    {
+        get
+        {
+            return isLeader;
+        }
+        set
+        {
+            isLeader = value;
+
+            if (hasAuthority)
+            {
+                GameUI.Instance.returnToLobbyBtn.SetActive(value);
+            }
+        }
+    }
+
     public override void OnStartClient()
     {
         DontDestroyOnLoad(gameObject);
@@ -41,16 +59,12 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     {
         if (!isLocalPlayer)
             SceneManager.sceneLoaded += SpawnNameTag;
-
-        if (!hasAuthority) return;
     }
 
     private void OnDisable()
     {
         if (!isLocalPlayer)
             SceneManager.sceneLoaded -= SpawnNameTag;
-
-        if (!hasAuthority) return;
     }
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
@@ -98,7 +112,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         effect.SetPosition(avatar.transform.position, avatar.transform.forward);
 
         if (GameController.Instance.allowPlayerRespawn)
-            Invoke("RespawnAvatar", effect.duration);
+            Invoke(nameof(RespawnAvatar), effect.duration);
     }
 
     [Command]

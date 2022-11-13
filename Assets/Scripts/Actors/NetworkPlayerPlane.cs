@@ -49,8 +49,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.AltFire.started += OnUseSpecial;
 
         inp.Player.Middle.started += ToggleMovement;
-
-        inp.Player.Pause.started += GameUI.Instance.TogglePauseMenu;
     }
 
     private void OnDisable()
@@ -63,8 +61,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.AltFire.started -= OnUseSpecial;
 
         inp.Player.Middle.started -= ToggleMovement;
-
-        inp.Player.Pause.started -= GameUI.Instance.TogglePauseMenu;
     }
 
     private void Update()

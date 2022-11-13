@@ -43,12 +43,18 @@ public class CameraController : MonoBehaviour
     {
         inp.Player.AltMouse.Enable();
         inp.Player.CameraPan.Enable();
+
+        inp.Player.Pause.Enable();
+        inp.Player.Pause.started += GameUI.Instance.TogglePauseMenu;
     }
 
     private void OnDisable()
     {
         inp.Player.AltMouse.Disable();
         inp.Player.CameraPan.Disable();
+
+        inp.Player.Pause.Disable();
+        inp.Player.Pause.started -= GameUI.Instance.TogglePauseMenu;
     }
 
     public void SpawnCam(Constants.CamType camType)

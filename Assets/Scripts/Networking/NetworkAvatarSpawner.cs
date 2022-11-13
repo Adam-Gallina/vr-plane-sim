@@ -17,8 +17,7 @@ public class NetworkAvatarSpawner : NetworkBehaviour
         PlaneSimNetworkManager.OnServerReadied += SpawnPlayer;
     }
 
-    [ServerCallback]
-    private void OnDestroy()
+    public override void OnStopServer()
     {
         PlaneSimNetworkManager.OnServerReadied -= SpawnPlayer;
     }

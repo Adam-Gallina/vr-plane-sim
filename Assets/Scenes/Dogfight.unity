@@ -449,6 +449,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 6712257493925607862, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
+      propertyPath: returnToLobbyBtn
+      value: 
+      objectReference: {fileID: 2129349485}
     - target: {fileID: 6712257493925607863, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2399,3 +2403,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982401550}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2129349485 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5000020764532020700, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
+  m_PrefabInstance: {fileID: 319473370}
+  m_PrefabAsset: {fileID: 0}
