@@ -18,12 +18,14 @@ public class NetworkCombatBase : NetworkBehaviour
     [SyncVar]
     public NetworkCombatUpdates player;
 
-    public void SetCombatUpdates(NetworkCombatUpdates player)
+    [Command]
+    public void CmdSetCombatUpdates(NetworkCombatUpdates player)
     {
         this.player = player;
     }
 
-    public void SetCombatName(string newName)
+    [Command]
+    public void CmdSetCombatName(string newName)
     {
         combatName = newName;
     }

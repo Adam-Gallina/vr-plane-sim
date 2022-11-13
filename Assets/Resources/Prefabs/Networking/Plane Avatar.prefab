@@ -884,7 +884,7 @@ MonoBehaviour:
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
-  body: {fileID: 6053520908640881496}
+  body: {fileID: 9187135911283660822}
   model: {fileID: 2318525436569042146}
   modelRotMod: 25
   propeller: {fileID: 6604473420705916484}
@@ -1115,14 +1115,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
+--- !u!23 &9187135911283660822 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6652725513331149018, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
+  m_PrefabInstance: {fileID: 6688837253965016880}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7279683740532761866 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4167280743394806330, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
-  m_PrefabInstance: {fileID: 6688837253965016880}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6053520908640881496 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 635547659545568360, guid: 8aad0fe92f539464fb86e656293c90e1, type: 3}
   m_PrefabInstance: {fileID: 6688837253965016880}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6582362107965507803 stripped

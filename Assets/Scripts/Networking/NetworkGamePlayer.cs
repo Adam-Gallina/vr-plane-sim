@@ -13,6 +13,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     public Color planeColor;
     [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
+    [SyncVar]
     public NetworkPlayerPlane avatar;
 
     private PlaneSimNetworkManager network;
@@ -94,15 +95,15 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     }
 
     [ClientRpc]
-    public void OnAvatarSpawned(GameObject avatarObj)
+    public void RpcOnAvatarSpawned(GameObject avatarObj)
     {
         avatar = avatarObj.GetComponent<NetworkPlayerPlane>();
-        avatar.SetCombatUpdates(this);
-        avatar.SetCombatName(displayName);
-
-        avatar.body.GetComponent<Renderer>().material.color = planeColor;
 
         if (!hasAuthority) return;
+
+        avatar.CmdSetCombatUpdates(this);
+        avatar.CmdSetCombatName(displayName);
+        avatar.CmdSetPlaneColor(planeColor);
 
         CameraController.Instance.SetTarget(avatar.transform);
     }

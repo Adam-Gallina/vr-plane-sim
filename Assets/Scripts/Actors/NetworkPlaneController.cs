@@ -11,13 +11,15 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float altSpeed;
 
     [Header("Animations")]
-    [SerializeField] public GameObject body;
+    [SerializeField] protected Renderer body;
     [SerializeField] protected Transform model;
     [SerializeField] private float modelRotMod;
     [SerializeField] private Transform propeller;
     [SerializeField] private float propellerSpeed;
     [SerializeField] private Transform joystick;
     [SerializeField] private float joystickMod;
+    [SyncVar(hook = nameof(OnSetPlaneColor))]
+    private Color planeCol;
 
     [Header("Death Effect")]
     [SerializeField] private GameObject deathPrefab;
@@ -84,13 +86,25 @@ public class NetworkPlaneController : NetworkHealthBase
         joystick.localEulerAngles = new Vector3(dir.y, 0, -dir.x) * joystickMod;
     }
 
+    [Command]
+    public void CmdSetPlaneColor(Color col)
+    {
+        planeCol = col;
+    }
+
+    private void OnSetPlaneColor(Color oldCol, Color newCol)
+    {
+        body.material.color = newCol;
+    }
+
     [ClientRpc]
     protected override void RpcOnDeath(NetworkCombatBase source, DamageSource sourceType)
     {
         GameObject effect = Instantiate(deathPrefab);
         effect.transform.position = transform.position;
         effect.transform.localEulerAngles = transform.localEulerAngles;
-        effect.GetComponent<DeathEffect>().body.GetComponent<Renderer>().material.color = body.GetComponent<Renderer>().material.color;
+        if (body)
+            effect.GetComponent<DeathEffect>().body.GetComponent<Renderer>().material.color = body.GetComponent<Renderer>().material.color;
 
         effect.transform.GetChild(0).localEulerAngles = model.localEulerAngles;
 
