@@ -151,7 +151,7 @@ MonoBehaviour:
   nametagPrefab: {fileID: 8032759019684989042, guid: 50a347138738038479392675b039ad03, type: 3}
   deathMessagePrefab: {fileID: 3414361253318315556, guid: 74810c4227f7c2f47b258113b1bb9d57, type: 3}
   deathMessageHeight: 30
-  deathMessageDuration: 2
+  deathMessageDuration: 3
   killMessagePrefab: {fileID: 0}
   killMessageHeight: 0
   killMessageDuration: 2

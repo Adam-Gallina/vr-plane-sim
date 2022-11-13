@@ -13,6 +13,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject deathMessagePrefab;
     [SerializeField] protected float deathMessageHeight;
     [SerializeField] protected float deathMessageDuration;
+    protected List<DeathMessageInstance> deathMessageLog = new List<DeathMessageInstance>();
 
     [Header("Kill banner")]
     [SerializeField] protected GameObject killMessagePrefab;
@@ -24,9 +25,30 @@ public abstract class GameUI : MonoBehaviour
         Instance = this;
     }
 
+    private void Update()
+    {
+        if (deathMessageLog.Count > 0 && Time.time >= deathMessageLog[0].endTime)
+        {
+            IncrementDeathMessages();
+        }
+    }
+
     public abstract NametagUI SpawnNametag();
 
     public abstract void SpawnDeathMessage(string msg);
+    public abstract void IncrementDeathMessages();
 
     public abstract void SpawnKillMessage(string target);
+
+    protected struct DeathMessageInstance
+    {
+        public RectTransform rt;
+        public float endTime;
+
+        public DeathMessageInstance(GameObject obj, float endTime)
+        {
+            rt = obj.GetComponent<RectTransform>();
+            this.endTime = endTime;
+        }
+    }
 }

@@ -20,6 +20,19 @@ public class DesktopGameUI : GameUI
         dm.GetComponentInChildren<Text>().text = msg;
 
         dm.GetComponent<RectTransform>().localPosition = new Vector3(0, -deathMessages.childCount * deathMessageHeight, 0);
+
+        deathMessageLog.Add(new DeathMessageInstance(dm, Time.time + deathMessageDuration ));
+    }
+
+    public override void IncrementDeathMessages()
+    {
+        Destroy(deathMessageLog[0].rt.gameObject);
+        deathMessageLog.RemoveAt(0);
+
+        for (int i = 0; i < deathMessageLog.Count; i++)
+        {
+            deathMessageLog[i].rt.localPosition = new Vector3(0, -i * deathMessageHeight, 0);
+        }
     }
 
     public override void SpawnKillMessage(string msg)
