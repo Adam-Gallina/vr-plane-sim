@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class GameUI : MonoBehaviour
 {
     public static GameUI Instance;
+
+    [Header("Pause Menu")]
+    [SerializeField] protected GameObject pauseMenu;
+    [HideInInspector] public bool pauseOpen = false;
 
     [Header("Player nametag")]
     [SerializeField] protected GameObject nametagPrefab;
@@ -34,6 +39,16 @@ public abstract class GameUI : MonoBehaviour
         }
     }
 
+    public void TogglePauseMenu(InputAction.CallbackContext context)
+    {
+        TogglePauseMenu();
+    }
+    public void TogglePauseMenu()
+    {
+        SetPauseMenu(!pauseOpen);
+    }
+    public abstract void SetPauseMenu(bool open);
+
     public abstract NametagUI SpawnNametag();
 
     public abstract void SpawnDeathMessage(string msg);
@@ -59,5 +74,15 @@ public abstract class GameUI : MonoBehaviour
             rt = obj.GetComponent<RectTransform>();
             this.endTime = endTime;
         }
+    }
+
+    public void LeaveLobbyPressed()
+    {
+
+    }
+
+    public void ReturnToLobbyPressed()
+    {
+
     }
 }

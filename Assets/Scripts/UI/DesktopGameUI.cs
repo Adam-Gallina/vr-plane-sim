@@ -13,6 +13,12 @@ public class DesktopGameUI : GameUI
         return Instantiate(nametagPrefab, transform).GetComponent<NametagUI>();
     }
 
+    public override void SetPauseMenu(bool open)
+    {
+        pauseOpen = open;
+        pauseMenu.SetActive(open);
+    }
+
     public override void SpawnDeathMessage(string msg)
     {
         GameObject dm = Instantiate(deathMessagePrefab, deathMessages);

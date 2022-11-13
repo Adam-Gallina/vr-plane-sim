@@ -89,6 +89,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""f06076ce-6f6f-4bd9-80dd-a3430cd0222e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -278,6 +287,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""AltMouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58a4a5f6-8bab-414d-a9ab-b40cea0ece8f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -293,6 +313,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
         m_Player_CameraPan = m_Player.FindAction("CameraPan", throwIfNotFound: true);
         m_Player_AltMouse = m_Player.FindAction("AltMouse", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -359,6 +380,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Speed;
     private readonly InputAction m_Player_CameraPan;
     private readonly InputAction m_Player_AltMouse;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -370,6 +392,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Speed => m_Wrapper.m_Player_Speed;
         public InputAction @CameraPan => m_Wrapper.m_Player_CameraPan;
         public InputAction @AltMouse => m_Wrapper.m_Player_AltMouse;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -400,6 +423,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AltMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
                 @AltMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
                 @AltMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltMouse;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -425,6 +451,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AltMouse.started += instance.OnAltMouse;
                 @AltMouse.performed += instance.OnAltMouse;
                 @AltMouse.canceled += instance.OnAltMouse;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -438,5 +467,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnSpeed(InputAction.CallbackContext context);
         void OnCameraPan(InputAction.CallbackContext context);
         void OnAltMouse(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

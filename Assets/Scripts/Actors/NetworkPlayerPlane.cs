@@ -49,6 +49,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.AltFire.started += OnUseSpecial;
 
         inp.Player.Middle.started += ToggleMovement;
+
+        inp.Player.Pause.started += GameUI.Instance.TogglePauseMenu;
     }
 
     private void OnDisable()
@@ -61,6 +63,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
         inp.Player.AltFire.started -= OnUseSpecial;
 
         inp.Player.Middle.started -= ToggleMovement;
+
+        inp.Player.Pause.started -= GameUI.Instance.TogglePauseMenu;
     }
 
     private void Update()
@@ -106,6 +110,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void HandleInput()
     {
+        if (GameUI.Instance.pauseOpen)
+            return;
+
         if (firing && Time.time > nextShot)
         {
             nextShot = Time.time + fireSpeed;
@@ -116,6 +123,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
     #region Input Callbacks
     private void OnStartFire(InputAction.CallbackContext obj)
     {
+        if (GameUI.Instance.pauseOpen)
+            return;
+
         firing = true;
     }
 
@@ -126,6 +136,9 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void OnUseSpecial(InputAction.CallbackContext obj)
     {
+        if (GameUI.Instance.pauseOpen)
+            return;
+
         if (currSpecial && Time.time > nextSpecial)
         {
             FireSpecial();
@@ -135,7 +148,21 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
+        if (GameUI.Instance.pauseOpen)
+            return;
+
         allowMovement = !allowMovement;
     }
     #endregion
+
+    protected override void Death(NetworkCombatBase source, DamageSource sourceType)
+    {
+        if (dead)
+            return;
+
+        player?.OnAvatarKilled(source, sourceType);
+        source.player?.OnEnemyKilled(this, sourceType);
+
+        base.Death(source, sourceType);
+    }
 }

@@ -10,7 +10,7 @@ public class NetworkHealthBase : NetworkCombatBase
     [SerializeField] protected float maxHealth;
     [SyncVar]//(hook = nameof(HandleHealthChanged))]
     protected float currHealth;
-    private bool dead = false;
+    protected bool dead = false;
 
     protected virtual void Awake()
     {
@@ -38,11 +38,6 @@ public class NetworkHealthBase : NetworkCombatBase
     {
         if (dead)
             return;
-
-        if (player)
-            player.OnAvatarKilled(source, sourceType);
-
-        source.player?.OnEnemyKilled(this, sourceType);
 
         RpcOnDeath(source, sourceType);
 
