@@ -84,7 +84,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     private void OnApplicationQuit() => isQuitting = true;
     private void OnDestroy()
     {
-        if (hasAuthority && !isQuitting && !PlaneSimNetworkManager.Instance.changingScenes)
+        if (hasAuthority && !isQuitting)
         {
             if (CameraController.Instance.IsTarget(transform))
                 CameraController.Instance.SetTarget(null);

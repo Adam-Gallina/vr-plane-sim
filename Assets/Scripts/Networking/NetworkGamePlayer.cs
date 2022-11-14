@@ -51,9 +51,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == Constants.MainMenu.buildIndex && !isLocalPlayer)
-            return;
-        else if (scene.buildIndex != Constants.MainMenu.buildIndex && isLocalPlayer)
+        if (scene.buildIndex != Constants.MainMenu.buildIndex && isLocalPlayer)
             return;
 
         SpawnNameTag();
@@ -84,6 +82,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     public void CmdSetIsReady(bool isReady)
     {
         IsReady = isReady;
+
+        PlaneSimNetworkManager.Instance.NotifyPlayersOfReadyState();
     }
 
     private void OnPlayerColorChanged(Color oldcol, Color newcol)
@@ -144,8 +144,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     }
     #endregion
 
-
-    public void HandleReadyToStart(bool readyToStart)
+    [ClientRpc]
+    public void RpcHandleReadyToStart(bool readyToStart)
     {
         if (!IsLeader) { return; }
 

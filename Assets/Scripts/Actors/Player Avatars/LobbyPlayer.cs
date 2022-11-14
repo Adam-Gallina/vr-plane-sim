@@ -76,8 +76,6 @@ public class LobbyPlayer : NametagUI
     public void ToggleReady()
     {
         LinkedPlayer.CmdSetIsReady(!LinkedPlayer.IsReady);
-
-        PlaneSimNetworkManager.Instance.NotifyPlayersOfReadyState();
     }
     #endregion
 }

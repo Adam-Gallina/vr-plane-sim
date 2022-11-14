@@ -9,9 +9,6 @@ public class LobbyUI : MultiCamUI
 
     [SerializeField] private Transform playerList;
     private List<LobbyPlayer> lobbyPlayers = new List<LobbyPlayer>();
-    private List<Image> playerColorTexts = new List<Image>();
-    private List<Text> playerNameTexts = new List<Text>();
-    private List<Text> playerReadyTexts = new List<Text>();
     public Dropdown camType;
     public Button startGameButton;
 
@@ -55,12 +52,6 @@ public class LobbyUI : MultiCamUI
 
     public void UpdateDisplay()
     {
-        for (int i = 0; i < playerNameTexts.Count; i++)
-        {
-            playerNameTexts[i].text = "Waiting...";
-            playerReadyTexts[i].text = string.Empty;
-        }
-
         for (int i = 0; i < lobbyPlayers.Count; i++)
         {
             lobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));

@@ -1890,11 +1890,10 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 8749878177697297261, guid: 4d1397f3a0f061347b3f7fbe05d1cd85, type: 3}
+  playerPrefab: {fileID: 1505773578397707798, guid: 308a1dabb3d4d874a8d2da7334f7e649, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 1505773578397707798, guid: 308a1dabb3d4d874a8d2da7334f7e649, type: 3}
   - {fileID: 1265399083062415739, guid: 89f48bd146147fd45b4be76b9115135b, type: 3}
   - {fileID: 6991280686162805566, guid: 68f910be232adce40b359e954a9c4cae, type: 3}
   - {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}
@@ -1902,9 +1901,7 @@ MonoBehaviour:
   - {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   - {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
   minPlayers: 1
-  gamePlayerPrefab: {fileID: 3752450130090303767, guid: 308a1dabb3d4d874a8d2da7334f7e649, type: 3}
   avatarSpawnerPrefab: {fileID: 6991280686162805566, guid: 68f910be232adce40b359e954a9c4cae, type: 3}
-  changingScenes: 0
 --- !u!4 &602145021
 Transform:
   m_ObjectHideFlags: 0
