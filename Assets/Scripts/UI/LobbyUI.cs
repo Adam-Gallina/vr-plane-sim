@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LobbyUI : MonoBehaviour
+public class LobbyUI : MultiCamUI
 {
-    public static LobbyUI Instance;
+    public static LobbyUI LInstance;
 
     [SerializeField] private Transform playerList;
     private List<LobbyPlayer> lobbyPlayers = new List<LobbyPlayer>();
@@ -20,9 +20,11 @@ public class LobbyUI : MonoBehaviour
 
     public Dropdown gameMode;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
+
+        LInstance = this;
 
         startGameButton.gameObject.SetActive(false);
     }
@@ -32,9 +34,13 @@ public class LobbyUI : MonoBehaviour
         Instance = null;
     }
 
+    public override NametagUI SpawnNametag()
+    {
+        return Instantiate(nametagPrefab, playerList).GetComponent<NametagUI>();
+    }
+
     public void AddPlayer(LobbyPlayer p)
     {
-        p.GetComponent<RectTransform>().SetParent(playerList, false);
         lobbyPlayers.Add(p);
 
         UpdateDisplay();
@@ -66,9 +72,9 @@ public class LobbyUI : MonoBehaviour
     {
         foreach (LobbyPlayer p in lobbyPlayers)
         {
-            if (p.hasAuthority)
+            if (p.LinkedPlayer.hasAuthority)
             {
-                p.CmdReadyUp();
+                p.ToggleReady();
                 break;
             }
         }
@@ -78,9 +84,9 @@ public class LobbyUI : MonoBehaviour
     {
         foreach (LobbyPlayer p in lobbyPlayers)
         {
-            if (p.hasAuthority)
+            if (p.LinkedPlayer.hasAuthority)
             {
-                p.CmdStartGame(gameMode.value);
+                p.StartGame(gameMode.value);
                 break;
             }
         }
@@ -100,6 +106,9 @@ public class LobbyUI : MonoBehaviour
                 Debug.LogError("Idk what happened but probably ur trying to make a server now so that's pretty cool");
                 break;
         }
+
+        foreach (LobbyPlayer p in lobbyPlayers)
+            Destroy(p.gameObject);
     }
 
     public void OnColorChange(Color col)
@@ -114,9 +123,9 @@ public class LobbyUI : MonoBehaviour
 
         foreach (LobbyPlayer p in lobbyPlayers)
         {
-            if (p.hasAuthority)
+            if (p.LinkedPlayer.hasAuthority)
             {
-                p.CmdSetPlaneColor(col);
+                p.SetPlaneColor(col);
                 break;
             }
         }

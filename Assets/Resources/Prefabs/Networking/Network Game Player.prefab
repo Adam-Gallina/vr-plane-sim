@@ -63,9 +63,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  nametagPrefab: {fileID: 8032759019684989042, guid: 50a347138738038479392675b039ad03, type: 3}
-  avatarPrefab: {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}
+  displayName: 
+  gameAvatarPrefab: {fileID: -7165951093212534526, guid: 487cce32879903e44858da5ef388d516, type: 3}
   avatarDeathEffectPrefab: {fileID: 1128044696953187201, guid: d17390f3c1b730548809a9dd200f6b86, type: 3}
-  displayName: Loading...
-  CamType: 0
   avatar: {fileID: 0}
+  playerColor: {r: 0.4392157, g: 0, b: 0.047058824, a: 1}
+  CamType: 0
+  IsReady: 0
+  IsLeader: 0

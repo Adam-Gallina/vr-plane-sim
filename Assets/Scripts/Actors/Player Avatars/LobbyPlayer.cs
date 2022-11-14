@@ -4,92 +4,78 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class LobbyPlayer : AvatarBase
+public class LobbyPlayer : NametagUI
 {
     [SerializeField] private Image playerColorImage;
     [SerializeField] private Text playerNameText;
     [SerializeField] private Text playerReadyText;
 
-    [SyncVar(hook = nameof(HandleDisplayNameChanged))]
-    public string DisplayName = "Loading...";
-    [SyncVar(hook = nameof(HandleReadyStatusChanged))]
-    public bool IsReady = false;
-    [SyncVar(hook = nameof(HandlePlaneColorChanged))]
-    public Color planeColor;
-    [SyncVar]
-    public int CamType;
-
-    public override void OnStartAuthority()
+    public override void SetLinkedPlayer(NetworkGamePlayer player)
     {
-        if (string.Equals(DisplayName, "Loading..."))
-            CmdSetDisplayName(MainMenu.DisplayName);
+        LinkedPlayer = player;
 
-        LobbyUI.Instance.startGameButton.gameObject.SetActive(((NetworkGamePlayer)Player).IsLeader);
-        LobbyUI.Instance.gameMode.gameObject.SetActive(((NetworkGamePlayer)Player).IsLeader);
+        if (player.hasAuthority)
+        {
+            LobbyUI.LInstance.startGameButton.gameObject.SetActive(player.IsLeader);
+            LobbyUI.LInstance.gameMode.gameObject.SetActive(player.IsLeader);
+        }
+
+        if (string.IsNullOrEmpty(player.displayName))
+            SetDisplayName(MainMenu.DisplayName);
+
+        LobbyUI.LInstance.AddPlayer(this);
+
+        LobbyUI.LInstance.camType.onValueChanged.AddListener((int val) => SetCamType(val));
     }
 
-    public override void OnStartClient()
+
+    protected override void Update()
     {
-        DontDestroyOnLoad(gameObject);
-
-        //Network.LobbyPlayers.Add(this);
-
-        LobbyUI.Instance.AddPlayer(this);
-
-        LobbyUI.Instance.camType.onValueChanged.AddListener((int val) => CmdSetCamType(val));
+        
     }
 
-    public override void OnStopClient()
+    private void OnDestroy()
     {
-        //Network.LobbyPlayers.Remove(this);
+        LobbyUI.LInstance.RemovePlayer(this);
 
-        LobbyUI.Instance.RemovePlayer(this);
-
-        LobbyUI.Instance.camType.onValueChanged.RemoveAllListeners();
+        if (LinkedPlayer.hasAuthority)
+            LobbyUI.LInstance.camType.onValueChanged.RemoveAllListeners();
     }
 
     public void UpdateUI()
     {
-        playerColorImage.color = planeColor;
-        playerNameText.text = DisplayName;
-        playerReadyText.text = ((NetworkGamePlayer)Player).IsLeader ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+        playerColorImage.color = LinkedPlayer.playerColor;
+        playerNameText.text = LinkedPlayer.displayName;
+        playerReadyText.text = LinkedPlayer.IsReady ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
     }
 
-    public void HandleReadyStatusChanged(bool oldValue, bool newValue) => LobbyUI.Instance.UpdateDisplay();
-    public void HandleDisplayNameChanged(string oldValue, string newValue) => LobbyUI.Instance.UpdateDisplay();
-    public void HandlePlaneColorChanged(Color oldValue, Color newValue) => LobbyUI.Instance.UpdateDisplay();
 
-    [Command]
-    public void CmdStartGame(int map)
+    public void StartGame(int map)
     {
-        if (PlaneSimNetworkManager.Instance.Players[0].connectionToClient != connectionToClient) { return; }
+        if (!LinkedPlayer.IsLeader) return;
 
         PlaneSimNetworkManager.Instance.StartGame(map);
     }
 
     #region Getters/Setters
-    [Command]
-    private void CmdSetDisplayName(string displayName)
+    private void SetDisplayName(string displayName)
     {
-        DisplayName = displayName;
+        LinkedPlayer.CmdSetDisplayName(displayName);
     }
 
-    [Command]
-    public void CmdSetPlaneColor(Color col)
+    public void SetPlaneColor(Color col)
     {
-        planeColor = col;
+        LinkedPlayer.CmdSetPlayerColor(col);
     }
 
-    [Command]
-    private void CmdSetCamType(int camType)
+    private void SetCamType(int camType)
     {
-        CamType = camType;
+        LinkedPlayer.CmdSetCamType((Constants.CamType)camType);
     }
 
-    [Command]
-    public void CmdReadyUp()
+    public void ToggleReady()
     {
-        IsReady = !IsReady;
+        LinkedPlayer.CmdSetIsReady(!LinkedPlayer.IsReady);
 
         PlaneSimNetworkManager.Instance.NotifyPlayersOfReadyState();
     }

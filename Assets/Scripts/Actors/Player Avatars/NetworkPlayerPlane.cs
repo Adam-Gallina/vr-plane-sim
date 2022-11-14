@@ -106,7 +106,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void HandleInput()
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         if (firing && Time.time > nextShot)
@@ -119,7 +119,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     #region Input Callbacks
     private void OnStartFire(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         firing = true;
@@ -132,7 +132,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void OnUseSpecial(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         if (currSpecial && Time.time > nextSpecial)
@@ -144,7 +144,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         allowMovement = !allowMovement;

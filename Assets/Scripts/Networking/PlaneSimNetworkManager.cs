@@ -176,7 +176,7 @@ public class PlaneSimNetworkManager : NetworkManager
 
         foreach (NetworkGamePlayer p in Players)
         {
-            if (!p.IsReady())
+            if (!p.IsReady)
             {
                 return false;
             }

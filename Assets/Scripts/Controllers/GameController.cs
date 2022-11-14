@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
 
     [Header("Map Rules")]
-    public List<AvatarBase> availableAvatars;
+    //public List<AvatarBase> availableAvatars;
     public bool pvp = true;
     public SpawnFormation spawnFormat = SpawnFormation.Assigned;
     public bool allowAiRespawn = true;
