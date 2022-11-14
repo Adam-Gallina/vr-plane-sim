@@ -6,7 +6,7 @@ using Mirror;
 
 public class NetworkGamePlayer : NetworkCombatUpdates
 {
-    public GameObject avatarPrefab;
+    [HideInInspector] public AvatarBase avatarPrefab;
     public WatchPlayerDeath avatarDeathEffectPrefab;
 
     [SyncVar]
@@ -14,17 +14,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
     [SyncVar]
-    public NetworkPlayerPlane avatar;
-
-    private PlaneSimNetworkManager network;
-    private PlaneSimNetworkManager Network
-    {
-        get
-        {
-            if (network != null) { return network; }
-            return network = NetworkManager.singleton as PlaneSimNetworkManager;
-        }
-    }
+    public AvatarBase avatar;
 
     private bool isLeader;
     public bool IsLeader
@@ -44,28 +34,37 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         }
     }
 
+    public override void OnStartAuthority()
+    {
+        SelectAvatar();
+    }
+
     public override void OnStartClient()
     {
         DontDestroyOnLoad(gameObject);
 
-        Network.GamePlayers.Add(this);
+        PlaneSimNetworkManager.Instance.Players.Add(this);
 
     }
 
     public override void OnStopClient()
     {
-        Network.GamePlayers.Remove(this);
+        PlaneSimNetworkManager.Instance.Players.Remove(this);
     }
 
     private void OnEnable()
     {
-        if (!isLocalPlayer)
+        if (isLocalPlayer)
+            SceneManager.sceneLoaded += SelectAvatar;
+        else
             SceneManager.sceneLoaded += SpawnNameTag;
     }
 
     private void OnDisable()
     {
-        if (!isLocalPlayer)
+        if (isLocalPlayer)
+            SceneManager.sceneLoaded -= SelectAvatar;
+        else
             SceneManager.sceneLoaded -= SpawnNameTag;
     }
 
@@ -77,6 +76,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         GameUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }
 
+    #region Getters/Setters
     [Server]
     public void SetPlaneColor(Color col)
     {
@@ -93,6 +93,23 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     {
         CamType = camType;
     }
+    #endregion
+
+    #region Avatar
+    private void SelectAvatar(Scene scene, LoadSceneMode mode)
+    {
+        SelectAvatar();
+    }
+    private void SelectAvatar()
+    {
+        CmdSetAvatar(GameController.Instance.availableAvatars[0]);
+    }
+
+    [Command]
+    private void CmdSetAvatar(AvatarBase prefab)
+    {
+        avatarPrefab = prefab;
+    }
 
     [ClientRpc]
     public void RpcOnAvatarSpawned(GameObject avatarObj)
@@ -102,8 +119,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         if (!hasAuthority) return;
 
         avatar.CmdSetCombatUpdates(this);
-        avatar.CmdSetCombatName(displayName);
-        avatar.CmdSetPlaneColor(planeColor);
+        avatar.CmdSetPlayerName(displayName);
+        avatar.CmdSetPlayerColor(planeColor);
 
         CameraController.Instance.SetTarget(avatar.transform);
     }
@@ -127,6 +144,27 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [Command]
     private void RespawnAvatar()
     {
-        NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.GamePlayers.IndexOf(this));
+        NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
     }
+    #endregion
+
+
+    public void HandleReadyToStart(bool readyToStart)
+    {
+        if (!isLeader) { return; }
+
+        LobbyUI.Instance.startGameButton.interactable = readyToStart;
+    }
+
+    public bool IsReady()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
+        {
+            // return avatar.isready
+        }
+
+        return true;
+    }
+
+    
 }

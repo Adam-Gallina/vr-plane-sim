@@ -21,7 +21,7 @@ public class NetworkCombatUpdates : NetworkBehaviour
             return;
 
         if (hasAuthority)
-            GameUI.Instance.SetBannerMessage($"Killed {target.GetCombatName()}!");
+            GameUI.Instance.SetBannerMessage($"Killed {target.GetPlayerName()}!");
     }
 
     [Server]
@@ -36,7 +36,7 @@ public class NetworkCombatUpdates : NetworkBehaviour
         switch (damageType)
         {
             case DamageSource.Player:
-                GameUI.Instance.SpawnDeathMessage($"{source.GetCombatName()} killed {displayName}!");
+                GameUI.Instance.SpawnDeathMessage($"{source.GetPlayerName()} killed {displayName}!");
                 break;
             case DamageSource.Ground:
                 GameUI.Instance.SpawnDeathMessage($"{displayName} couldn't control their plane...");

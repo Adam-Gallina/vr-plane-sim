@@ -8,6 +8,7 @@ public class LobbyUI : MonoBehaviour
     public static LobbyUI Instance;
 
     [SerializeField] private Transform playerList;
+    private List<LobbyPlayer> lobbyPlayers = new List<LobbyPlayer>();
     private List<Image> playerColorTexts = new List<Image>();
     private List<Text> playerNameTexts = new List<Text>();
     private List<Text> playerReadyTexts = new List<Text>();
@@ -31,21 +32,17 @@ public class LobbyUI : MonoBehaviour
         Instance = null;
     }
 
-    public void AddPlayer(NetworkLobbyPlayer p)
+    public void AddPlayer(LobbyPlayer p)
     {
         p.GetComponent<RectTransform>().SetParent(playerList, false);
-        playerColorTexts.Add(p.playerColorImage);
-        playerNameTexts.Add(p.playerNameText);
-        playerReadyTexts.Add(p.playerReadyText);
+        lobbyPlayers.Add(p);
 
         UpdateDisplay();
     }
 
-    public void RemovePlayer(NetworkLobbyPlayer p)
+    public void RemovePlayer(LobbyPlayer p)
     {
-        playerColorTexts.Remove(p.playerColorImage);
-        playerNameTexts.Remove(p.playerNameText);
-        playerReadyTexts.Remove(p.playerReadyText);
+        lobbyPlayers.Remove(p);
 
         UpdateDisplay();
     }
@@ -58,18 +55,16 @@ public class LobbyUI : MonoBehaviour
             playerReadyTexts[i].text = string.Empty;
         }
 
-        for (int i = 0; i < PlaneSimNetworkManager.Instance.LobbyPlayers.Count; i++)
+        for (int i = 0; i < lobbyPlayers.Count; i++)
         {
-            PlaneSimNetworkManager.Instance.LobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));
-            playerColorTexts[i].color = PlaneSimNetworkManager.Instance.LobbyPlayers[i].planeColor;
-            playerNameTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].DisplayName;
-            playerReadyTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].IsReady ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+            lobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));
+            lobbyPlayers[i].UpdateUI();
         }
     }
 
     public void PressReady()
     {
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
+        foreach (LobbyPlayer p in lobbyPlayers)
         {
             if (p.hasAuthority)
             {
@@ -81,7 +76,7 @@ public class LobbyUI : MonoBehaviour
 
     public void PressStart()
     {
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
+        foreach (LobbyPlayer p in lobbyPlayers)
         {
             if (p.hasAuthority)
             {
@@ -117,7 +112,7 @@ public class LobbyUI : MonoBehaviour
     {
         OnColorChange(col);
 
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
+        foreach (LobbyPlayer p in lobbyPlayers)
         {
             if (p.hasAuthority)
             {

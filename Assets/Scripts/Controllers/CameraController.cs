@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 
         if (PlaneSimNetworkManager.Instance)
         {
-            foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.GamePlayers)
+            foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.Players)
             {
                 if (p.hasAuthority)
                 {

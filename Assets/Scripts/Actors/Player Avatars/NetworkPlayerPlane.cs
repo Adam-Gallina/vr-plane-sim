@@ -156,8 +156,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
         if (dead)
             return;
 
-        player?.OnAvatarKilled(source, sourceType);
-        source.player?.OnEnemyKilled(this, sourceType);
+        Player?.OnAvatarKilled(source, sourceType);
+        source.Player?.OnEnemyKilled(this, sourceType);
 
         base.Death(source, sourceType);
     }

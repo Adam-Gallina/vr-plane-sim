@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 730087444933450839}
   - component: {fileID: 7606245905610268187}
   - component: {fileID: 8907587166219069922}
-  - component: {fileID: 8349663456205832488}
+  - component: {fileID: 5874415925371696984}
   m_Layer: 5
   m_Name: Network Lobby Player
   m_TagString: Untagged
@@ -176,7 +176,7 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 4d1397f3a0f061347b3f7fbe05d1cd85
   hasSpawned: 0
---- !u!114 &8349663456205832488
+--- !u!114 &5874415925371696984
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,11 +185,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8749878177697297261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b92841631aa9e4d46bd38e782c79b69e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ae2adba0f390ec4b967d41ebf8befe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  playerName: Loading...
   playerColorImage: {fileID: 5891364539410195294}
   playerNameText: {fileID: 4807003337786574959}
   playerReadyText: {fileID: 6763579019904972484}

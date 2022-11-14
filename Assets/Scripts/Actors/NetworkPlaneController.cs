@@ -18,12 +18,9 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float propellerSpeed;
     [SerializeField] private Transform joystick;
     [SerializeField] private float joystickMod;
-    [SyncVar(hook = nameof(OnSetPlaneColor))]
-    private Color planeCol;
 
     [Header("Death Effect")]
     [SerializeField] private GameObject deathPrefab;
-
 
     protected Rigidbody rb;
 
@@ -85,14 +82,7 @@ public class NetworkPlaneController : NetworkHealthBase
 
         joystick.localEulerAngles = new Vector3(dir.y, 0, -dir.x) * joystickMod;
     }
-
-    [Command]
-    public void CmdSetPlaneColor(Color col)
-    {
-        planeCol = col;
-    }
-
-    private void OnSetPlaneColor(Color oldCol, Color newCol)
+    protected override void OnSetPlayerColor(Color oldCol, Color newCol)
     {
         body.material.color = newCol;
     }
