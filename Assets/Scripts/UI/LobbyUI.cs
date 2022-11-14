@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,15 +6,18 @@ public class LobbyUI : MultiCamUI
 {
     public static LobbyUI LInstance;
 
-    [SerializeField] private Transform playerList;
     private List<LobbyPlayer> lobbyPlayers = new List<LobbyPlayer>();
+
+    [Header("UI")]
+    [SerializeField] private Transform playerParent;
     public Dropdown camType;
+    public Button readyButton;
+    public Dropdown gameMode;
     public Button startGameButton;
 
+    [Header("Plane Preview")]
+    public FlexibleColorPicker colorSelect;
     [SerializeField] private GameObject planeBody;
-    [HideInInspector] public Color planeColor;
-
-    public Dropdown gameMode;
 
     protected override void Awake()
     {
@@ -33,7 +35,7 @@ public class LobbyUI : MultiCamUI
 
     public override NametagUI SpawnNametag()
     {
-        return Instantiate(nametagPrefab, playerList).GetComponent<NametagUI>();
+        return Instantiate(nametagPrefab, playerParent).GetComponent<NametagUI>();
     }
 
     public void AddPlayer(LobbyPlayer p)
@@ -59,30 +61,7 @@ public class LobbyUI : MultiCamUI
         }
     }
 
-    public void PressReady()
-    {
-        foreach (LobbyPlayer p in lobbyPlayers)
-        {
-            if (p.LinkedPlayer.hasAuthority)
-            {
-                p.ToggleReady();
-                break;
-            }
-        }
-    }
-
-    public void PressStart()
-    {
-        foreach (LobbyPlayer p in lobbyPlayers)
-        {
-            if (p.LinkedPlayer.hasAuthority)
-            {
-                p.StartGame(gameMode.value);
-                break;
-            }
-        }
-    }
-
+    #region UICallbacks
     public void PressLeave()
     {
         switch (PlaneSimNetworkManager.Instance.mode)
@@ -104,21 +83,7 @@ public class LobbyUI : MultiCamUI
 
     public void OnColorChange(Color col)
     {
-        planeColor = col;
         planeBody.GetComponent<Renderer>().material.color = col;
     }
-
-    public void SelectColor(Color col)
-    {
-        OnColorChange(col);
-
-        foreach (LobbyPlayer p in lobbyPlayers)
-        {
-            if (p.LinkedPlayer.hasAuthority)
-            {
-                p.SetPlaneColor(col);
-                break;
-            }
-        }
-    }
+    #endregion
 }

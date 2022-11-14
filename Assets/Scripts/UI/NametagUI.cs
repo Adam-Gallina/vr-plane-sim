@@ -7,8 +7,8 @@ public class NametagUI : MonoBehaviour
 {
     [HideInInspector] public NetworkGamePlayer LinkedPlayer;
 
-    [SerializeField] private GameObject background;
-    [SerializeField] private Text text;
+    [SerializeField] protected GameObject background;
+    [SerializeField] protected Text playerNameText;
 
     [SerializeField] private Vector3 offset = new Vector3(0, 2, 0);
 
@@ -23,6 +23,13 @@ public class NametagUI : MonoBehaviour
     private void Awake()
     {
         rt = GetComponent<RectTransform>();
+    }
+
+    public virtual void SetLinkedPlayer(NetworkGamePlayer player)
+    {
+        LinkedPlayer = player;
+
+        playerNameText.text = player.displayName;
     }
 
     protected virtual void Update()
@@ -67,12 +74,4 @@ public class NametagUI : MonoBehaviour
 
         return 1 - (dist / maxDist);
     }
-
-    public virtual void SetLinkedPlayer(NetworkGamePlayer player)
-    {
-        LinkedPlayer = player;
-
-        text.text = player.displayName;
-    }
-
 }

@@ -4106,12 +4106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nametagPrefab: {fileID: 8749878177697297261, guid: 4d1397f3a0f061347b3f7fbe05d1cd85, type: 3}
-  playerList: {fileID: 86269169}
+  playerParent: {fileID: 86269169}
   camType: {fileID: 1336527141}
-  startGameButton: {fileID: 1047614735}
-  planeBody: {fileID: 1642815073}
-  planeColor: {r: 0, g: 0, b: 0, a: 0}
+  readyButton: {fileID: 2065647982}
   gameMode: {fileID: 479433168}
+  startGameButton: {fileID: 1047614735}
+  colorSelect: {fileID: 575384093}
+  planeBody: {fileID: 1642815073}
 --- !u!1 &1592973456
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,27 +7,27 @@ using Mirror;
 public class LobbyPlayer : NametagUI
 {
     [SerializeField] private Image playerColorImage;
-    [SerializeField] private Text playerNameText;
     [SerializeField] private Text playerReadyText;
 
     public override void SetLinkedPlayer(NetworkGamePlayer player)
     {
         LinkedPlayer = player;
+        LobbyUI.LInstance.AddPlayer(this);
 
-        if (player.hasAuthority)
-        {
-            LobbyUI.LInstance.startGameButton.gameObject.SetActive(player.IsLeader);
-            LobbyUI.LInstance.gameMode.gameObject.SetActive(player.IsLeader);
-        }
+        if (!player.hasAuthority)
+            return;
 
         if (string.IsNullOrEmpty(player.displayName))
             SetDisplayName(MainMenu.DisplayName);
 
-        LobbyUI.LInstance.AddPlayer(this);
+        LobbyUI.LInstance.startGameButton.gameObject.SetActive(player.IsLeader);
+        LobbyUI.LInstance.gameMode.gameObject.SetActive(player.IsLeader);
 
-        LobbyUI.LInstance.camType.onValueChanged.AddListener((int val) => SetCamType(val));
+        LobbyUI.LInstance.readyButton.onClick.AddListener(ToggleReady);
+        LobbyUI.LInstance.startGameButton.onClick.AddListener(StartGame);
+        LobbyUI.LInstance.colorSelect.onColorSelect.AddListener(SetPlaneColor);
+        LobbyUI.LInstance.camType.onValueChanged.AddListener(SetCamType);
     }
-
 
     protected override void Update()
     {
@@ -39,7 +39,12 @@ public class LobbyPlayer : NametagUI
         LobbyUI.LInstance.RemovePlayer(this);
 
         if (LinkedPlayer.hasAuthority)
-            LobbyUI.LInstance.camType.onValueChanged.RemoveAllListeners();
+        {
+            LobbyUI.LInstance.readyButton.onClick.RemoveListener(ToggleReady);
+            LobbyUI.LInstance.startGameButton.onClick.RemoveListener(StartGame);
+            LobbyUI.LInstance.colorSelect.onColorSelect.RemoveListener(SetPlaneColor);
+            LobbyUI.LInstance.camType.onValueChanged.RemoveListener(SetCamType);
+        }
     }
 
     public void UpdateUI()
@@ -49,12 +54,16 @@ public class LobbyPlayer : NametagUI
         playerReadyText.text = LinkedPlayer.IsReady ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
     }
 
+    public void ToggleReady()
+    {
+        LinkedPlayer.CmdSetIsReady(!LinkedPlayer.IsReady);
+    }
 
-    public void StartGame(int map)
+    public void StartGame()
     {
         if (!LinkedPlayer.IsLeader) return;
 
-        PlaneSimNetworkManager.Instance.StartGame(map);
+        PlaneSimNetworkManager.Instance.StartGame(LobbyUI.LInstance.gameMode.value);
     }
 
     #region Getters/Setters
@@ -71,11 +80,6 @@ public class LobbyPlayer : NametagUI
     private void SetCamType(int camType)
     {
         LinkedPlayer.CmdSetCamType((Constants.CamType)camType);
-    }
-
-    public void ToggleReady()
-    {
-        LinkedPlayer.CmdSetIsReady(!LinkedPlayer.IsReady);
     }
     #endregion
 }
