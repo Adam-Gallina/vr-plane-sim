@@ -90,7 +90,6 @@ GameObject:
   - component: {fileID: 6372311919926056808}
   - component: {fileID: 730087444933450839}
   - component: {fileID: 7606245905610268187}
-  - component: {fileID: 8907587166219069922}
   - component: {fileID: 5874415925371696984}
   m_Layer: 5
   m_Name: Lobby Nametag
@@ -159,23 +158,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8907587166219069922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8749878177697297261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 4d1397f3a0f061347b3f7fbe05d1cd85
-  hasSpawned: 0
 --- !u!114 &5874415925371696984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,16 +170,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae2adba0f390ec4b967d41ebf8befe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  playerName: Loading...
-  playerColorImage: {fileID: 5891364539410195294}
+  LinkedPlayer: {fileID: 0}
+  background: {fileID: 0}
   playerNameText: {fileID: 4807003337786574959}
+  offset: {x: 0, y: 2, z: 0}
+  minDist: 0
+  maxDist: 0
+  hideDist: 0
+  minScale: 0
+  playerColorImage: {fileID: 5891364539410195294}
   playerReadyText: {fileID: 6763579019904972484}
-  DisplayName: Loading...
-  IsReady: 0
-  planeColor: {r: 0.4392157, g: 0, b: 0.047058824, a: 1}
-  CamType: 0
 --- !u!1 &8975835294024041375
 GameObject:
   m_ObjectHideFlags: 0
