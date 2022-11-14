@@ -6,55 +6,35 @@ using Mirror;
 
 public class NetworkGamePlayer : NetworkCombatUpdates
 {
-    public GameObject avatarPrefab;
+    public AvatarBase gameAvatarPrefab;
     public WatchPlayerDeath avatarDeathEffectPrefab;
 
     [SyncVar]
-    public Color planeColor;
+    public AvatarBase avatar;
+
+    [SyncVar(hook = nameof(OnPlayerColorChanged))]
+    public Color playerColor;
     [SyncVar]
     [HideInInspector] public Constants.CamType CamType;
-    [SyncVar]
-    public NetworkPlayerPlane avatar;
+    [SyncVar(hook = nameof(OnReadyChanged))]
+    public bool IsReady = false;
 
-    private PlaneSimNetworkManager network;
-    private PlaneSimNetworkManager Network
-    {
-        get
-        {
-            if (network != null) { return network; }
-            return network = NetworkManager.singleton as PlaneSimNetworkManager;
-        }
-    }
+    public bool IsLeader;
 
-    private bool isLeader;
-    public bool IsLeader
-    {
-        get
-        {
-            return isLeader;
-        }
-        set
-        {
-            isLeader = value;
-
-            if (hasAuthority)
-            {
-                GameUI.Instance.returnToLobbyBtn.SetActive(value);
-            }
-        }
-    }
 
     public override void OnStartClient()
     {
         DontDestroyOnLoad(gameObject);
 
-        Network.GamePlayers.Add(this);
+        PlaneSimNetworkManager.Instance.Players.Add(this);
+
+        SpawnNameTag();
 
     }
 
     public override void OnStopClient()
     {
-        Network.GamePlayers.Remove(this);
+        PlaneSimNetworkManager.Instance.Players.Remove(this);
     }
 
     private void OnEnable()
@@ -71,29 +51,62 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == Constants.MainMenu.buildIndex || isLocalPlayer)
+        if (scene.buildIndex != Constants.MainMenu.buildIndex && isLocalPlayer)
             return;
 
-        GameUI.Instance.SpawnNametag().SetLinkedPlayer(this);
+        SpawnNameTag();
+    }
+    private void SpawnNameTag()
+    {
+        MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }
 
-    [Server]
-    public void SetPlaneColor(Color col)
+    #region Getters/Setters
+    [Command]
+    public void CmdSetPlayerColor(Color col)
     {
-        planeColor = col;
+        playerColor = col;
     }
-    [Server]
-    public void SetDisplayName(string displayName)
+    [Command]
+    public void CmdSetDisplayName(string displayName)
     {
         this.displayName = displayName;
     }
 
-    [Server]
-    public void SetCamType(Constants.CamType camType)
+    [Command]
+    public void CmdSetCamType(Constants.CamType camType)
     {
         CamType = camType;
     }
+    [Command]
+    public void CmdSetIsReady(bool isReady)
+    {
+        IsReady = isReady;
 
+        PlaneSimNetworkManager.Instance.NotifyPlayersOfReadyState();
+    }
+
+    private void OnPlayerColorChanged(Color oldcol, Color newcol)
+    {
+        OnPlayerInfoChanged();
+    }
+    protected override void OnDisplayNameChanged(string oldval, string newval)
+    {
+        OnPlayerInfoChanged();
+    }
+    private void OnReadyChanged(bool oldval, bool newval)
+    {
+        OnPlayerInfoChanged();
+    }
+
+    private void OnPlayerInfoChanged()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
+            LobbyUI.LInstance.UpdateDisplay();
+    }
+    #endregion
+
+    #region Avatar
     [ClientRpc]
     public void RpcOnAvatarSpawned(GameObject avatarObj)
     {
@@ -102,8 +115,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         if (!hasAuthority) return;
 
         avatar.CmdSetCombatUpdates(this);
-        avatar.CmdSetCombatName(displayName);
-        avatar.CmdSetPlaneColor(planeColor);
+        avatar.CmdSetPlayerName(displayName);
+        avatar.CmdSetPlayerColor(playerColor);
 
         CameraController.Instance.SetTarget(avatar.transform);
     }
@@ -127,6 +140,15 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [Command]
     private void RespawnAvatar()
     {
-        NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.GamePlayers.IndexOf(this));
+        NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
     }
+    #endregion
+
+    [ClientRpc]
+    public void RpcHandleReadyToStart(bool readyToStart)
+    {
+        if (!IsLeader) { return; }
+
+        LobbyUI.LInstance.startGameButton.interactable = readyToStart;
+    }    
 }

@@ -5,7 +5,7 @@ using Mirror;
 
 public class NetworkCombatUpdates : NetworkBehaviour
 {
-    [SyncVar]
+    [SyncVar(hook = nameof(OnDisplayNameChanged))]
     public string displayName = "Unnamed CombatUpdates";
 
     [Server]
@@ -21,7 +21,7 @@ public class NetworkCombatUpdates : NetworkBehaviour
             return;
 
         if (hasAuthority)
-            GameUI.Instance.SetBannerMessage($"Killed {target.GetCombatName()}!");
+            GameUI.GInstance.SetBannerMessage($"Killed {target.GetPlayerName()}!");
     }
 
     [Server]
@@ -36,11 +36,16 @@ public class NetworkCombatUpdates : NetworkBehaviour
         switch (damageType)
         {
             case DamageSource.Player:
-                GameUI.Instance.SpawnDeathMessage($"{source.GetCombatName()} killed {displayName}!");
+                GameUI.GInstance.SpawnDeathMessage($"{source.GetPlayerName()} killed {displayName}!");
                 break;
             case DamageSource.Ground:
-                GameUI.Instance.SpawnDeathMessage($"{displayName} couldn't control their plane...");
+                GameUI.GInstance.SpawnDeathMessage($"{displayName} couldn't control their plane...");
                 break;
         }
+    }
+
+    protected virtual void OnDisplayNameChanged(string oldname, string newname)
+    {
+
     }
 }

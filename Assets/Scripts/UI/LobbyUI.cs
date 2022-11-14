@@ -1,27 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LobbyUI : MonoBehaviour
+public class LobbyUI : MultiCamUI
 {
-    public static LobbyUI Instance;
+    public static LobbyUI LInstance;
 
-    [SerializeField] private Transform playerList;
-    private List<Image> playerColorTexts = new List<Image>();
-    private List<Text> playerNameTexts = new List<Text>();
-    private List<Text> playerReadyTexts = new List<Text>();
+    private List<LobbyPlayer> lobbyPlayers = new List<LobbyPlayer>();
+
+    [Header("UI")]
+    [SerializeField] private Transform playerParent;
     public Dropdown camType;
+    public Button readyButton;
+    public Dropdown gameMode;
     public Button startGameButton;
 
+    [Header("Plane Preview")]
+    public FlexibleColorPicker colorSelect;
     [SerializeField] private GameObject planeBody;
-    [HideInInspector] public Color planeColor;
 
-    public Dropdown gameMode;
-
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
+
+        LInstance = this;
 
         startGameButton.gameObject.SetActive(false);
     }
@@ -31,66 +33,35 @@ public class LobbyUI : MonoBehaviour
         Instance = null;
     }
 
-    public void AddPlayer(NetworkLobbyPlayer p)
+    public override NametagUI SpawnNametag()
     {
-        p.GetComponent<RectTransform>().SetParent(playerList, false);
-        playerColorTexts.Add(p.playerColorImage);
-        playerNameTexts.Add(p.playerNameText);
-        playerReadyTexts.Add(p.playerReadyText);
+        return Instantiate(nametagPrefab, playerParent).GetComponent<NametagUI>();
+    }
+
+    public void AddPlayer(LobbyPlayer p)
+    {
+        lobbyPlayers.Add(p);
 
         UpdateDisplay();
     }
 
-    public void RemovePlayer(NetworkLobbyPlayer p)
+    public void RemovePlayer(LobbyPlayer p)
     {
-        playerColorTexts.Remove(p.playerColorImage);
-        playerNameTexts.Remove(p.playerNameText);
-        playerReadyTexts.Remove(p.playerReadyText);
+        lobbyPlayers.Remove(p);
 
         UpdateDisplay();
     }
 
     public void UpdateDisplay()
     {
-        for (int i = 0; i < playerNameTexts.Count; i++)
+        for (int i = 0; i < lobbyPlayers.Count; i++)
         {
-            playerNameTexts[i].text = "Waiting...";
-            playerReadyTexts[i].text = string.Empty;
-        }
-
-        for (int i = 0; i < PlaneSimNetworkManager.Instance.LobbyPlayers.Count; i++)
-        {
-            PlaneSimNetworkManager.Instance.LobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));
-            playerColorTexts[i].color = PlaneSimNetworkManager.Instance.LobbyPlayers[i].planeColor;
-            playerNameTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].DisplayName;
-            playerReadyTexts[i].text = PlaneSimNetworkManager.Instance.LobbyPlayers[i].IsReady ? "<color=green>Ready</color>" : "<color=red>Not Ready</color>";
+            lobbyPlayers[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -10 - (i * 60));
+            lobbyPlayers[i].UpdateUI();
         }
     }
 
-    public void PressReady()
-    {
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
-        {
-            if (p.hasAuthority)
-            {
-                p.CmdReadyUp();
-                break;
-            }
-        }
-    }
-
-    public void PressStart()
-    {
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
-        {
-            if (p.hasAuthority)
-            {
-                p.CmdStartGame(gameMode.value);
-                break;
-            }
-        }
-    }
-
+    #region UICallbacks
     public void PressLeave()
     {
         switch (PlaneSimNetworkManager.Instance.mode)
@@ -105,25 +76,14 @@ public class LobbyUI : MonoBehaviour
                 Debug.LogError("Idk what happened but probably ur trying to make a server now so that's pretty cool");
                 break;
         }
+
+        foreach (LobbyPlayer p in lobbyPlayers)
+            Destroy(p.gameObject);
     }
 
     public void OnColorChange(Color col)
     {
-        planeColor = col;
         planeBody.GetComponent<Renderer>().material.color = col;
     }
-
-    public void SelectColor(Color col)
-    {
-        OnColorChange(col);
-
-        foreach (NetworkLobbyPlayer p in PlaneSimNetworkManager.Instance.LobbyPlayers)
-        {
-            if (p.hasAuthority)
-            {
-                p.CmdSetPlaneColor(col);
-                break;
-            }
-        }
-    }
+    #endregion
 }

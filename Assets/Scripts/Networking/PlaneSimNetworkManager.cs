@@ -12,18 +12,13 @@ public class PlaneSimNetworkManager : NetworkManager
     [SerializeField] private int minPlayers = 2;
 
     [Header("Prefabs")]
-    [SerializeField] private NetworkLobbyPlayer lobbyPlayerPrefab;
-    [SerializeField] private NetworkGamePlayer gamePlayerPrefab;
     [SerializeField] private GameObject avatarSpawnerPrefab;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
     public static event Action<NetworkConnection, int> OnServerReadied;
 
-    [HideInInspector] public bool changingScenes = false;
-
-    public List<NetworkLobbyPlayer> LobbyPlayers { get; } = new List<NetworkLobbyPlayer>();
-    public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
+    public List<NetworkGamePlayer> Players { get; } = new List<NetworkGamePlayer>();
 
     public override void Awake()
     {
@@ -56,17 +51,10 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        if (conn.identity != null && SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
-        {
-            NetworkLobbyPlayer player = conn.identity.gameObject.GetComponent<NetworkLobbyPlayer>();
-            LobbyPlayers.Remove(player);
-
-            NotifyPlayersOfReadyState();
-        }
-        else
+        if (conn.identity != null)
         {
             NetworkGamePlayer player = conn.identity.gameObject.GetComponent<NetworkGamePlayer>();
-            GamePlayers.Remove(player);
+            Players.Remove(player);
         }
 
         base.OnServerDisconnect(conn);
@@ -74,67 +62,20 @@ public class PlaneSimNetworkManager : NetworkManager
 
     public override void OnStopServer()
     {
-        LobbyPlayers.Clear();
-        GamePlayers.Clear();
+        Players.Clear();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
-        {
-            NetworkLobbyPlayer roomPlayerInstance = Instantiate(lobbyPlayerPrefab);
-            NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
+        GameObject p = Instantiate(playerPrefab);
+        NetworkServer.AddPlayerForConnection(conn, p);
 
-            roomPlayerInstance.IsLeader = LobbyPlayers.Count == 0;
-        }
-    }
-
-    public override void ServerChangeScene(string newSceneName)
-    {
-        changingScenes = true;
-
-        if (SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex && 
-            newSceneName != Constants.MainMenu.name)
-        {
-            for (int i = LobbyPlayers.Count - 1; i >= 0; i--)
-            {
-                NetworkConnection conn = LobbyPlayers[i].connectionToClient;
-                NetworkGamePlayer p = Instantiate(gamePlayerPrefab);
-                p.SetPlaneColor(LobbyPlayers[i].planeColor);
-                p.SetDisplayName(LobbyPlayers[i].DisplayName);
-                p.SetCamType((Constants.CamType)LobbyPlayers[i].CamType);
-                p.IsLeader = LobbyPlayers[i].IsLeader;
-
-                NetworkServer.Destroy(conn.identity.gameObject);
-
-                NetworkServer.ReplacePlayerForConnection(conn, p.gameObject);
-            }
-        }
-
-        base.ServerChangeScene(newSceneName);
+        p.GetComponent<NetworkGamePlayer>().IsLeader = Players.Count == 0;
     }
 
     public override void OnServerSceneChanged(string sceneName)
     {
-        changingScenes = false;
-
-        if (sceneName == Constants.MainMenu.name)
-        {
-            for (int i = GamePlayers.Count - 1; i >= 0; i--)
-            {
-                NetworkConnection conn = GamePlayers[i].connectionToClient;
-                NetworkLobbyPlayer p = Instantiate(lobbyPlayerPrefab);
-                p.CmdSetPlaneColor(GamePlayers[i].planeColor);
-                p.DisplayName = GamePlayers[i].displayName;
-                p.CamType = (int)GamePlayers[i].CamType;
-                p.IsLeader = GamePlayers[i].IsLeader;
-
-                NetworkServer.Destroy(conn.identity.gameObject);
-
-                NetworkServer.ReplacePlayerForConnection(conn, p.gameObject);
-            }
-        }
-        else
+        if (sceneName != Constants.MainMenu.name)
         {
             GameObject playerSpawnSystemInstance = Instantiate(avatarSpawnerPrefab);
             NetworkServer.Spawn(playerSpawnSystemInstance);
@@ -146,7 +87,7 @@ public class PlaneSimNetworkManager : NetworkManager
         base.OnServerReady(conn);
     
         if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
-            OnServerReadied?.Invoke(conn, GamePlayers.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
+            OnServerReadied?.Invoke(conn, Players.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
     }
     #endregion
 
@@ -171,9 +112,9 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         bool ready = IsReadyToStart();
 
-        foreach (NetworkLobbyPlayer p in LobbyPlayers)
+        foreach (NetworkGamePlayer p in Players)
         {
-            p.HandleReadyToStart(ready);
+            p.RpcHandleReadyToStart(ready);
         }
     }
 
@@ -182,7 +123,7 @@ public class PlaneSimNetworkManager : NetworkManager
         if (numPlayers < minPlayers)
             return false;
 
-        foreach (NetworkLobbyPlayer p in LobbyPlayers)
+        foreach (NetworkGamePlayer p in Players)
         {
             if (!p.IsReady)
             {

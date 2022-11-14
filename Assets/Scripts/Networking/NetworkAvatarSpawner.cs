@@ -27,7 +27,7 @@ public class NetworkAvatarSpawner : NetworkBehaviour
     {
         Transform t = MapController.Instance.GetSpawnPos(player);
 
-        GameObject avatar = Instantiate(conn.identity.GetComponent<NetworkGamePlayer>().avatarPrefab, t.position, t.rotation);
+        GameObject avatar = Instantiate(conn.identity.GetComponent<NetworkGamePlayer>().gameAvatarPrefab, t.position, t.rotation).gameObject;
         NetworkServer.Spawn(avatar, conn);
 
         conn.identity.GetComponent<NetworkGamePlayer>().RpcOnAvatarSpawned(avatar);

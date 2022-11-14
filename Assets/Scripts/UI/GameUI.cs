@@ -4,17 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
-public abstract class GameUI : MonoBehaviour
+public abstract class GameUI : MultiCamUI
 {
-    public static GameUI Instance;
+    public static GameUI GInstance;
 
     [Header("Pause Menu")]
     [SerializeField] protected GameObject pauseMenu;
     [HideInInspector] public bool pauseOpen = false;
     public GameObject returnToLobbyBtn;
-
-    [Header("Player nametag")]
-    [SerializeField] protected GameObject nametagPrefab;
 
     [Header("Death messages")]
     [SerializeField] protected GameObject deathMessagePrefab;
@@ -26,9 +23,11 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject banner;
     [SerializeField] protected float defaultBannerDuration;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
+
+        GInstance = this;
 
         HideBannerMessage();
     }
@@ -60,8 +59,6 @@ public abstract class GameUI : MonoBehaviour
         SetPauseMenu(!pauseOpen);
     }
     public abstract void SetPauseMenu(bool open);
-
-    public abstract NametagUI SpawnNametag();
 
     public abstract void SpawnDeathMessage(string msg);
     public abstract void IncrementDeathMessages();

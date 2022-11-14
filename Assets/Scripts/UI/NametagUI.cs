@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class NametagUI : MonoBehaviour
 {
-    private NetworkGamePlayer linkedPlayer;
+    [HideInInspector] public NetworkGamePlayer LinkedPlayer;
 
-    [SerializeField] private GameObject background;
-    [SerializeField] private Text text;
+    [SerializeField] protected GameObject background;
+    [SerializeField] protected Text playerNameText;
 
     [SerializeField] private Vector3 offset = new Vector3(0, 2, 0);
 
@@ -25,32 +25,39 @@ public class NametagUI : MonoBehaviour
         rt = GetComponent<RectTransform>();
     }
 
-    void Update()
+    public virtual void SetLinkedPlayer(NetworkGamePlayer player)
     {
-        if (!linkedPlayer)
+        LinkedPlayer = player;
+
+        playerNameText.text = player.displayName;
+    }
+
+    protected virtual void Update()
+    {
+        if (!LinkedPlayer)
         {
             Destroy(gameObject);
             return;
         }
 
-        background.SetActive(linkedPlayer.avatar && CanSeeTarget() && SetRectTransform());
+        background.SetActive(LinkedPlayer.avatar && CanSeeTarget() && SetRectTransform());
     }
 
     private bool CanSeeTarget()
     {
-        if (Physics.Linecast(Camera.main.transform.position, linkedPlayer.avatar.transform.position, 1 << Constants.EnvironmentLayer))
+        if (Physics.Linecast(Camera.main.transform.position, LinkedPlayer.avatar.transform.position, 1 << Constants.EnvironmentLayer))
             return false;
 
-        return Vector3.Angle(Camera.main.transform.forward, linkedPlayer.avatar.transform.position - Camera.main.transform.position) < Camera.main.fieldOfView;
+        return Vector3.Angle(Camera.main.transform.forward, LinkedPlayer.avatar.transform.position - Camera.main.transform.position) < Camera.main.fieldOfView;
     }
 
     private bool SetRectTransform()
     {
-        float dist = Vector3.Distance(Camera.main.transform.position, linkedPlayer.avatar.transform.position);
+        float dist = Vector3.Distance(Camera.main.transform.position, LinkedPlayer.avatar.transform.position);
         if (dist > maxDist)
             return false;
 
-        rt.position = Camera.main.WorldToScreenPoint(linkedPlayer.avatar.transform.position + offset);
+        rt.position = Camera.main.WorldToScreenPoint(LinkedPlayer.avatar.transform.position + offset);
 
         float scale = minScale + (1 - minScale) * CalcT(dist);
         rt.localScale = new Vector3(scale, scale, scale);
@@ -67,12 +74,4 @@ public class NametagUI : MonoBehaviour
 
         return 1 - (dist / maxDist);
     }
-
-    public void SetLinkedPlayer(NetworkGamePlayer player)
-    {
-        linkedPlayer = player;
-
-        text.text = player.displayName;
-    }
-
 }

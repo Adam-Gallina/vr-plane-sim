@@ -204,8 +204,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf114d82e5cb9a40a8dfbed772edbe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LinkedPlayer: {fileID: 0}
   background: {fileID: 8032759018881367778}
-  text: {fileID: 8032759019300930935}
+  playerNameText: {fileID: 8032759019300930935}
   offset: {x: 0, y: 3, z: 0}
   minDist: 50
   maxDist: 450

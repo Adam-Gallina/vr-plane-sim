@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class NetworkCombatBase : NetworkBehaviour
+public class NetworkCombatBase : AvatarBase
 {
     [Header("Combat")]
     [SerializeField] private Transform[] bulletSource;
@@ -11,29 +11,7 @@ public class NetworkCombatBase : NetworkBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform specialSource;
     [SerializeField] protected GameObject currSpecial;
-    [SyncVar]
-    [SerializeField] protected string combatName;
     [SerializeField] private DamageSource damageType = DamageSource.AI;
-
-    [SyncVar]
-    public NetworkCombatUpdates player;
-
-    [Command]
-    public void CmdSetCombatUpdates(NetworkCombatUpdates player)
-    {
-        this.player = player;
-    }
-
-    [Command]
-    public void CmdSetCombatName(string newName)
-    {
-        combatName = newName;
-    }
-
-    public string GetCombatName()
-    {
-        return string.IsNullOrEmpty(combatName) ? "Unnamed CombatBase (" + name + ")": combatName;
-    }
 
     protected void Fire()
     {
@@ -76,5 +54,4 @@ public class NetworkCombatBase : NetworkBehaviour
         b.GetComponent<NetworkBullet>().SetSource(this, damageType);
 
     }
-
 }

@@ -84,7 +84,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     private void OnApplicationQuit() => isQuitting = true;
     private void OnDestroy()
     {
-        if (hasAuthority && !isQuitting && !PlaneSimNetworkManager.Instance.changingScenes)
+        if (hasAuthority && !isQuitting)
         {
             if (CameraController.Instance.IsTarget(transform))
                 CameraController.Instance.SetTarget(null);
@@ -106,7 +106,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void HandleInput()
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         if (firing && Time.time > nextShot)
@@ -119,7 +119,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
     #region Input Callbacks
     private void OnStartFire(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         firing = true;
@@ -132,7 +132,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void OnUseSpecial(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         if (currSpecial && Time.time > nextSpecial)
@@ -144,7 +144,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
-        if (GameUI.Instance.pauseOpen)
+        if (GameUI.GInstance.pauseOpen)
             return;
 
         allowMovement = !allowMovement;
@@ -156,8 +156,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
         if (dead)
             return;
 
-        player?.OnAvatarKilled(source, sourceType);
-        source.player?.OnEnemyKilled(this, sourceType);
+        Player?.OnAvatarKilled(source, sourceType);
+        source.Player?.OnEnemyKilled(this, sourceType);
 
         base.Death(source, sourceType);
     }
