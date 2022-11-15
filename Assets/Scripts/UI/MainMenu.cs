@@ -91,6 +91,8 @@ public class MainMenu : MonoBehaviour
 
         startPagePanel.SetActive(true);
         lobbyPanel.SetActive(false);
+
+        LobbyUI.LInstance.ClearPlayers();
     }
     #endregion
 }

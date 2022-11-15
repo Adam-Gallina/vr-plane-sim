@@ -29,7 +29,6 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         PlaneSimNetworkManager.Instance.Players.Add(this);
 
         SpawnNameTag();
-
     }
 
     public override void OnStopClient()
@@ -39,14 +38,12 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void OnEnable()
     {
-        if (!isLocalPlayer)
-            SceneManager.sceneLoaded += SpawnNameTag;
+        SceneManager.sceneLoaded += SpawnNameTag;
     }
 
     private void OnDisable()
     {
-        if (!isLocalPlayer)
-            SceneManager.sceneLoaded -= SpawnNameTag;
+        SceneManager.sceneLoaded -= SpawnNameTag;
     }
 
     private void SpawnNameTag(Scene scene, LoadSceneMode mode)
@@ -78,6 +75,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     {
         CamType = camType;
     }
+    
     [Command]
     public void CmdSetIsReady(bool isReady)
     {
@@ -133,7 +131,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         WatchPlayerDeath effect = Instantiate(avatarDeathEffectPrefab);
         effect.SetPosition(avatar.transform.position, avatar.transform.forward);
 
-        if (GameController.Instance.allowPlayerRespawn)
+        if (MapController.Instance.allowPlayerRespawn)
             Invoke(nameof(RespawnAvatar), effect.duration);
     }
 
@@ -143,12 +141,4 @@ public class NetworkGamePlayer : NetworkCombatUpdates
         NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
     }
     #endregion
-
-    [ClientRpc]
-    public void RpcHandleReadyToStart(bool readyToStart)
-    {
-        if (!IsLeader) { return; }
-
-        LobbyUI.LInstance.startGameButton.interactable = readyToStart;
-    }    
 }

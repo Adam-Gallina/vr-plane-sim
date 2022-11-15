@@ -61,6 +61,12 @@ public class LobbyUI : MultiCamUI
         }
     }
 
+    public void ClearPlayers()
+    {
+        foreach (LobbyPlayer p in lobbyPlayers)
+            Destroy(p.gameObject);
+    }
+
     #region UICallbacks
     public void PressLeave()
     {
@@ -77,8 +83,7 @@ public class LobbyUI : MultiCamUI
                 break;
         }
 
-        foreach (LobbyPlayer p in lobbyPlayers)
-            Destroy(p.gameObject);
+        ClearPlayers();
     }
 
     public void OnColorChange(Color col)

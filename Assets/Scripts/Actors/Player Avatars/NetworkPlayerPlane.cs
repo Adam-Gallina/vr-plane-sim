@@ -35,8 +35,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     public override void OnStartClient()
     {
-        gameObject.tag = GameController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
-        model.gameObject.tag = GameController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
+        gameObject.tag = MapController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
+        model.gameObject.tag = MapController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
     }
 
     private void OnEnable()

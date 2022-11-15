@@ -53,7 +53,7 @@ public class NetworkBasicEnemy : NetworkPlaneController
     [ServerCallback]
     protected override void Death(NetworkCombatBase source, DamageSource sourceType)
     {
-        if (GameController.Instance.allowAiRespawn)
+        if (MapController.Instance.allowAiRespawn)
             NetworkEnemySpawner.Instance.SpawnRandomEnemy();
 
         base.Death(source, sourceType);

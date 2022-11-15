@@ -9,6 +9,8 @@ public class PlaneSimNetworkManager : NetworkManager
 {
     public static PlaneSimNetworkManager Instance;
 
+    private GameController gc;
+
     [SerializeField] private int minPlayers = 2;
 
     [Header("Prefabs")]
@@ -31,6 +33,10 @@ public class PlaneSimNetworkManager : NetworkManager
         base.Awake();
 
         Instance = this;
+    }
+    public override void OnStartServer()
+    {
+        OnServerSceneChanged(SceneManager.GetActiveScene().name);
     }
 
     #region Server Callbacks
@@ -73,8 +79,19 @@ public class PlaneSimNetworkManager : NetworkManager
         p.GetComponent<NetworkGamePlayer>().IsLeader = Players.Count == 0;
     }
 
+    public override void OnServerChangeScene(string newSceneName)
+    {
+        foreach (NetworkGamePlayer p in Players)
+            p.IsReady = false;
+
+        base.OnServerChangeScene(newSceneName);
+    }
+
     public override void OnServerSceneChanged(string sceneName)
     {
+        gc = Instantiate(MapController.Instance.gameControllerPrefab);
+        NetworkServer.Spawn(gc.gameObject);
+
         if (sceneName != Constants.MainMenu.name)
         {
             GameObject playerSpawnSystemInstance = Instantiate(avatarSpawnerPrefab);
@@ -85,9 +102,13 @@ public class PlaneSimNetworkManager : NetworkManager
     public override void OnServerReady(NetworkConnection conn)
     {
         base.OnServerReady(conn);
-    
+
         if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
+        {
             OnServerReadied?.Invoke(conn, Players.IndexOf(conn.identity.GetComponent<NetworkGamePlayer>()));
+            conn.identity.GetComponent<NetworkGamePlayer>().IsReady = true;
+            NotifyPlayersOfReadyState();
+        }
     }
     #endregion
 
@@ -110,12 +131,7 @@ public class PlaneSimNetworkManager : NetworkManager
     #region Lobby
     public void NotifyPlayersOfReadyState()
     {
-        bool ready = IsReadyToStart();
-
-        foreach (NetworkGamePlayer p in Players)
-        {
-            p.RpcHandleReadyToStart(ready);
-        }
+        gc.HandleReadyToStart(IsReadyToStart());
     }
 
     private bool IsReadyToStart()

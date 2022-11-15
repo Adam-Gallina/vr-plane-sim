@@ -65,9 +65,16 @@ public abstract class GameUI : MultiCamUI
 
     public void SetBannerMessage(string msg, float duration=0)
     {
+        if (string.IsNullOrEmpty(msg))
+        {
+            HideBannerMessage();
+            return;
+        }
+
         ShowBannerMessage(msg);
 
-        Invoke(nameof(HideBannerMessage), duration == 0 ? defaultBannerDuration : duration);
+        if (duration != -1)
+            Invoke(nameof(HideBannerMessage), duration == 0 ? defaultBannerDuration : duration);
     }
 
     public abstract void ShowBannerMessage(string msg);

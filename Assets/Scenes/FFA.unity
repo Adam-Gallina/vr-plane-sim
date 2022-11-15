@@ -188,7 +188,7 @@ Transform:
   - {fileID: 684514672}
   - {fileID: 341436391}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &226924324
 MonoBehaviour:
@@ -202,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8d834d0af7ca534d8847517bc419635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameControllerPrefab: {fileID: 7805355302271731025, guid: 24686a0c4826d674a950a9cf95aa4c2d, type: 3}
   spawnPositions:
   - {fileID: 198825780}
   - {fileID: 1993102200}
@@ -211,6 +212,10 @@ MonoBehaviour:
   - {fileID: 740703885}
   - {fileID: 1206322239}
   - {fileID: 717768294}
+  pvp: 1
+  spawnFormat: 1
+  allowAiRespawn: 1
+  allowPlayerRespawn: 1
 --- !u!1 &341436390
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,7 +523,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &684514671
 PrefabInstance:
@@ -951,7 +956,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &981855841
 GameObject:
@@ -1068,54 +1073,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1025697509
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1025697511}
-  - component: {fileID: 1025697510}
-  m_Layer: 0
-  m_Name: Game Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1025697510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025697509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30a21a470af33740b649487f9498134, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pvp: 1
-  spawnFormat: 1
-  allowAiRespawn: 1
-  allowPlayerRespawn: 1
---- !u!4 &1025697511
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025697509}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1045671653
 GameObject:
@@ -1262,7 +1220,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1062277259
 MonoBehaviour:
@@ -2195,7 +2153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6712257493925607863, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6712257493925607863, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
       propertyPath: m_AnchorMax.x

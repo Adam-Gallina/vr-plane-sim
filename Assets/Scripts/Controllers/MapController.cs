@@ -1,16 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum SpawnFormation { RoundRobin, Assigned, Random }
 public class MapController : MonoBehaviour
 {
     public static MapController Instance;
 
+    public GameController gameControllerPrefab;
+
     [SerializeField] private Transform[] spawnPositions;
+
+    [Header("Map Rules")]
+    //public List<AvatarBase> availableAvatars;
+    public bool pvp = true;
+    public SpawnFormation spawnFormat = SpawnFormation.Assigned;
+    public bool allowAiRespawn = true;
+    public bool allowPlayerRespawn = true;
 
     private void OnDrawGizmos()
     {
+        if (spawnPositions.Length == 0)
+            return;
+
         foreach (Transform t in spawnPositions)
         {
             Gizmos.color = Color.blue;
@@ -22,19 +35,22 @@ public class MapController : MonoBehaviour
 
     private void Awake()
     {
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex && !PlaneSimNetworkManager.Instance)
+            SceneManager.LoadScene(Constants.MainMenu.buildIndex);
+
         Instance = this;
     }
 
     public Transform GetSpawnPos(int player)
     {
-        switch (GameController.Instance.spawnFormat)
+        switch (spawnFormat)
         {
             case SpawnFormation.RoundRobin:
                 return RoundRobin();
             case SpawnFormation.Assigned:
                 return AssignedSpawn(player);
             default:
-                Debug.LogWarning($"{GameController.Instance.spawnFormat} has not been implemented, defaulting to RoundRobin");
+                Debug.LogWarning($"{spawnFormat} has not been implemented, defaulting to RoundRobin");
                 return RoundRobin();
         }
     }
