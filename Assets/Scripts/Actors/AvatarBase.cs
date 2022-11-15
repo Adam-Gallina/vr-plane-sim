@@ -30,6 +30,8 @@ public class AvatarBase : NetworkBehaviour
     [SerializeField] protected string playerName;
     [SyncVar(hook = nameof(OnSetPlayerColor))]
     private Color playerColor;
+    [SyncVar]
+    protected bool canControl = false;
 
     #region Getters/Setters
     [Command]
@@ -57,6 +59,12 @@ public class AvatarBase : NetworkBehaviour
 
     protected virtual void OnSetPlayerColor(Color oldCol, Color newCol)
     {
+    }
+
+    [Command]
+    public void CmdSetCanControl(bool canControl)
+    {
+        this.canControl = canControl;
     }
     #endregion
 }

@@ -12,6 +12,9 @@ public class MapController : MonoBehaviour
 
     [SerializeField] private Transform[] spawnPositions;
 
+    [Header("Debug")]
+    public bool DEBUG_toggleControl;
+
     [Header("Map Rules")]
     //public List<AvatarBase> availableAvatars;
     public bool pvp = true;

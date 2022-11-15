@@ -23,6 +23,11 @@ public class NetworkBasicEnemy : NetworkPlaneController
         h = transform.position.y;
     }
 
+    public override void OnStartAuthority()
+    {
+        CmdSetCanControl(true);
+    }
+
     [ServerCallback]
     private void Update()
     {

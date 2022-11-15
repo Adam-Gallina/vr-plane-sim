@@ -26,10 +26,13 @@ public class BasicGameController : GameController
         {
             playing = true;
 
+            if (MapController.Instance.DEBUG_toggleControl)
+                return;
+
             foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.Players)
             {
                 if (p.hasAuthority)
-                    ((NetworkPlayerPlane)p.avatar).canMove = true;
+                    p.avatar.CmdSetCanControl(true);
             }
         }
     }

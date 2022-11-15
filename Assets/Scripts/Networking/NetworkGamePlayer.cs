@@ -138,7 +138,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [Command]
     private void RespawnAvatar()
     {
-        NetworkAvatarSpawner.Instance.SpawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
+        GameController.Instance.RespawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
     }
     #endregion
 }

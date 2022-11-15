@@ -67,14 +67,16 @@ public class NetworkPlayerPlane : NetworkPlaneController
         if (!hasAuthority)
             return;
 
+        if (!canControl)
+            return;
+
         float speedMod = (-inp.Player.Speed.ReadValue<float>() + 1) / 2; // (1, -1) -> (0, 1)
         float s = thrustSpeed + (maxThrustSpeed - thrustSpeed) * speedMod;
 
-        Debug.Log(canMove + " " + GameController.Instance.playing, GameController.Instance);
-        if (canMove)
-            SetDirection(HandleMovement(), s);
-        else
-            Steer(Vector2.zero, 0);
+        
+        SetDirection(HandleMovement(), s);
+        //else
+        //    Steer(Vector2.zero, 0);
 
         HandleInput();
 
@@ -144,10 +146,11 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
-        //if (GameUI.GInstance.pauseOpen)
-        //    return;
+        if (GameUI.GInstance.pauseOpen)
+            return;
 
-        //canMove = !canMove;
+        if (MapController.Instance.DEBUG_toggleControl && hasAuthority)
+            CmdSetCanControl(!canControl);
     }
     #endregion
 
