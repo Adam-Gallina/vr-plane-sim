@@ -9,6 +9,7 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] protected float thrustSpeed;
     [SerializeField] private float turnSpeed;
     [SerializeField] private float altSpeed;
+    [HideInInspector] public bool canMove = false;
 
     [Header("Animations")]
     [SerializeField] protected Renderer body;

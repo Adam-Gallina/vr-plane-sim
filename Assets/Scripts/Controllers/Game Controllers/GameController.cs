@@ -5,6 +5,15 @@ using Mirror;
 
 public abstract class GameController : NetworkBehaviour
 {
+    public static GameController Instance;
+
+    public bool playing = false;
+
+    public override void OnStartClient()
+    {
+        Instance = this;
+    }
+
     [Server]
     public virtual void HandleReadyToStart(bool ready)
     {
@@ -14,6 +23,6 @@ public abstract class GameController : NetworkBehaviour
     [ClientRpc]
     protected virtual void RpcHandleReadyToStart(bool ready)
     {
-        Debug.LogError("RpcHandleReadyToStart not implemented (recieved '" + ready + "')");
+        Debug.LogWarning("RpcHandleReadyToStart not implemented (recieved '" + ready + "')");
     }
 }

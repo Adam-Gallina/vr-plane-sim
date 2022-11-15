@@ -18,7 +18,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
     [SerializeField] private float specialCooldown;
     private float nextSpecial;
 
-    private bool allowMovement = false;
     [SerializeField] private float maxThrustSpeed;
 
     private bool isQuitting = false;
@@ -71,7 +70,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
         float speedMod = (-inp.Player.Speed.ReadValue<float>() + 1) / 2; // (1, -1) -> (0, 1)
         float s = thrustSpeed + (maxThrustSpeed - thrustSpeed) * speedMod;
 
-        if (allowMovement)
+        Debug.Log(canMove + " " + GameController.Instance.playing, GameController.Instance);
+        if (canMove)
             SetDirection(HandleMovement(), s);
         else
             Steer(Vector2.zero, 0);
@@ -144,10 +144,10 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void ToggleMovement(InputAction.CallbackContext obj)
     {
-        if (GameUI.GInstance.pauseOpen)
-            return;
+        //if (GameUI.GInstance.pauseOpen)
+        //    return;
 
-        allowMovement = !allowMovement;
+        //canMove = !canMove;
     }
     #endregion
 

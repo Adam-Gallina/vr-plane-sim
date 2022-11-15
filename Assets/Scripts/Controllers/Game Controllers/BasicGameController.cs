@@ -22,7 +22,16 @@ public class BasicGameController : GameController
     [ClientRpc]
     protected override void RpcHandleReadyToStart(bool ready)
     {
+        if (ready)
+        {
+            playing = true;
 
+            foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.Players)
+            {
+                if (p.hasAuthority)
+                    ((NetworkPlayerPlane)p.avatar).canMove = true;
+            }
+        }
     }
 
     private IEnumerator StartSequence()
@@ -34,6 +43,8 @@ public class BasicGameController : GameController
         }
 
         RpcSendServerBannerMessage(string.Empty, 0);
+
+        RpcHandleReadyToStart(true);
     }
 
     [ClientRpc]
