@@ -14,6 +14,16 @@ public abstract class GameController : NetworkBehaviour
         Instance = this;
     }
 
+    public override void OnStartServer()
+    {
+        PlaneSimNetworkManager.OnServerReadied += SpawnPlayer;
+    }
+
+    public override void OnStopServer()
+    {
+        PlaneSimNetworkManager.OnServerReadied -= SpawnPlayer;
+    }
+
     [Server]
     public virtual void HandleReadyToStart(bool ready)
     {
@@ -27,13 +37,21 @@ public abstract class GameController : NetworkBehaviour
     }
 
     [Server]
+    public void SpawnPlayer(NetworkConnection conn, int player)
+    {
+        Transform t = MapController.Instance.GetSpawnPos(player);
+
+        GameObject avatar = Instantiate(conn.identity.GetComponent<NetworkGamePlayer>().gameAvatarPrefab, t.position, t.rotation).gameObject;
+        NetworkServer.Spawn(avatar, conn);
+
+        conn.identity.GetComponent<NetworkGamePlayer>().RpcOnAvatarSpawned(avatar);
+    }
+
+    [Server]
     public void RespawnPlayer(NetworkConnection conn, int player)
     {
-        if (MapController.Instance.allowPlayerRespawn)
-        {
-            NetworkAvatarSpawner.Instance.SpawnPlayer(conn, player);
-            RpcHandlePlayerRespawn(player);
-        }
+        SpawnPlayer(conn, player);
+        RpcHandlePlayerRespawn(player);
     }
 
     [ClientRpc]
