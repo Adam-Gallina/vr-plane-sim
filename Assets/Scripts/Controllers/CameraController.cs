@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class CameraController : MonoBehaviour
         inp.Player.CameraPan.Enable();
 
         inp.Player.Pause.Enable();
-        inp.Player.Pause.started += GameUI.GInstance.TogglePauseMenu;
+        inp.Player.Pause.started += TogglePause;
     }
 
     private void OnDisable()
@@ -56,7 +57,7 @@ public class CameraController : MonoBehaviour
         inp.Player.CameraPan.Disable();
 
         inp.Player.Pause.Disable();
-        inp.Player.Pause.started -= GameUI.GInstance.TogglePauseMenu;
+        inp.Player.Pause.started -= TogglePause;
     }
 
     public void SpawnCam(Constants.CamType camType)
@@ -110,5 +111,10 @@ public class CameraController : MonoBehaviour
     {
         SetTarget(targets[0]);
         targets.RemoveAt(0);
+    }
+
+    private void TogglePause(InputAction.CallbackContext context)
+    {
+        GameUI.GInstance.TogglePauseMenu();
     }
 }

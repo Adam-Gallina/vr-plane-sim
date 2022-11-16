@@ -1780,7 +1780,7 @@ GameObject:
   - component: {fileID: 6712257493925607858}
   - component: {fileID: 6712257493925607862}
   m_Layer: 5
-  m_Name: Game Canvas
+  m_Name: Desktop Game Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1887,12 +1887,12 @@ MonoBehaviour:
   pauseMenu: {fileID: 4120452923651128723}
   pauseOpen: 0
   returnToLobbyBtn: {fileID: 0}
+  deathMessageParent: {fileID: 6712257493192838431}
   deathMessagePrefab: {fileID: 3414361253318315556, guid: 74810c4227f7c2f47b258113b1bb9d57, type: 3}
   deathMessageHeight: 30
   deathMessageDuration: 3
   banner: {fileID: 1639134702}
   defaultBannerDuration: 2
-  deathMessages: {fileID: 6712257493192838431}
   boostMeter: {fileID: 6602559840134870650}
   boostMeterColors:
     serializedVersion: 2

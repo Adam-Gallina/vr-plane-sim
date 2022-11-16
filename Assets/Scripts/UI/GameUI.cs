@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,7 @@ public abstract class GameUI : MultiCamUI
     public GameObject returnToLobbyBtn;
 
     [Header("Death messages")]
+    [SerializeField] protected Transform deathMessageParent;
     [SerializeField] protected GameObject deathMessagePrefab;
     [SerializeField] protected float deathMessageHeight;
     [SerializeField] protected float deathMessageDuration;
@@ -22,6 +24,10 @@ public abstract class GameUI : MultiCamUI
     [Header("Message banner")]
     [SerializeField] protected GameObject banner;
     [SerializeField] protected float defaultBannerDuration;
+
+    [Header("Plane UI")]
+    [SerializeField] private Image boostMeter;
+    [SerializeField] private Gradient boostMeterColors;
 
     protected override void Awake()
     {
@@ -48,7 +54,7 @@ public abstract class GameUI : MultiCamUI
             SceneManager.LoadScene(Constants.MainMenu.buildIndex);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (deathMessageLog.Count > 0 && Time.time >= deathMessageLog[0].endTime)
         {
@@ -57,7 +63,11 @@ public abstract class GameUI : MultiCamUI
     }
 
     #region Plane UI
-    public abstract void SetBoostLevel(float chargeAmount);
+    public void SetBoostLevel(float chargeAmount)
+    {
+        boostMeter.color = boostMeterColors.Evaluate(chargeAmount);
+        boostMeter.fillAmount = chargeAmount;
+    }
     #endregion
 
     public void TogglePauseMenu(InputAction.CallbackContext context)
@@ -68,10 +78,30 @@ public abstract class GameUI : MultiCamUI
     {
         SetPauseMenu(!pauseOpen);
     }
+
     public abstract void SetPauseMenu(bool open);
 
-    public abstract void SpawnDeathMessage(string msg);
-    public abstract void IncrementDeathMessages();
+    public virtual void SpawnDeathMessage(string msg)
+    {
+        GameObject dm = Instantiate(deathMessagePrefab, deathMessageParent);
+
+        dm.GetComponentInChildren<Text>().text = msg;
+
+        dm.GetComponent<RectTransform>().localPosition = new Vector3(0, -deathMessageParent.childCount * deathMessageHeight, 0);
+
+        deathMessageLog.Add(new DeathMessageInstance(dm, Time.time + deathMessageDuration));
+    }
+
+    public void IncrementDeathMessages()
+    {
+        Destroy(deathMessageLog[0].rt.gameObject);
+        deathMessageLog.RemoveAt(0);
+
+        for (int i = 0; i < deathMessageLog.Count; i++)
+        {
+            deathMessageLog[i].rt.localPosition = new Vector3(0, -i * deathMessageHeight, 0);
+        }
+    }
 
     #region Banner Messages
     public void SetBannerMessage(string msg, float duration=0)
@@ -88,8 +118,18 @@ public abstract class GameUI : MultiCamUI
             Invoke(nameof(HideBannerMessage), duration == 0 ? defaultBannerDuration : duration);
     }
 
-    public abstract void ShowBannerMessage(string msg);
-    public abstract void HideBannerMessage();
+    public void ShowBannerMessage(string msg)
+    {
+        banner.SetActive(true);
+
+        foreach (Text t in banner.GetComponentsInChildren<Text>())
+            t.text = msg;
+    }
+
+    public void HideBannerMessage()
+    {
+        banner.SetActive(false);
+    }
     #endregion
 
     protected struct DeathMessageInstance

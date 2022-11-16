@@ -28,7 +28,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
         PlaneSimNetworkManager.Instance.Players.Add(this);
 
-        SpawnNameTag();
+        SpawnGameUI();
     }
 
     public override void OnStopClient()
@@ -38,24 +38,24 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += SpawnNameTag;
+        SceneManager.sceneLoaded += SpawnGameUI;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= SpawnNameTag;
+        SceneManager.sceneLoaded -= SpawnGameUI;
     }
 
-    private void SpawnNameTag(Scene scene, LoadSceneMode mode)
+    private void SpawnGameUI(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex != Constants.MainMenu.buildIndex && isLocalPlayer)
-            return;
-
-        SpawnNameTag();
+        SpawnGameUI();
     }
-    private void SpawnNameTag()
+    private void SpawnGameUI()
     {
-        MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
+        MapController.Instance.SpawnUI();
+
+        if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
+            MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }
 
     #region Getters/Setters

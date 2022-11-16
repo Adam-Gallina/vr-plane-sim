@@ -12,6 +12,10 @@ public class MapController : MonoBehaviour
 
     [SerializeField] private Transform[] spawnPositions;
 
+    [SerializeField] private GameObject desktopUI;
+    [SerializeField] private GameObject vrUI;
+    private GameObject ui;
+
     [Header("Debug")]
     public bool DEBUG_toggleControl;
 
@@ -44,6 +48,36 @@ public class MapController : MonoBehaviour
             SceneManager.LoadScene(Constants.MainMenu.buildIndex);
 
         Instance = this;
+    }
+
+    public void SpawnUI()
+    {
+        if (ui)
+            return;
+
+        Constants.CamType camType = Constants.CamType.Desktop;
+
+        foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.Players)
+        {
+            if (p.hasAuthority)
+            {
+                camType = p.CamType;
+                break;
+            }
+        }
+
+        if (!desktopUI || !vrUI)
+            return;
+
+        switch (camType)
+        {
+            case Constants.CamType.Desktop:
+                ui = Instantiate(desktopUI);
+                break;
+            case Constants.CamType.VR:
+                ui = Instantiate(vrUI);
+                break;
+        }
     }
 
     public Transform GetSpawnPos(int player)

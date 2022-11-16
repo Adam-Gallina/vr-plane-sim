@@ -21,12 +21,17 @@ public class NetworkPlaneController : NetworkHealthBase
 
     [Header("Animations")]
     [SerializeField] protected Renderer body;
-    [SerializeField] protected Transform model;
+    public Transform model;
     [SerializeField] private float modelRotMod;
     [SerializeField] private Transform propeller;
     [SerializeField] private float propellerSpeed;
     [SerializeField] private Transform joystick;
     [SerializeField] private float joystickMod;
+
+    [Header("VR UI")]
+    public Transform deathMessagePos;
+    public Transform bannerPos;
+    public Transform boostMeterPos;
 
     [Header("Death Effect")]
     [SerializeField] private GameObject deathPrefab;

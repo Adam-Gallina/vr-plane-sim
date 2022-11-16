@@ -10,13 +10,13 @@ public class NametagUI : MonoBehaviour
     [SerializeField] protected GameObject background;
     [SerializeField] protected Text playerNameText;
 
-    [SerializeField] private Vector3 offset = new Vector3(0, 2, 0);
+    [SerializeField] protected Vector3 offset = new Vector3(0, 2, 0);
 
     [Header("Scaling")]
-    [SerializeField] private float minDist;
-    [SerializeField] private float maxDist;
-    [SerializeField] private float hideDist;
-    [SerializeField] private float minScale;
+    [SerializeField] protected float minDist;
+    [SerializeField] protected float maxDist;
+    [SerializeField] protected float hideDist;
+    [SerializeField] protected float minScale;
 
     private RectTransform rt;
 
@@ -43,7 +43,7 @@ public class NametagUI : MonoBehaviour
         background.SetActive(LinkedPlayer.avatar && CanSeeTarget() && SetRectTransform());
     }
 
-    private bool CanSeeTarget()
+    protected bool CanSeeTarget()
     {
         if (Physics.Linecast(Camera.main.transform.position, LinkedPlayer.avatar.transform.position, 1 << Constants.EnvironmentLayer))
             return false;
@@ -51,7 +51,7 @@ public class NametagUI : MonoBehaviour
         return Vector3.Angle(Camera.main.transform.forward, LinkedPlayer.avatar.transform.position - Camera.main.transform.position) < Camera.main.fieldOfView;
     }
 
-    private bool SetRectTransform()
+    protected virtual bool SetRectTransform()
     {
         float dist = Vector3.Distance(Camera.main.transform.position, LinkedPlayer.avatar.transform.position);
         if (dist > maxDist)
@@ -65,7 +65,7 @@ public class NametagUI : MonoBehaviour
         return true;
     }
 
-    private float CalcT(float dist)
+    protected float CalcT(float dist)
     {
         if (dist < minDist)
             return 1;
