@@ -1424,7 +1424,7 @@ MonoBehaviour:
   - {fileID: 399124888}
   desktopUI: {fileID: 6712257493925607859, guid: 15bb4abc9a34d5b4a8254759999d3fe6, type: 3}
   vrUI: {fileID: 6817113261941131533, guid: c4bc639638f50bb4e83706c9c1bd3de7, type: 3}
-  DEBUG_toggleControl: 1
+  DEBUG_toggleControl: 0
   pvp: 1
   spawnFormat: 1
   allowAiRespawn: 1

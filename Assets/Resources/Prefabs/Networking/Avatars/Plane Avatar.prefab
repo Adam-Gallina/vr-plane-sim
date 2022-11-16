@@ -916,7 +916,7 @@ MonoBehaviour:
   maxBoost: 4
   boostSpeed: 90
   boostRegenSpeed: 0.5
-  boostMinToUse: 1
+  boostMinToUse: 0.25
   body: {fileID: 9187135911283660822}
   model: {fileID: 2318525436569042146}
   modelRotMod: 25
