@@ -10,6 +10,15 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float turnSpeed;
     [SerializeField] private float altSpeed;
 
+    [Header("Boost")]
+    [Tooltip("Duration of boost (sec)")]
+    [SerializeField] protected float maxBoost;
+    protected float currBoost;
+    [SerializeField] protected float boostSpeed;
+    [SerializeField] protected float boostRegenSpeed;
+    [SerializeField] protected float boostMinToUse;
+    protected bool boostRecharging = false;
+
     [Header("Animations")]
     [SerializeField] protected Renderer body;
     [SerializeField] protected Transform model;
@@ -29,6 +38,9 @@ public class NetworkPlaneController : NetworkHealthBase
         base.Awake();
 
         rb = GetComponent<Rigidbody>();
+
+        if (MapController.Instance.startMaxBoost)
+            currBoost = maxBoost;
     }
 
     [ServerCallback]
@@ -40,12 +52,19 @@ public class NetworkPlaneController : NetworkHealthBase
         }
     }
 
-    protected void SetDirection(Vector2 dir, float speed = -1)
+    #region Movement
+    protected void SetDirection(Vector2 dir, bool useBoost = false, float speed = -1)
     {
         if (!hasAuthority)
             return;
 
-        Steer(dir, speed == -1 ? thrustSpeed : speed);
+        if (speed == -1)
+            speed = useBoost && CanBoost() ? boostSpeed : thrustSpeed;
+
+        if (useBoost && CanBoost())
+            UseBoost();
+
+        Steer(dir, speed);
         UpdateJoystick(dir);
         UpdateModel();
     }
@@ -63,7 +82,46 @@ public class NetworkPlaneController : NetworkHealthBase
         transform.localEulerAngles = ang;
 
     }
+    #endregion
 
+    #region Boost
+    protected bool CanBoost()
+    {
+        return currBoost > 0 && !boostRecharging;
+    }
+
+    protected bool UseBoost(bool ignoreAuthority = false)
+    {
+        if (!hasAuthority && !ignoreAuthority)
+            return false;
+
+        if (!CanBoost())
+            return false;
+
+        currBoost -= Time.deltaTime;
+
+        if (currBoost <= 0)
+        {
+            boostRecharging = true;
+            currBoost = 0;
+            return false;
+        }
+
+        return true;
+    }
+
+    protected void RegenBoost()
+    {
+        currBoost += Time.deltaTime * boostRegenSpeed;
+        if (currBoost > maxBoost)
+            currBoost = maxBoost;
+
+        if (boostRecharging)
+            boostRecharging = currBoost < boostMinToUse;
+    }
+    #endregion
+
+    #region Animations
     protected void UpdateModel(bool ignoreAuthority=false)
     {
         if (!hasAuthority && !ignoreAuthority)
@@ -82,6 +140,8 @@ public class NetworkPlaneController : NetworkHealthBase
 
         joystick.localEulerAngles = new Vector3(dir.y, 0, -dir.x) * joystickMod;
     }
+    #endregion
+
     protected override void OnSetPlayerColor(Color oldCol, Color newCol)
     {
         body.material.color = newCol;

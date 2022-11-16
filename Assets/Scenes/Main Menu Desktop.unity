@@ -1895,14 +1895,12 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 5680591334375510837, guid: 3b097c8f0a58df5439dfac76e6913696, type: 3}
-  - {fileID: 6991280686162805566, guid: 68f910be232adce40b359e954a9c4cae, type: 3}
   - {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}
   - {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
   - {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   - {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
   - {fileID: 7805355302271731026, guid: 24686a0c4826d674a950a9cf95aa4c2d, type: 3}
   minPlayers: 1
-  avatarSpawnerPrefab: {fileID: 6991280686162805566, guid: 68f910be232adce40b359e954a9c4cae, type: 3}
 --- !u!4 &602145021
 Transform:
   m_ObjectHideFlags: 0
@@ -2348,6 +2346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameControllerPrefab: {fileID: 5608801881046879877, guid: 3b097c8f0a58df5439dfac76e6913696, type: 3}
   spawnPositions: []
+  DEBUG_toggleControl: 0
   pvp: 1
   spawnFormat: 1
   allowAiRespawn: 1

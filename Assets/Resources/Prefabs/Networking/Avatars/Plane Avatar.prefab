@@ -883,7 +883,10 @@ MonoBehaviour:
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
-  canMove: 0
+  maxBoost: 4
+  boostSpeed: 90
+  boostRegenSpeed: 0.5
+  boostMinToUse: 1
   body: {fileID: 9187135911283660822}
   model: {fileID: 2318525436569042146}
   modelRotMod: 25
@@ -895,7 +898,6 @@ MonoBehaviour:
   camTarget: {fileID: 6688837255019762194}
   fireSpeed: 0.08
   specialCooldown: 1
-  maxThrustSpeed: 60
 --- !u!114 &2318525437501457447
 MonoBehaviour:
   m_ObjectHideFlags: 0

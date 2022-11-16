@@ -9,16 +9,16 @@ public class NetworkPlayerPlane : NetworkPlaneController
 {
     [SerializeField] private Transform camTarget;
 
+    private bool boostPressed = false;
+
     [Header("Combat")]
     [SerializeField] private float fireSpeed;
     private float nextShot;
-    private bool firing = false;
+    private bool firePressed = false;
 
     [Header("Special")]
     [SerializeField] private float specialCooldown;
     private float nextSpecial;
-
-    [SerializeField] private float maxThrustSpeed;
 
     private bool isQuitting = false;
 
@@ -47,7 +47,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
         inp.Player.AltFire.started += OnUseSpecial;
 
-        inp.Player.Middle.started += ToggleMovement;
+        inp.Player.Right.started += ToggleMovement;
     }
 
     private void OnDisable()
@@ -59,7 +59,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
         inp.Player.AltFire.started -= OnUseSpecial;
 
-        inp.Player.Middle.started -= ToggleMovement;
+        inp.Player.Right.started -= ToggleMovement;
     }
 
     private void Update()
@@ -67,18 +67,20 @@ public class NetworkPlayerPlane : NetworkPlaneController
         if (!hasAuthority)
             return;
 
+        UpdateUI();
+
         if (!canControl)
+        {
+            SetDirection(Vector2.zero, false, 0);
             return;
+        }
 
-        float speedMod = (-inp.Player.Speed.ReadValue<float>() + 1) / 2; // (1, -1) -> (0, 1)
-        float s = thrustSpeed + (maxThrustSpeed - thrustSpeed) * speedMod;
-
-        
-        SetDirection(HandleMovement(), s);
-        //else
-        //    Steer(Vector2.zero, 0);
+        if (MapController.Instance.boostRegen && !(boostPressed && CanBoost()))
+            RegenBoost();
 
         HandleInput();
+
+        SetDirection(HandleMovement(), boostPressed && CanBoost(), CalcSpeed());
 
         UpdateModel();
     }
@@ -106,16 +108,31 @@ public class NetworkPlayerPlane : NetworkPlaneController
         return dir;
     }
 
+    private float CalcSpeed()
+    {
+        if (boostPressed && CanBoost())
+            return boostSpeed;
+
+        return thrustSpeed;
+    }
+
     private void HandleInput()
     {
         if (GameUI.GInstance.pauseOpen)
             return;
 
-        if (firing && Time.time > nextShot)
+        if (firePressed && Time.time > nextShot)
         {
             nextShot = Time.time + fireSpeed;
             Fire();
         }
+
+        boostPressed = inp.Player.Speed.ReadValue<float>() > 0;
+    }
+
+    private void UpdateUI()
+    {
+        GameUI.GInstance.SetBoostLevel(currBoost / maxBoost);
     }
 
     #region Input Callbacks
@@ -124,16 +141,19 @@ public class NetworkPlayerPlane : NetworkPlaneController
         if (GameUI.GInstance.pauseOpen)
             return;
 
-        firing = true;
+        firePressed = true;
     }
 
     private void OnStopFire(InputAction.CallbackContext obj)
     {
-        firing = false;
+        firePressed = false;
     }
 
     private void OnUseSpecial(InputAction.CallbackContext obj)
     {
+        if (!canControl)
+            return;
+
         if (GameUI.GInstance.pauseOpen)
             return;
 

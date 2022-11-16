@@ -7,10 +7,18 @@ public class DesktopGameUI : GameUI
 {
     [Header("Desktop UI")]
     [SerializeField] private Transform deathMessages;
+    [SerializeField] private Image boostMeter;
+    [SerializeField] private Gradient boostMeterColors;
 
     public override NametagUI SpawnNametag()
     {
         return Instantiate(nametagPrefab, transform).GetComponent<NametagUI>();
+    }
+
+    public override void SetBoostLevel(float chargeAmount)
+    {
+        boostMeter.color = boostMeterColors.Evaluate(chargeAmount);
+        boostMeter.fillAmount = chargeAmount;
     }
 
     public override void SetPauseMenu(bool open)

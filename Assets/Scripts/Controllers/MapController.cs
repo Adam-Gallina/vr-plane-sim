@@ -21,6 +21,8 @@ public class MapController : MonoBehaviour
     public SpawnFormation spawnFormat = SpawnFormation.Assigned;
     public bool allowAiRespawn = true;
     public bool allowPlayerRespawn = true;
+    public bool startMaxBoost = true;
+    public bool boostRegen = true;
 
     private void OnDrawGizmos()
     {

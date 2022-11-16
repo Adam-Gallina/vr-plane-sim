@@ -1527,10 +1527,13 @@ MonoBehaviour:
   - {fileID: 1241928009}
   - {fileID: 603531811}
   - {fileID: 399124888}
+  DEBUG_toggleControl: 1
   pvp: 1
   spawnFormat: 1
   allowAiRespawn: 1
   allowPlayerRespawn: 1
+  startMaxBoost: 1
+  boostRegen: 1
 --- !u!4 &1664129240
 Transform:
   m_ObjectHideFlags: 0

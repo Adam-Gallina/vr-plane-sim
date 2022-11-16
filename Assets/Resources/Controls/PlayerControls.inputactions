@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Middle",
+                    "name": "AltFire",
                     "type": "Button",
                     "id": "5941e479-f855-4b31-8847-aafe8086bfdf",
                     "expectedControlType": "Button",
@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AltFire",
+                    "name": "Right",
                     "type": "Button",
                     "id": "032f548d-6b31-46be-874c-d7f45a680736",
                     "expectedControlType": "Button",
@@ -196,18 +196,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Middle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6260f73e-2a24-4471-b3f1-86c0f67095d4",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Middle",
+                    "action": "AltFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -218,18 +207,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AltFire",
+                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "439855ca-b5f4-4776-aeac-165d3366d9b4",
-                    "path": "<Keyboard>/e",
+                    "id": "6260f73e-2a24-4471-b3f1-86c0f67095d4",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AltFire",
+                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -237,6 +226,17 @@
                     "name": "",
                     "id": "f1fd22d8-98af-46c6-9f46-ad4d3b3bf40b",
                     "path": "<HID::Thrustmaster, Inc. USB Game Controllers>/z",
+                    "interactions": "",
+                    "processors": "Invert,Clamp(max=1)",
+                    "groups": "",
+                    "action": "Speed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2645b0b-b7ce-4b9b-8a03-bc1e23554b3e",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -285,6 +285,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "439855ca-b5f4-4776-aeac-165d3366d9b4",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AltFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

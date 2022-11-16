@@ -46,7 +46,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Middle"",
+                    ""name"": ""AltFire"",
                     ""type"": ""Button"",
                     ""id"": ""5941e479-f855-4b31-8847-aafe8086bfdf"",
                     ""expectedControlType"": ""Button"",
@@ -55,7 +55,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AltFire"",
+                    ""name"": ""Right"",
                     ""type"": ""Button"",
                     ""id"": ""032f548d-6b31-46be-874c-d7f45a680736"",
                     ""expectedControlType"": ""Button"",
@@ -218,18 +218,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Middle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6260f73e-2a24-4471-b3f1-86c0f67095d4"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Middle"",
+                    ""action"": ""AltFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -240,18 +229,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AltFire"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""439855ca-b5f4-4776-aeac-165d3366d9b4"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""id"": ""6260f73e-2a24-4471-b3f1-86c0f67095d4"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AltFire"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -259,6 +248,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f1fd22d8-98af-46c6-9f46-ad4d3b3bf40b"",
                     ""path"": ""<HID::Thrustmaster, Inc. USB Game Controllers>/z"",
+                    ""interactions"": """",
+                    ""processors"": ""Invert,Clamp(max=1)"",
+                    ""groups"": """",
+                    ""action"": ""Speed"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2645b0b-b7ce-4b9b-8a03-bc1e23554b3e"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -309,6 +309,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""439855ca-b5f4-4776-aeac-165d3366d9b4"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AltFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -319,8 +330,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_Middle = m_Player.FindAction("Middle", throwIfNotFound: true);
         m_Player_AltFire = m_Player.FindAction("AltFire", throwIfNotFound: true);
+        m_Player_Right = m_Player.FindAction("Right", throwIfNotFound: true);
         m_Player_Speed = m_Player.FindAction("Speed", throwIfNotFound: true);
         m_Player_CameraPan = m_Player.FindAction("CameraPan", throwIfNotFound: true);
         m_Player_AltMouse = m_Player.FindAction("AltMouse", throwIfNotFound: true);
@@ -386,8 +397,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_Middle;
     private readonly InputAction m_Player_AltFire;
+    private readonly InputAction m_Player_Right;
     private readonly InputAction m_Player_Speed;
     private readonly InputAction m_Player_CameraPan;
     private readonly InputAction m_Player_AltMouse;
@@ -398,8 +409,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
-        public InputAction @Middle => m_Wrapper.m_Player_Middle;
         public InputAction @AltFire => m_Wrapper.m_Player_AltFire;
+        public InputAction @Right => m_Wrapper.m_Player_Right;
         public InputAction @Speed => m_Wrapper.m_Player_Speed;
         public InputAction @CameraPan => m_Wrapper.m_Player_CameraPan;
         public InputAction @AltMouse => m_Wrapper.m_Player_AltMouse;
@@ -419,12 +430,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                @Middle.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddle;
-                @Middle.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddle;
-                @Middle.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddle;
                 @AltFire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltFire;
                 @AltFire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltFire;
                 @AltFire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAltFire;
+                @Right.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRight;
+                @Right.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRight;
+                @Right.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRight;
                 @Speed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
                 @Speed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
                 @Speed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpeed;
@@ -447,12 +458,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
-                @Middle.started += instance.OnMiddle;
-                @Middle.performed += instance.OnMiddle;
-                @Middle.canceled += instance.OnMiddle;
                 @AltFire.started += instance.OnAltFire;
                 @AltFire.performed += instance.OnAltFire;
                 @AltFire.canceled += instance.OnAltFire;
+                @Right.started += instance.OnRight;
+                @Right.performed += instance.OnRight;
+                @Right.canceled += instance.OnRight;
                 @Speed.started += instance.OnSpeed;
                 @Speed.performed += instance.OnSpeed;
                 @Speed.canceled += instance.OnSpeed;
@@ -473,8 +484,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
-        void OnMiddle(InputAction.CallbackContext context);
         void OnAltFire(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
         void OnSpeed(InputAction.CallbackContext context);
         void OnCameraPan(InputAction.CallbackContext context);
         void OnAltMouse(InputAction.CallbackContext context);

@@ -42,6 +42,12 @@ public abstract class GameUI : MultiCamUI
         PlaneSimNetworkManager.OnClientDisconnected -= HandleClientDisconnected;
     }
 
+    private void HandleClientDisconnected()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
+            SceneManager.LoadScene(Constants.MainMenu.buildIndex);
+    }
+
     private void Update()
     {
         if (deathMessageLog.Count > 0 && Time.time >= deathMessageLog[0].endTime)
@@ -49,6 +55,10 @@ public abstract class GameUI : MultiCamUI
             IncrementDeathMessages();
         }
     }
+
+    #region Plane UI
+    public abstract void SetBoostLevel(float chargeAmount);
+    #endregion
 
     public void TogglePauseMenu(InputAction.CallbackContext context)
     {
@@ -63,6 +73,7 @@ public abstract class GameUI : MultiCamUI
     public abstract void SpawnDeathMessage(string msg);
     public abstract void IncrementDeathMessages();
 
+    #region Banner Messages
     public void SetBannerMessage(string msg, float duration=0)
     {
         if (string.IsNullOrEmpty(msg))
@@ -79,6 +90,7 @@ public abstract class GameUI : MultiCamUI
 
     public abstract void ShowBannerMessage(string msg);
     public abstract void HideBannerMessage();
+    #endregion
 
     protected struct DeathMessageInstance
     {
@@ -92,6 +104,7 @@ public abstract class GameUI : MultiCamUI
         }
     }
 
+    #region Pause Menu Buttons
     public void LeaveLobbyPressed()
     {
         switch (PlaneSimNetworkManager.Instance.mode)
@@ -112,10 +125,5 @@ public abstract class GameUI : MultiCamUI
     {
         PlaneSimNetworkManager.Instance.ReturnToLobby();
     }
-
-    private void HandleClientDisconnected()
-    {
-        if (SceneManager.GetActiveScene().buildIndex != Constants.MainMenu.buildIndex)
-            SceneManager.LoadScene(Constants.MainMenu.buildIndex);
-    }
+    #endregion
 }
