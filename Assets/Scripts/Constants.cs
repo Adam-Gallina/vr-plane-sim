@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Constants
 {
+    public const string PlayerNamePref = "PlayerName";
+    public const string LastIpPref = "LastIP";
+
     public enum Tag { Ally, Enemy }
     public const string AllyTag = "Ally";
     public const string EnemyTag = "Enemy";

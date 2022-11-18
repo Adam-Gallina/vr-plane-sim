@@ -22,6 +22,10 @@ public class MainMenu : MonoBehaviour
         {
             startPagePanel.SetActive(false);
             lobbyPanel.SetActive(true);
+
+            nameInputField.text = PlayerPrefs.GetString(Constants.PlayerNamePref, "Player");
+            if (PlayerPrefs.HasKey(Constants.LastIpPref))
+                ipAddressField.text = PlayerPrefs.GetString(Constants.LastIpPref);
         }
         else
         {
@@ -47,6 +51,8 @@ public class MainMenu : MonoBehaviour
     {
         DisplayName = name;
         UpdateButtons();
+
+        PlayerPrefs.SetString(Constants.PlayerNamePref, name);
     }
 
     public void UpdateButtons()
@@ -81,6 +87,8 @@ public class MainMenu : MonoBehaviour
 
         startPagePanel.SetActive(false);
         lobbyPanel.SetActive(true);
+
+        PlayerPrefs.SetString(Constants.LastIpPref, ipAddressField.text);
     }
 
     private void HandleClientDisconnected()
