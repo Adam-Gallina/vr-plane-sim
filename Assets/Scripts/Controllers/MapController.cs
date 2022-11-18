@@ -13,7 +13,11 @@ public class MapController : MonoBehaviour
     [SerializeField] private Transform[] spawnPositions;
     [SerializeField] private Transform[] powerupPositions;
     [SerializeField] private PowerupSource[] availablePowerups;
-    public int TotalPowerupSpawns { get { return powerupPositions.Length; } }
+    public int TotalPowerupSpawns { get {
+            if (powerupPositions == null)
+                return 0;
+            return powerupPositions.Length; 
+        } }
 
     [SerializeField] private GameObject desktopUI;
     [SerializeField] private GameObject vrUI;
