@@ -2410,13 +2410,11 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 5680591334375510837, guid: 3b097c8f0a58df5439dfac76e6913696, type: 3}
-  - {fileID: 7805355302271731026, guid: 24686a0c4826d674a950a9cf95aa4c2d, type: 3}
   - {fileID: 2318525437501457625, guid: 487cce32879903e44858da5ef388d516, type: 3}
-  - {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   - {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
+  - {fileID: 8294273329988570475, guid: bb734adce8dd5b645bbab2f958419392, type: 3}
   - {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
-  - {fileID: 2052979015071400893, guid: 9a3a9dcb5bba4244a92cb3a51690e168, type: 3}
-  - {fileID: 9098312945684389500, guid: 1a4fb289828d7bd48ba0228e343b8c7b, type: 3}
+  - {fileID: 7805355302271731026, guid: 24686a0c4826d674a950a9cf95aa4c2d, type: 3}
   minPlayers: 1
 --- !u!4 &602145021
 Transform:
@@ -2863,8 +2861,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameControllerPrefab: {fileID: 5608801881046879877, guid: 3b097c8f0a58df5439dfac76e6913696, type: 3}
   spawnPositions: []
-  powerupPositions: []
-  availablePowerups: []
   desktopUI: {fileID: 0}
   vrUI: {fileID: 0}
   DEBUG_toggleControl: 0
@@ -2874,8 +2870,6 @@ MonoBehaviour:
   allowPlayerRespawn: 1
   startMaxBoost: 1
   boostRegen: 1
-  allowPowerupRespawn: 1
-  powerupRespawnTime: 3
 --- !u!4 &939821235
 Transform:
   m_ObjectHideFlags: 0

@@ -36,8 +36,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
     {
         gameObject.tag = MapController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
         model.gameObject.tag = MapController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
-
-        PlaneSimNetworkManager.OnBeforeSceneChange += ServerSceneChanging;
     }
 
     private void OnEnable()
@@ -54,8 +52,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     private void OnDisable()
     {
-        PlaneSimNetworkManager.OnBeforeSceneChange -= ServerSceneChanging;
-
         inp.Player.Disable();
 
         inp.Player.Fire.started -= OnStartFire;
@@ -89,7 +85,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
         UpdateModel();
     }
 
-    private void ServerSceneChanging() => isQuitting = true;
     private void OnApplicationQuit() => isQuitting = true;
     private void OnDestroy()
     {

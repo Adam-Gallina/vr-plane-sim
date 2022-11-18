@@ -38,18 +38,22 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void OnEnable()
     {
-        PlaneSimNetworkManager.OnAfterSceneChange += SpawnGameUI;
+        SceneManager.sceneLoaded += SpawnGameUI;
     }
 
     private void OnDisable()
     {
-        PlaneSimNetworkManager.OnAfterSceneChange -= SpawnGameUI;
+        SceneManager.sceneLoaded -= SpawnGameUI;
     }
 
+    private void SpawnGameUI(Scene scene, LoadSceneMode mode)
+    {
+        SpawnGameUI();
+    }
     private void SpawnGameUI()
     {
         MapController.Instance.SpawnUI();
-        
+
         if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
             MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }

@@ -905,9 +905,9 @@ MonoBehaviour:
   bulletSource:
   - {fileID: 1653076711583785706}
   - {fileID: 1653076712325322626}
-  bulletPrefab: {fileID: 1777144864192326898, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
+  bulletPrefab: {fileID: 4773419067082245090, guid: cf34bc2d179edc347b4ab934b99837b6, type: 3}
   specialSource: {fileID: 3420009011094819388}
-  currSpecial: {fileID: 0}
+  currSpecial: {fileID: 7914010303628725667, guid: be6037f6b7372ed43bb767c1849b08fb, type: 3}
   damageType: 0
   maxHealth: 12
   thrustSpeed: 30
