@@ -10,6 +10,4 @@ public class DesktopGameUI : GameUI
         pauseOpen = open;
         pauseMenu.SetActive(open);
     }
-
-    
 }

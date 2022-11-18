@@ -14,6 +14,11 @@ public abstract class MultiCamUI : MonoBehaviour
         Instance = this;
     }
 
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
+
     public virtual NametagUI SpawnNametag()
     {
         return Instantiate(nametagPrefab, transform).GetComponent<NametagUI>();

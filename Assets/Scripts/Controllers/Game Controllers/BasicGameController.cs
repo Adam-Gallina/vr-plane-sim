@@ -18,7 +18,7 @@ public class BasicGameController : GameController
     {
         StartCoroutine(StartSequence());
     }
-    
+
     [ClientRpc]
     protected override void RpcHandleReadyToStart(bool ready)
     {
@@ -39,6 +39,8 @@ public class BasicGameController : GameController
 
     private IEnumerator StartSequence()
     {
+        SpawnAllPowerups();
+
         foreach (string m in bannerMessages)
         {
             RpcSendServerBannerMessage(m, -1);
@@ -60,5 +62,42 @@ public class BasicGameController : GameController
         }
 
         GameUI.GInstance.SetBannerMessage(message, duration);
+    }
+
+    [Server]
+    private void SpawnAllPowerups()
+    {
+        for (int i = 0; i < MapController.Instance.TotalPowerupSpawns; i++)
+        {
+            SpawnPowerup(MapController.Instance.GetRandomPowerup(),
+                         MapController.Instance.GetPowerupPos(i),
+                         i);
+        }
+    }
+
+    [Server]
+    public void OnPowerupCollected(int powerupId)
+    {
+        if (MapController.Instance.allowPowerupRespawn)
+            StartCoroutine(RespawnPowerup(MapController.Instance.GetRandomPowerup(),
+                                          MapController.Instance.GetPowerupPos(powerupId),
+                                          MapController.Instance.powerupRespawnTime,
+                                          powerupId));
+    }
+
+    [Server]
+    private IEnumerator RespawnPowerup(PowerupSource prefab, Transform spawnPos, float time, int id)
+    {
+        yield return new WaitForSeconds(time);
+        SpawnPowerup(prefab, spawnPos, id);
+    }
+
+    [Server]
+    private void SpawnPowerup(PowerupSource prefab, Transform spawnPos, int id)
+    {
+        PowerupSource newPowerup = Instantiate(prefab, spawnPos.position, spawnPos.rotation);
+        NetworkServer.Spawn(newPowerup.gameObject);
+
+        newPowerup.powerupId = id;
     }
 }
