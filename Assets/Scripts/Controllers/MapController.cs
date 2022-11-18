@@ -68,6 +68,11 @@ public class MapController : MonoBehaviour
         Instance = this;
     }
 
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
+
     public void SpawnUI()
     {
         if (ui)
