@@ -52,8 +52,9 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     }
     private void SpawnGameUI()
     {
+        Debug.Log("Before: " + MultiCamUI.Instance);
         MapController.Instance.SpawnUI();
-
+        Debug.Log("After: " + MultiCamUI.Instance);
         if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
             MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
     }

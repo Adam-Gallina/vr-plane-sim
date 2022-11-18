@@ -51,8 +51,6 @@ public class MainMenu : MonoBehaviour
     {
         DisplayName = name;
         UpdateButtons();
-
-        PlayerPrefs.SetString(Constants.PlayerNamePref, name);
     }
 
     public void UpdateButtons()
@@ -89,6 +87,7 @@ public class MainMenu : MonoBehaviour
         lobbyPanel.SetActive(true);
 
         PlayerPrefs.SetString(Constants.LastIpPref, ipAddressField.text);
+        PlayerPrefs.SetString(Constants.PlayerNamePref, name);
     }
 
     private void HandleClientDisconnected()
