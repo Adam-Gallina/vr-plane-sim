@@ -18,6 +18,10 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        nameInputField.text = PlayerPrefs.GetString(Constants.PlayerNamePref, "Player");
+        if (PlayerPrefs.HasKey(Constants.LastIpPref))
+            ipAddressField.text = PlayerPrefs.GetString(Constants.LastIpPref);
+
         if (PlaneSimNetworkManager.Instance.mode != Mirror.NetworkManagerMode.Offline)
         {
             startPagePanel.SetActive(false);
@@ -81,6 +85,9 @@ public class MainMenu : MonoBehaviour
 
         startPagePanel.SetActive(false);
         lobbyPanel.SetActive(true);
+
+        PlayerPrefs.SetString(Constants.LastIpPref, ipAddressField.text);
+        PlayerPrefs.SetString(Constants.PlayerNamePref, DisplayName);
     }
 
     private void HandleClientDisconnected()

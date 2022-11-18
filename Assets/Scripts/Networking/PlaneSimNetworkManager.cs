@@ -16,6 +16,8 @@ public class PlaneSimNetworkManager : NetworkManager
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
     public static event Action<NetworkConnection, int> OnServerReadied;
+    public static event Action OnBeforeSceneChange;
+    public static event Action OnAfterSceneChange;
 
     public List<NetworkGamePlayer> Players { get; } = new List<NetworkGamePlayer>();
 
@@ -81,6 +83,8 @@ public class PlaneSimNetworkManager : NetworkManager
         foreach (NetworkGamePlayer p in Players)
             p.IsReady = false;
 
+        OnBeforeSceneChange?.Invoke();
+
         base.OnServerChangeScene(newSceneName);
     }
 
@@ -88,6 +92,8 @@ public class PlaneSimNetworkManager : NetworkManager
     {
         gc = Instantiate(MapController.Instance.gameControllerPrefab);
         NetworkServer.Spawn(gc.gameObject);
+
+        OnAfterSceneChange?.Invoke();
     }
 
     public override void OnServerReady(NetworkConnection conn)

@@ -8,9 +8,10 @@ public class NetworkCombatBase : AvatarBase
     [Header("Combat")]
     [SerializeField] private Transform[] bulletSource;
     private int nextSource;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private NetworkBullet bulletPrefab;
     [SerializeField] private Transform specialSource;
-    [SerializeField] protected GameObject currSpecial;
+    [SyncVar]
+    [SerializeField] protected PowerupBase currSpecial;
     [SerializeField] private DamageSource damageType = DamageSource.AI;
 
     protected void Fire()
@@ -33,9 +34,9 @@ public class NetworkCombatBase : AvatarBase
     [Command]
     private void CmdSpawnBullet(int source)
     {
-        GameObject b = Instantiate(bulletPrefab, bulletSource[source].position, bulletSource[source].rotation);
-        NetworkServer.Spawn(b);
-        b.GetComponent<NetworkBullet>().SetSource(this, damageType);
+        NetworkBullet b = Instantiate(bulletPrefab, bulletSource[source].position, bulletSource[source].rotation);
+        NetworkServer.Spawn(b.gameObject);
+        b.SetSource(this, damageType);
 
         RpcOnSpawnBullet(source);
     }
@@ -46,12 +47,16 @@ public class NetworkCombatBase : AvatarBase
         bulletSource[source].GetComponent<AudioSource>()?.Play();
     }
 
+    [Server]
+    public void SetSpecial(PowerupBase powerup)
+    {
+        currSpecial = powerup;
+    }
+
     [Command]
     private void CmdSpawnSpecial()
     {
-        GameObject b = Instantiate(currSpecial, specialSource.position, specialSource.rotation);
-        NetworkServer.Spawn(b);
-        b.GetComponent<NetworkBullet>().SetSource(this, damageType);
-
+        if (currSpecial.UsePowerup(this, specialSource, damageType))
+            currSpecial = null;
     }
 }

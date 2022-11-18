@@ -11,6 +11,13 @@ public class MapController : MonoBehaviour
     public GameController gameControllerPrefab;
 
     [SerializeField] private Transform[] spawnPositions;
+    [SerializeField] private Transform[] powerupPositions;
+    [SerializeField] private PowerupSource[] availablePowerups;
+    public int TotalPowerupSpawns { get {
+            if (powerupPositions == null)
+                return 0;
+            return powerupPositions.Length; 
+        } }
 
     [SerializeField] private GameObject desktopUI;
     [SerializeField] private GameObject vrUI;
@@ -27,18 +34,29 @@ public class MapController : MonoBehaviour
     public bool allowPlayerRespawn = true;
     public bool startMaxBoost = true;
     public bool boostRegen = true;
+    public bool allowPowerupRespawn = true;
+    public float powerupRespawnTime = 3;
 
     private void OnDrawGizmos()
     {
-        if (spawnPositions.Length == 0)
-            return;
-
-        foreach (Transform t in spawnPositions)
+        if (spawnPositions.Length > 0)
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(t.position, 1);
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(t.position, t.position + t.forward * 2);
+            foreach (Transform t in spawnPositions)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireSphere(t.position, 1);
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(t.position, t.position + t.forward * 2);
+            }
+        }
+
+        if (powerupPositions.Length > 0)
+        {
+            Gizmos.color = Color.yellow;
+            foreach (Transform t in powerupPositions)
+            {
+                Gizmos.DrawWireSphere(t.position, 5);
+            }
         }
     }
 
@@ -48,6 +66,11 @@ public class MapController : MonoBehaviour
             SceneManager.LoadScene(Constants.MainMenu.buildIndex);
 
         Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        Instance = null;
     }
 
     public void SpawnUI()
@@ -114,5 +137,22 @@ public class MapController : MonoBehaviour
         }
 
         return spawnPositions[player];
+    }
+
+
+    public Transform GetPowerupPos(int powerup)
+    {
+        if (powerupPositions.Length < powerup)
+        {
+            Debug.LogError("Requesting invalid powerup position (" + powerup + ")");
+            return null;
+        }
+
+        return powerupPositions[powerup];
+    }
+
+    public PowerupSource GetRandomPowerup()
+    {
+        return availablePowerups[Random.Range(0, availablePowerups.Length)];
     }
 }
