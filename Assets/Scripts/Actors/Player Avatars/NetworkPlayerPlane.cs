@@ -38,6 +38,11 @@ public class NetworkPlayerPlane : NetworkPlaneController
         model.gameObject.tag = MapController.Instance.pvp ? Constants.EnemyTag : Constants.AllyTag;
     }
 
+    public override void OnStartAuthority()
+    {
+        GameUI.GInstance?.missileIndicator.SetLinkedPlane(this);
+    }
+
     private void OnEnable()
     {
         inp.Player.Enable();
@@ -138,6 +143,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
             return;
         }
 
+        GameUI.GInstance.SetHealthLevel(currHealth / maxHealth);
         GameUI.GInstance.SetBoostLevel(currBoost / maxBoost);
     }
 

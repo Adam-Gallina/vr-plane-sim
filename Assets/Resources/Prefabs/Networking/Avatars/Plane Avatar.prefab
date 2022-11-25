@@ -909,6 +909,7 @@ MonoBehaviour:
   specialSource: {fileID: 3420009011094819388}
   currSpecial: {fileID: 0}
   damageType: 0
+  maxMissileDetectionRange: 50
   maxHealth: 12
   thrustSpeed: 30
   turnSpeed: 60

@@ -13,6 +13,7 @@ public class NetworkCombatBase : AvatarBase
     [SyncVar]
     [SerializeField] protected PowerupBase currSpecial;
     [SerializeField] private DamageSource damageType = DamageSource.AI;
+    public float maxMissileDetectionRange = 20;
 
     protected void Fire()
     {

@@ -26,8 +26,11 @@ public abstract class GameUI : MultiCamUI
     [SerializeField] protected float defaultBannerDuration;
 
     [Header("Plane UI")]
+    [SerializeField] private Image healthMeter;
+    [SerializeField] private Gradient healthMeterColors;
     [SerializeField] private Image boostMeter;
     [SerializeField] private Gradient boostMeterColors;
+    public MissileIndicatorUI missileIndicator;
 
     protected override void Awake()
     {
@@ -63,6 +66,12 @@ public abstract class GameUI : MultiCamUI
     }
 
     #region Plane UI
+    public void SetHealthLevel(float healthAmount)
+    {
+        healthMeter.color = healthMeterColors.Evaluate(healthAmount);
+        healthMeter.fillAmount = healthAmount;
+    }
+
     public void SetBoostLevel(float chargeAmount)
     {
         boostMeter.color = boostMeterColors.Evaluate(chargeAmount);

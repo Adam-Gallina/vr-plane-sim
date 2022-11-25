@@ -25,6 +25,7 @@ public class Constants
     public const int DamageableLayer = 6;
     public const int EnvironmentLayer = 7;
     public const int BulletLayer = 8;
+    public const int ProjectileLayer = 9;
 
     public enum CamType { Desktop, VR, Unknown }
 
