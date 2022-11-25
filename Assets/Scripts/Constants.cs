@@ -26,7 +26,7 @@ public class Constants
     public const int EnvironmentLayer = 7;
     public const int BulletLayer = 8;
 
-    public enum CamType { Desktop, VR }
+    public enum CamType { Desktop, VR, Unknown }
 
     public enum SceneType { MainMenu, FFA, Dogfight, Survival, Race }
     public static GameScene MainMenu = new GameScene(0, "Main Menu Desktop", SceneType.MainMenu);

@@ -15,7 +15,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [SyncVar(hook = nameof(OnPlayerColorChanged))]
     public Color playerColor;
     [SyncVar]
-    [HideInInspector] public Constants.CamType CamType;
+    [HideInInspector] public Constants.CamType CamType = Constants.CamType.Unknown;
     [SyncVar(hook = nameof(OnReadyChanged))]
     public bool IsReady = false;
 
@@ -38,20 +38,24 @@ public class NetworkGamePlayer : NetworkCombatUpdates
 
     private void OnEnable()
     {
-        PlaneSimNetworkManager.OnAfterSceneChange += SpawnGameUI;
+        SceneManager.activeSceneChanged += SpawnGameUI;
     }
 
     private void OnDisable()
     {
-        PlaneSimNetworkManager.OnAfterSceneChange -= SpawnGameUI;
+        SceneManager.activeSceneChanged -= SpawnGameUI;
     }
 
+    private void SpawnGameUI(Scene oldScene, Scene newScene)
+    {
+        SpawnGameUI();
+    }
     private void SpawnGameUI()
     {
         MapController.Instance.SpawnUI();
         
         if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
-            MultiCamUI.Instance.SpawnNametag().SetLinkedPlayer(this);
+            MultiCamUI.Instance?.SpawnNametag().SetLinkedPlayer(this);
     }
 
     #region Getters/Setters

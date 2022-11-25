@@ -78,7 +78,7 @@ public class MapController : MonoBehaviour
         if (ui)
             return;
 
-        Constants.CamType camType = Constants.CamType.Desktop;
+        Constants.CamType camType = Constants.CamType.Unknown;
 
         foreach (NetworkGamePlayer p in PlaneSimNetworkManager.Instance.Players)
         {
@@ -90,10 +90,15 @@ public class MapController : MonoBehaviour
         }
 
         if (!desktopUI || !vrUI)
+        {
+            Debug.LogError("No UI set, cannot spawn");
             return;
+        }
 
         switch (camType)
         {
+            case Constants.CamType.Unknown:
+                break;
             case Constants.CamType.Desktop:
                 ui = Instantiate(desktopUI);
                 break;

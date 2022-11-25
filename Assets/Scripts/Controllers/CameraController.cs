@@ -64,6 +64,10 @@ public class CameraController : MonoBehaviour
     {
         switch (camType)
         {
+            case Constants.CamType.Unknown:
+                Debug.LogWarning("Unknown CamType recieved, spawning Desktop Cam");
+                SpawnCam(Constants.CamType.Desktop);
+                return;
             case Constants.CamType.Desktop:
                 Instantiate(desktopCamPrefab, transform);
                 break;

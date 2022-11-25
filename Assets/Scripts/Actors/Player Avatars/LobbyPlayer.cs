@@ -27,11 +27,16 @@ public class LobbyPlayer : NametagUI
         LobbyUI.LInstance.startGameButton.onClick.AddListener(StartGame);
         LobbyUI.LInstance.colorSelect.onColorSelect.AddListener(SetPlaneColor);
         LobbyUI.LInstance.camType.onValueChanged.AddListener(SetCamType);
+        SetCamType(LobbyUI.LInstance.camType.value); // Get default CamType value
     }
 
     protected override void Update()
     {
-        
+        if (!LinkedPlayer)
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     private void OnDestroy()
