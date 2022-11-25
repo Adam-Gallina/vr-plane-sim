@@ -122,7 +122,7 @@ public class NetworkPlaneController : NetworkHealthBase
             currBoost = maxBoost;
 
         if (boostRecharging)
-            boostRecharging = currBoost > boostMinToUse;
+            boostRecharging = currBoost < (boostMinToUse * maxBoost);
     }
     #endregion
 
