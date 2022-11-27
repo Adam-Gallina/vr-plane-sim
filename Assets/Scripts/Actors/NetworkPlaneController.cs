@@ -31,6 +31,7 @@ public class NetworkPlaneController : NetworkHealthBase
     [Header("VR UI")]
     public Transform deathMessagePos;
     public Transform bannerPos;
+    public Transform healthMeterPos;
     public Transform boostMeterPos;
 
     [Header("Death Effect")]

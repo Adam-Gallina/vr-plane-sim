@@ -8,6 +8,8 @@ public class BasicGameController : GameController
     [SerializeField] protected string[] bannerMessages = new string[] { "READY?", "3", "2", "1", "GO!" };
     [SerializeField] protected float messageTime = 1;
 
+    private bool started = false;
+
     public override void OnStartClient()
     {
         GameUI.GInstance?.SetBannerMessage("Waiting for players...", -1);
@@ -16,7 +18,11 @@ public class BasicGameController : GameController
     [Server]
     public override void HandleReadyToStart(bool ready)
     {
-        StartCoroutine(StartSequence());
+        if (!started)
+        {
+            started = true;
+            StartCoroutine(StartSequence());
+        }
     }
 
     [ClientRpc]
@@ -40,6 +46,7 @@ public class BasicGameController : GameController
     private IEnumerator StartSequence()
     {
         SpawnAllPowerups();
+        SpawnAllMapEnemies();
 
         foreach (string m in bannerMessages)
         {
@@ -64,6 +71,22 @@ public class BasicGameController : GameController
         GameUI.GInstance.SetBannerMessage(message, duration);
     }
 
+    #region Map Enemies
+    private void SpawnAllMapEnemies()
+    {
+        foreach (NetworkEnemySpawnPos spawner in MapController.Instance.GetMapEnemies())
+            if (spawner.spawn)
+                SpawnMapEnemy(spawner);
+    }
+
+    private void SpawnMapEnemy(NetworkEnemySpawnPos spawner)
+    {
+        GameObject newEnemy = Instantiate(spawner.enemyPrefab.gameObject, spawner.transform.position, spawner.transform.rotation);
+        NetworkServer.Spawn(newEnemy);
+    }
+    #endregion
+
+    #region Powerups
     [Server]
     private void SpawnAllPowerups()
     {
@@ -100,4 +123,5 @@ public class BasicGameController : GameController
 
         newPowerup.powerupId = id;
     }
+    #endregion
 }

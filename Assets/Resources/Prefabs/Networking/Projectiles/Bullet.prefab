@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1777144864192326898}
   - component: {fileID: 5595763645612024201}
   m_Layer: 8
-  m_Name: Player Bullet
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   targetTag: 1
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
   damage: 1
   hitEffect: {fileID: 0}
   speed: 250

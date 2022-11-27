@@ -7,6 +7,7 @@ public enum DamageSource { Player, Ground, AI }
 public class NetworkHealthBase : NetworkCombatBase
 {
     [Header("Health")]
+    [SerializeField] protected bool damageable = true;
     [SerializeField] protected float maxHealth;
     [SyncVar]//(hook = nameof(HandleHealthChanged))]
     protected float currHealth;
@@ -22,7 +23,7 @@ public class NetworkHealthBase : NetworkCombatBase
     [ServerCallback]
     public virtual void Damage(float damage, NetworkCombatBase source, DamageSource sourceType)
     {
-        if (dead)
+        if (dead || !damageable)
             return;
 
         currHealth -= damage;

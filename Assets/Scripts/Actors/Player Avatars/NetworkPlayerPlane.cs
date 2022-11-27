@@ -40,7 +40,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
     public override void OnStartAuthority()
     {
-        GameUI.GInstance?.missileIndicator.SetLinkedPlane(this);
+        GameUI.GInstance?.missileIndicator?.SetLinkedPlane(this);
     }
 
     private void OnEnable()

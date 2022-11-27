@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8656020496028136542}
   - component: {fileID: 835807422865372277}
   m_Layer: 9
-  m_Name: Player Rocket
+  m_Name: Homing Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
   targetTag: 1
   targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
   damage: 10
   hitEffect: {fileID: 394842632943706986, guid: 4651d0f482ed3484da0c41321b34d049, type: 3}
   speed: 120

@@ -10,9 +10,9 @@ public class MapController : MonoBehaviour
 
     public GameController gameControllerPrefab;
 
-    [SerializeField] private Transform[] spawnPositions;
-    [SerializeField] private Transform[] powerupPositions;
-    [SerializeField] private PowerupSource[] availablePowerups;
+    [SerializeField] private Transform[] spawnPositions = new Transform[0];
+    [SerializeField] private Transform[] powerupPositions = new Transform[0];
+    [SerializeField] private PowerupSource[] availablePowerups = new PowerupSource[0];
     public int TotalPowerupSpawns { get {
             if (powerupPositions == null)
                 return 0;
@@ -144,6 +144,11 @@ public class MapController : MonoBehaviour
         return spawnPositions[player];
     }
 
+
+    public NetworkEnemySpawnPos[] GetMapEnemies()
+    {
+        return GetComponentsInChildren<NetworkEnemySpawnPos>();
+    }
 
     public Transform GetPowerupPos(int powerup)
     {

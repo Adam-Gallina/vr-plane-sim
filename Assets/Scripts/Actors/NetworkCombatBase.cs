@@ -9,35 +9,53 @@ public class NetworkCombatBase : AvatarBase
     [SerializeField] private Transform[] bulletSource;
     private int nextSource;
     [SerializeField] private NetworkBullet bulletPrefab;
+    //[SerializeField] private float maxBulletAngle;
     [SerializeField] private Transform specialSource;
     [SyncVar]
     [SerializeField] protected PowerupBase currSpecial;
     [SerializeField] private DamageSource damageType = DamageSource.AI;
     public float maxMissileDetectionRange = 20;
+    [SerializeField] protected Constants.Tag targetTag;
+    [SerializeField] protected LayerMask targetLayer;
 
-    protected void Fire()
+    [Server]
+    protected void ServerFire()
     {
-        if (!hasAuthority) return;
-
-        CmdSpawnBullet(nextSource);
+        SpawnBullet(nextSource);
 
         if (++nextSource >= bulletSource.Length)
             nextSource = 0;
     }
 
-    protected void FireSpecial()
+    protected void Fire()
     {
         if (!hasAuthority) return;
 
-        CmdSpawnSpecial();
+        CmdFire(nextSource);
+
+        if (++nextSource >= bulletSource.Length)
+            nextSource = 0;
+    }
+
+    protected void FireSpecial(bool removeSpecial = true)
+    {
+        if (!hasAuthority) return;
+
+        CmdSpawnSpecial(removeSpecial);
     }
 
     [Command]
-    private void CmdSpawnBullet(int source)
+    private void CmdFire(int source)
+    {
+        SpawnBullet(source);
+    }
+
+    [Server]
+    private void SpawnBullet(int source)
     {
         NetworkBullet b = Instantiate(bulletPrefab, bulletSource[source].position, bulletSource[source].rotation);
         NetworkServer.Spawn(b.gameObject);
-        b.SetSource(this, damageType);
+        b.SetSource(this, damageType, targetTag, targetLayer);
 
         RpcOnSpawnBullet(source);
     }
@@ -45,7 +63,8 @@ public class NetworkCombatBase : AvatarBase
     [ClientRpc]
     private void RpcOnSpawnBullet(int source)
     {
-        bulletSource[source].GetComponent<AudioSource>()?.Play();
+        if (bulletSource[source].GetComponent<AudioSource>())
+            bulletSource[source].GetComponent<AudioSource>()?.Play();
     }
 
     [Server]
@@ -54,10 +73,18 @@ public class NetworkCombatBase : AvatarBase
         currSpecial = powerup;
     }
 
+
     [Command]
-    private void CmdSpawnSpecial()
+    private void CmdSpawnSpecial(bool removeSpecial)
     {
-        if (currSpecial.UsePowerup(this, specialSource, damageType))
+        SpawnSpecial(removeSpecial);
+    }
+
+
+    [Server]
+    protected void SpawnSpecial(bool removeSpecial = true)
+    {
+        if (currSpecial.UsePowerup(this, specialSource, damageType, targetTag, targetLayer, removeSpecial) && removeSpecial)
             currSpecial = null;
     }
 }

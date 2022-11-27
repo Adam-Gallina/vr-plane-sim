@@ -29,7 +29,7 @@ public class NetworkBasicEnemy : NetworkPlaneController
     }
 
     [ServerCallback]
-    private void Update()
+    protected virtual void Update()
     {
         if (Time.time > nextDirChange)
         {

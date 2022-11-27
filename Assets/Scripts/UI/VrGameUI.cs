@@ -6,6 +6,7 @@ using UnityEngine;
 public class VrGameUI : GameUI
 {
     [Header("VR UI")]
+    [SerializeField] private Transform healthMeterBkgd;
     [SerializeField] private Transform boostMeterBkgd;
     [SerializeField] private Vector3 boostMeterOffset;
     [SerializeField] private float boostMeterRotation;
@@ -27,6 +28,7 @@ public class VrGameUI : GameUI
         NetworkPlaneController p = Camera.main?.GetComponentInParent<NetworkPlaneController>();
 
         deathMessageParent.gameObject.SetActive(p);
+        healthMeterBkgd.gameObject.SetActive(p);
         boostMeterBkgd.gameObject.SetActive(p);
 
         if (p)
@@ -36,6 +38,9 @@ public class VrGameUI : GameUI
 
             banner.transform.position = p.bannerPos.position;
             banner.transform.LookAt(Camera.main.transform.position);
+
+            healthMeterBkgd.position = p.healthMeterPos.position;
+            healthMeterBkgd.rotation = p.healthMeterPos.rotation;
 
             boostMeterBkgd.position = p.boostMeterPos.position;
             boostMeterBkgd.rotation = p.boostMeterPos.rotation;

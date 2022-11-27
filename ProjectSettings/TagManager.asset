@@ -13,11 +13,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Damageable
+  - Damageable (Enemy)
   - Environment
   - Bullet
   - Projectile
-  - 
+  - Damageable (Player)
   - 
   - 
   - 

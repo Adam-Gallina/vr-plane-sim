@@ -83,17 +83,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  playerName: 
   bulletSource: []
   bulletPrefab: {fileID: 0}
   specialSource: {fileID: 0}
   currSpecial: {fileID: 0}
-  combatName: 
   damageType: 2
-  player: {fileID: 0}
+  maxMissileDetectionRange: 20
+  targetTag: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  damageable: 1
   maxHealth: 10
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60
+  maxBoost: 0
+  boostSpeed: 0
+  boostRegenSpeed: 0
+  boostMinToUse: 0
   body: {fileID: 5816373366970856577}
   model: {fileID: 8294273330429824627}
   modelRotMod: 25
@@ -101,6 +110,9 @@ MonoBehaviour:
   propellerSpeed: 1000
   joystick: {fileID: 0}
   joystickMod: 0
+  deathMessagePos: {fileID: 0}
+  bannerPos: {fileID: 0}
+  boostMeterPos: {fileID: 0}
   deathPrefab: {fileID: 7533953259834077275, guid: 1ce014fb91563284dbb1132fea9701e3, type: 3}
   turnSteerMod: 10
   altSteerMod: 10

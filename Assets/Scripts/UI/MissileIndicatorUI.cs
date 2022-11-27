@@ -55,7 +55,9 @@ public class MissileIndicatorUI : MonoBehaviour
         }
 
         Vector3 toTarget = (target.position - linkedPlane.transform.position);
-        SetIndicator(new Vector2(toTarget.x, toTarget.z).normalized);
+        //SetIndicator(new Vector2(toTarget.x, toTarget.z).normalized);
+        SetIndicator(Vector2.SignedAngle(new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z),
+                                         new Vector2(toTarget.x, toTarget.z)));
 
         DistanceCutoff d = CalcCutoff(Vector3.Distance(target.position, linkedPlane.transform.position));
         UpdateIndicator(d.indicatorText);
@@ -112,8 +114,10 @@ public class MissileIndicatorUI : MonoBehaviour
         return new DistanceCutoff();
     }
 
-    protected void SetIndicator(Vector2 dir)
+    protected void SetIndicator(float ang)
     {
+        Vector2 dir = Quaternion.AngleAxis(ang, Vector3.forward) * new Vector3(0, 1, 0);
+
         Vector2 pos = new Vector2(Screen.width, Screen.height) / 2;
 
         pos += new Vector2(dir.x * Screen.width / 2, dir.y * Screen.height / 2);

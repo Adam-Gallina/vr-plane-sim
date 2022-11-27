@@ -7,9 +7,9 @@ public class NetworkBullet : NetworkBehaviour
 {
     protected NetworkCombatBase spawner;
     protected DamageSource source;
+    protected Constants.Tag targetTag;
+     protected LayerMask targetLayer;
 
-    [SerializeField] protected Constants.Tag targetTag;
-    [SerializeField] protected LayerMask targetLayer;
     [SerializeField] protected float damage = 1;
     [SerializeField] protected GameObject hitEffect;
     private bool canDamage = true;
@@ -43,7 +43,7 @@ public class NetworkBullet : NetworkBehaviour
 
         if (((1 << other.gameObject.layer) & targetLayer.value) > 0)
         {
-            if (!other.CompareTag(Constants.TagString(targetTag)))
+            if (targetTag != Constants.Tag.Any && !other.CompareTag(Constants.TagString(targetTag)))
                 return;
 
             NetworkHealthBase target = other.gameObject.GetComponentInParent<NetworkHealthBase>();
@@ -62,9 +62,11 @@ public class NetworkBullet : NetworkBehaviour
     }
 
     [Server]
-    public void SetSource(NetworkCombatBase spawner, DamageSource sourceType) 
+    public void SetSource(NetworkCombatBase spawner, DamageSource sourceType, Constants.Tag targetTag, LayerMask targetLayer) 
     { 
         this.spawner = spawner;
         source = sourceType;
+        this.targetTag = targetTag;
+        this.targetLayer = targetLayer;
     } 
 }

@@ -5,13 +5,16 @@ public class Constants
     public const string PlayerNamePref = "PlayerName";
     public const string LastIpPref = "LastIP";
 
-    public enum Tag { Ally, Enemy }
+    public enum Tag { Any, Ally, Enemy }
     public const string AllyTag = "Ally";
     public const string EnemyTag = "Enemy";
     public static string TagString(Tag tag)
     {
         switch (tag)
         {
+            case Tag.Any:
+                Debug.LogWarning("Should not be calling TagString with Any tag");
+                return "Any";
             case Tag.Ally:
                 return AllyTag;
             case Tag.Enemy:
@@ -22,10 +25,11 @@ public class Constants
         return "Error";
     }
 
-    public const int DamageableLayer = 6;
+    public const int DamageableEnemyLayer = 6;
     public const int EnvironmentLayer = 7;
     public const int BulletLayer = 8;
     public const int ProjectileLayer = 9;
+    public const int DamageablePlayerLayer = 10;
 
     public enum CamType { Desktop, VR, Unknown }
 

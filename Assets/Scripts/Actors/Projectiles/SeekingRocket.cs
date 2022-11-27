@@ -58,7 +58,7 @@ public class SeekingRocket : NetworkBullet
             if (!plane || plane == spawner)
                 continue;
 
-            if (!c.CompareTag(Constants.TagString(targetTag)))
+            if (targetTag != Constants.Tag.Any && !c.CompareTag(Constants.TagString(targetTag)))
                 continue;
 
             if (Vector3.Angle(transform.forward, c.ClosestPoint(transform.position) - transform.position) > angle)

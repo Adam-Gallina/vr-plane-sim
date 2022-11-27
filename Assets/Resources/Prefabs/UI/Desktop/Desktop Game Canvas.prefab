@@ -1265,15 +1265,16 @@ MonoBehaviour:
   indicatorBackground: {fileID: 8448630640236095163}
   indicatorText: {fileID: 3416319373867391175}
   warningCutoffs:
-  - percentDist: 0.25
+  - percentDist: 0.475
     indicatorText: '!!!'
-    flashSpeed: 0.1
-  - percentDist: 0.5
+    flashSpeed: 0.15
+  - percentDist: 0.75
     indicatorText: '!!'
     flashSpeed: 0.3
   - percentDist: 1
     indicatorText: '!'
     flashSpeed: 0
+  edgeMargin: 10
   colors:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
