@@ -8,10 +8,17 @@ public class NetworkCombatUpdates : NetworkBehaviour
     [SyncVar(hook = nameof(OnDisplayNameChanged))]
     public string displayName = "Unnamed CombatUpdates";
 
+    [SyncVar]
+    public int enemyKills = 0;
+    [SyncVar]
+    public int avatarDeaths = 0;
+
     [Server]
     public void OnEnemyKilled(NetworkCombatBase target, DamageSource damageType)
     {
         RpcEnemyKilled(target, damageType);
+
+        enemyKills++;
     }
 
     [ClientRpc]
@@ -28,6 +35,8 @@ public class NetworkCombatUpdates : NetworkBehaviour
     public void OnAvatarKilled(NetworkCombatBase source, DamageSource damageType)
     {
         RpcAvatarKilled(source, damageType);
+
+        avatarDeaths++;
     }
 
     [ClientRpc]

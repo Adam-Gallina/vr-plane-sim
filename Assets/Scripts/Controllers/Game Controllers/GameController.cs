@@ -37,6 +37,18 @@ public abstract class GameController : NetworkBehaviour
     }
 
     [Server]
+    protected virtual void CheckRoundEnd()
+    {
+
+    }
+
+    [Server]
+    protected virtual void HandlePlayerWin(NetworkGamePlayer p)
+    {
+        Debug.LogWarning("HandlePlayerWin not implemented ('" + p.displayName + "' won)");
+    }
+
+    [Server]
     public void SpawnPlayer(NetworkConnection conn, int player)
     {
         Transform t = MapController.Instance.GetSpawnPos(player);

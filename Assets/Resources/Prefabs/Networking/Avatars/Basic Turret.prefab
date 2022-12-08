@@ -596,6 +596,8 @@ MonoBehaviour:
   minAimAssistRange: 10
   maxAimAssistOffset: 25
   minAimAssistOffset: 1
+  minAimAngle: 0
+  maxAimAngle: 60
   turretModel: {fileID: 5764069253423718344}
   firePointParent: {fileID: 3267363759394947458}
 --- !u!114 &241589959651815114

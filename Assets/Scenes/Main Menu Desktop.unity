@@ -298,6 +298,7 @@ MonoBehaviour:
   - {fileID: 9098312945684389500, guid: 1a4fb289828d7bd48ba0228e343b8c7b, type: 3}
   - {fileID: 8697615680638678841, guid: 1809240a6834ff7408a28e22f25dfe05, type: 3}
   - {fileID: 107181813201959552, guid: 68c71de7ff5821445868d804e6e20393, type: 3}
+  - {fileID: 6480191025984147356, guid: e2d3fe67f35baaf4489eb1bcbc3de5b5, type: 3}
   minPlayers: 1
 --- !u!4 &602145021
 Transform:

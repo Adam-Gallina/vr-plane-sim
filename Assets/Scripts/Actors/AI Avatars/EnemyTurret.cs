@@ -16,6 +16,8 @@ public class EnemyTurret : NetworkCombatBase
     [SerializeField] protected float maxAimAssistOffset;
     [SerializeField] protected float minAimAssistOffset;
     protected Transform currTarget;
+    [SerializeField] protected float minAimAngle;
+    [SerializeField] protected float maxAimAngle;
 
     [Header("Effects")]
     [SerializeField] protected Transform turretModel;
@@ -44,27 +46,45 @@ public class EnemyTurret : NetworkCombatBase
         }
     }
 
+    private float CalcAngle(Transform target) 
+    {
+        Vector3 dir = target.position - firePointParent.position;
+        float ang = Vector3.Angle(dir, new Vector3(dir.x, 0, dir.z));
+        if (dir.y < 0)
+            ang *= -1;
+
+        return ang;
+    }
+
     protected Transform GetTarget()
     {
         if (currTarget)
         {
             if (Vector3.Distance(transform.position, currTarget.position) < maxRange)
-                return currTarget;
+            {
+                float ang = CalcAngle(currTarget);
+                if (ang >= minAimAngle && ang <= maxAimAngle)
+                    return currTarget;
+            }
         }
 
         Collider[] colls = Physics.OverlapSphere(firePointParent.position, maxRange, targetLayer.value);
         if (colls.Length == 0)
             return null;
-        Transform closest = colls[0].transform;
+        Transform closest = null;
         float closestDist = float.MaxValue;
         foreach (Collider c in colls)
         {
             float dist = Vector3.Distance(c.transform.position, firePointParent.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                closest = c.transform;
-            }
+            if (dist >= closestDist)
+                continue;
+
+            float ang = CalcAngle(c.transform);
+            if (ang < minAimAngle || ang > maxAimAngle)
+                continue;
+
+            closestDist = dist;
+            closest = c.transform;
         }
 
         return closest;

@@ -76,9 +76,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &159225832
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,9 +157,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &382291363
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,9 +238,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &416543793
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,9 +319,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &1180756831
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,9 +400,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &1189142269
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,9 +481,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &1561752147
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,9 +562,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &1639134702
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1639134703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -673,9 +687,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &1768973035
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,9 +768,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Wow! You're so cool!
+  m_Text: 'Wow! You''re so cool!
+
+    Line 2'
 --- !u!1 &92967091238976253
 GameObject:
   m_ObjectHideFlags: 0

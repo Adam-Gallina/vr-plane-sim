@@ -915,7 +915,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1088
   damageable: 1
-  maxHealth: 120
+  maxHealth: 12
   thrustSpeed: 30
   turnSpeed: 60
   altSpeed: 60

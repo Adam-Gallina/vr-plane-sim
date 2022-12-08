@@ -5,10 +5,12 @@ using Mirror;
 
 public class BasicGameController : GameController
 {
-    [SerializeField] protected string[] bannerMessages = new string[] { "READY?", "3", "2", "1", "GO!" };
+    [SerializeField] protected string[] startBannerMessages = new string[] { "READY?", "3", "2", "1", "GO!" };
+    [SerializeField] protected string[] endBannerMessages = new string[] { "Returning to lobby..." };
     [SerializeField] protected float messageTime = 1;
 
     private bool started = false;
+    private bool ended = false;
 
     public override void OnStartClient()
     {
@@ -43,12 +45,13 @@ public class BasicGameController : GameController
         }
     }
 
+    [Server]
     private IEnumerator StartSequence()
     {
         SpawnAllPowerups();
         SpawnAllMapEnemies();
 
-        foreach (string m in bannerMessages)
+        foreach (string m in startBannerMessages)
         {
             RpcSendServerBannerMessage(m, -1);
             yield return new WaitForSeconds(messageTime);
@@ -57,6 +60,31 @@ public class BasicGameController : GameController
         RpcSendServerBannerMessage(string.Empty, 0);
 
         RpcHandleReadyToStart(true);
+    }
+
+    [Server]
+    protected override void HandlePlayerWin(NetworkGamePlayer p)
+    {
+        if (!ended)
+        {
+            ended = true;
+            StartCoroutine(OnPlayerWin(p));
+            Debug.Log(p.displayName + " won!");
+        }
+    }
+
+    [Server]
+    protected IEnumerator OnPlayerWin(NetworkGamePlayer p)
+    {
+        foreach (string m in endBannerMessages)
+        {
+            RpcSendServerBannerMessage(p.displayName + " won!\n" + m, -1);
+            yield return new WaitForSeconds(messageTime);
+        }
+
+        RpcSendServerBannerMessage(string.Empty, 0);
+
+        PlaneSimNetworkManager.Instance.ReturnToLobby();
     }
 
     [ClientRpc]

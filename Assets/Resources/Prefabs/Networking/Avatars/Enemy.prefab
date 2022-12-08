@@ -112,6 +112,7 @@ MonoBehaviour:
   joystickMod: 0
   deathMessagePos: {fileID: 0}
   bannerPos: {fileID: 0}
+  healthMeterPos: {fileID: 0}
   boostMeterPos: {fileID: 0}
   deathPrefab: {fileID: 7533953259834077275, guid: 1ce014fb91563284dbb1132fea9701e3, type: 3}
   turnSteerMod: 10
