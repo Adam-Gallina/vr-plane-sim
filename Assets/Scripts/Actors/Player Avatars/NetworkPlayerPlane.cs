@@ -200,7 +200,7 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
 class FixInput
 {
-    private float threshold = 0.5f;
+    private float threshold = 0.25f;
     private Vector2 lastDir = new Vector2();
 
     private float VerifyInput(float value, float lastVal)

@@ -166,6 +166,9 @@ public class PlaneSimNetworkManager : NetworkManager
                 case 1:
                     ServerChangeScene(Constants.DogfightTest.name);
                     break;
+                case 2:
+                    ServerChangeScene(Constants.RaceTest.name);
+                    break;
                 default:
                     Debug.LogWarning("Not sure how to open map " + map + ", switching to FFA Test");
                     StartGame(0);

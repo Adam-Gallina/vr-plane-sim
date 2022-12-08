@@ -37,6 +37,7 @@ public class Constants
     public static GameScene MainMenu = new GameScene(0, "Main Menu Desktop", SceneType.MainMenu);
     public static GameScene FfaTest = new GameScene(1, "FFA", SceneType.FFA);
     public static GameScene DogfightTest = new GameScene(2, "Dogfight", SceneType.Dogfight);
+    public static GameScene RaceTest = new GameScene(3, "Test Race", SceneType.Race);
 
     public struct GameScene
     {

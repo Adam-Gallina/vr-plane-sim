@@ -916,11 +916,11 @@ MonoBehaviour:
     m_Bits: 1088
   damageable: 1
   maxHealth: 12
-  thrustSpeed: 30
-  turnSpeed: 60
-  altSpeed: 60
+  thrustSpeed: 75
+  turnSpeed: 150
+  altSpeed: 150
   maxBoost: 4
-  boostSpeed: 90
+  boostSpeed: 150
   boostRegenSpeed: 0.5
   boostMinToUse: 0.25
   body: {fileID: 9187135911283660822}
