@@ -85,6 +85,7 @@ public class MainMenu : MonoBehaviour
 
         startPagePanel.SetActive(false);
         lobbyPanel.SetActive(true);
+        //LobbyUI.LInstance.gameObject.SetActive(true);
 
         PlayerPrefs.SetString(Constants.LastIpPref, ipAddressField.text);
         PlayerPrefs.SetString(Constants.PlayerNamePref, DisplayName);
@@ -98,6 +99,7 @@ public class MainMenu : MonoBehaviour
 
         startPagePanel.SetActive(true);
         lobbyPanel.SetActive(false);
+        //LobbyUI.LInstance.gameObject.SetActive(false);
 
         LobbyUI.LInstance.ClearPlayers();
     }

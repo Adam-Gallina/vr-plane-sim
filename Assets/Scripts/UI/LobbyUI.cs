@@ -23,6 +23,8 @@ public class LobbyUI : MultiCamUI
     {
         base.Awake();
 
+        Debug.Log(Instance);
+
         LInstance = this;
 
         startGameButton.gameObject.SetActive(false);

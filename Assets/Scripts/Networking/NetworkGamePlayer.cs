@@ -52,10 +52,24 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     }
     private void SpawnGameUI()
     {
+        StartCoroutine(WaitForMapController());
+    }
+
+    private IEnumerator WaitForMapController()
+    {
+        if (!MapController.Instance)
+            yield return new WaitUntil(() => MapController.Instance);
+
         MapController.Instance.SpawnUI();
-        
+
+        if (!MultiCamUI.Instance)
+            yield return new WaitUntil(() => MultiCamUI.Instance);
+
         if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
+        {
+            Debug.Log("Spawn nametag " + MultiCamUI.Instance);
             MultiCamUI.Instance?.SpawnNametag().SetLinkedPlayer(this);
+        }
     }
 
     #region Getters/Setters
@@ -138,7 +152,8 @@ public class NetworkGamePlayer : NetworkCombatUpdates
     [Command]
     private void RespawnAvatar()
     {
-        GameController.Instance.RespawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
+        if (GameController.Instance.playing)
+            GameController.Instance.RespawnPlayer(connectionToClient, PlaneSimNetworkManager.Instance.Players.IndexOf(this));
     }
     #endregion
 }
