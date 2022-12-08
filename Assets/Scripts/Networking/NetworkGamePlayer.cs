@@ -66,10 +66,7 @@ public class NetworkGamePlayer : NetworkCombatUpdates
             yield return new WaitUntil(() => MultiCamUI.Instance);
 
         if (!isLocalPlayer || SceneManager.GetActiveScene().buildIndex == Constants.MainMenu.buildIndex)
-        {
-            Debug.Log("Spawn nametag " + MultiCamUI.Instance);
             MultiCamUI.Instance?.SpawnNametag().SetLinkedPlayer(this);
-        }
     }
 
     #region Getters/Setters

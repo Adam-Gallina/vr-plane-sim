@@ -66,8 +66,6 @@ public class MapController : MonoBehaviour
             SceneManager.LoadScene(Constants.MainMenu.buildIndex);
 
         Instance = this;
-
-        Debug.Log(Instance);
     }
 
     private void OnDestroy()
