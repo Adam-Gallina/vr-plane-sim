@@ -7,9 +7,6 @@ public class VrGameUI : GameUI
 {
     [Header("VR UI")]
     [SerializeField] private Transform healthMeterBkgd;
-    [SerializeField] private Transform boostMeterBkgd;
-    [SerializeField] private Vector3 boostMeterOffset;
-    [SerializeField] private float boostMeterRotation;
 
     private void OnValidate()
     {
@@ -29,7 +26,6 @@ public class VrGameUI : GameUI
 
         deathMessageParent.gameObject.SetActive(p);
         healthMeterBkgd.gameObject.SetActive(p);
-        boostMeterBkgd.gameObject.SetActive(p);
 
         if (p)
         {
@@ -41,9 +37,6 @@ public class VrGameUI : GameUI
 
             healthMeterBkgd.position = p.healthMeterPos.position;
             healthMeterBkgd.rotation = p.healthMeterPos.rotation;
-
-            boostMeterBkgd.position = p.boostMeterPos.position;
-            boostMeterBkgd.rotation = p.boostMeterPos.rotation;
         }
     }
 
