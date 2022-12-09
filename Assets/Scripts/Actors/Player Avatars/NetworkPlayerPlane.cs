@@ -9,7 +9,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
 {
     [SerializeField] private Transform camTarget;
 
-    private bool boostPressed = false;
+    //private bool boostPressed = false;
+    private bool driftPressed = false;
 
     [Header("Combat")]
     [SerializeField] private float fireSpeed;
@@ -76,17 +77,19 @@ public class NetworkPlayerPlane : NetworkPlaneController
 
         if (!canControl)
         {
-            SetDirection(Vector2.zero, false, 0);
+            Steer(Vector2.zero, 0);
             return;
         }
 
-        if (MapController.Instance.boostRegen && !(boostPressed && CanBoost()))
-            RegenBoost();
-
         HandleInput();
 
-        SetDirection(HandleMovement(), boostPressed && CanBoost(), CalcSpeed());
+        Vector2 dir = HandleMovement();
+        if (driftPressed)
+            Drift(dir);
+        else
+            Steer(dir, thrustSpeed * CalcBoostMod());
 
+        UpdateJoystick(dir);
         UpdateModel();
     }
 
@@ -113,14 +116,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
         return dir;
     }
 
-    private float CalcSpeed()
-    {
-        if (boostPressed && CanBoost())
-            return boostSpeed;
-
-        return thrustSpeed;
-    }
-
     private void HandleInput()
     {
         if (GameUI.GInstance && GameUI.GInstance.pauseOpen)
@@ -131,8 +126,8 @@ public class NetworkPlayerPlane : NetworkPlaneController
             nextShot = Time.time + fireSpeed;
             Fire();
         }
-
-        boostPressed = inp.Player.Speed.ReadValue<float>() > 0;
+        
+        driftPressed = inp.Player.Speed.ReadValue<float>() > 0;
     }
 
     private void UpdateUI()
@@ -144,7 +139,6 @@ public class NetworkPlayerPlane : NetworkPlaneController
         }
 
         GameUI.GInstance.SetHealthLevel(currHealth / maxHealth);
-        GameUI.GInstance.SetBoostLevel(currBoost / maxBoost);
     }
 
     #region Input Callbacks

@@ -10,14 +10,16 @@ public class NetworkPlaneController : NetworkHealthBase
     [SerializeField] private float turnSpeed;
     [SerializeField] private float altSpeed;
 
+    [Header("Drift")]
+    [SerializeField] protected float driftTurnSpeed;
+    [SerializeField] protected float driftAltSpeed;
+    [SerializeField] protected float driftGravity;
+    private float driftStart;
+
     [Header("Boost")]
-    [Tooltip("Duration of boost (sec)")]
-    [SerializeField] protected float maxBoost;
-    protected float currBoost;
-    [SerializeField] protected float boostSpeed;
-    [SerializeField] protected float boostRegenSpeed;
-    [SerializeField] protected float boostMinToUse;
-    protected bool boostRecharging = false;
+    [SerializeField] protected BoostChargeLevel[] boostChargeLevels;
+    private float boostSpeedMod;
+    private float boostDuration;
 
     [Header("Animations")]
     [SerializeField] protected Renderer body;
@@ -39,14 +41,22 @@ public class NetworkPlaneController : NetworkHealthBase
 
     protected Rigidbody rb;
 
+    private void OnValidate()
+    {
+        for (int i = 1; i < boostChargeLevels.Length; i++)
+        {
+            if (boostChargeLevels[i].chargeLevel > boostChargeLevels[i - 1].chargeLevel)
+            {
+                Debug.LogError("Warning: Charge levels must be listed in descending order", gameObject);
+            }
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
 
         rb = GetComponent<Rigidbody>();
-
-        if (MapController.Instance.startMaxBoost)
-            currBoost = maxBoost;
     }
 
     [ServerCallback]
@@ -59,22 +69,6 @@ public class NetworkPlaneController : NetworkHealthBase
     }
 
     #region Movement
-    protected void SetDirection(Vector2 dir, bool useBoost = false, float speed = -1)
-    {
-        if (!hasAuthority)
-            return;
-
-        if (speed == -1)
-            speed = useBoost && CanBoost() ? boostSpeed : thrustSpeed;
-
-        if (useBoost && CanBoost())
-            UseBoost();
-
-        Steer(dir, speed);
-        UpdateJoystick(dir);
-        UpdateModel();
-    }
-
     protected void Steer(Vector2 dir, float speed, bool ignoreAuthority=false)
     {
         if (!hasAuthority && !ignoreAuthority)
@@ -87,43 +81,55 @@ public class NetworkPlaneController : NetworkHealthBase
         ang.z = 0;
         transform.localEulerAngles = ang;
 
+        if (driftStart != 0)
+        {
+            driftStart = 0;
+            CalcBoostCharge();
+        }
+    }
+
+    protected void Drift(Vector2 dir, bool ignoreAuthority=false)
+    {
+        if (!hasAuthority && !ignoreAuthority)
+            return;
+
+        rb.AddForce(Vector3.down * driftGravity);
+
+        rb.AddTorque((transform.up * dir.x * driftTurnSpeed + transform.right * dir.y * driftAltSpeed) * Time.deltaTime);
+        Vector3 ang = transform.localEulerAngles;
+        ang.z = 0;
+        transform.localEulerAngles = ang;
+
+        if (driftStart == 0)
+            driftStart = Time.time;
     }
     #endregion
 
     #region Boost
-    protected bool CanBoost()
+    protected float CalcBoostMod()
     {
-        return currBoost > 0 && !boostRecharging;
+        if (boostDuration <= 0)
+            return 1;
+
+        boostDuration -= Time.deltaTime;
+
+        return boostSpeedMod;
     }
 
-    protected bool UseBoost(bool ignoreAuthority = false)
+    private void CalcBoostCharge()
     {
-        if (!hasAuthority && !ignoreAuthority)
-            return false;
-
-        if (!CanBoost())
-            return false;
-
-        currBoost -= Time.deltaTime;
-
-        if (currBoost <= 0)
+        foreach (BoostChargeLevel l in boostChargeLevels)
         {
-            boostRecharging = true;
-            currBoost = 0;
-            return false;
+            if (Time.time - driftStart >= l.chargeLevel)
+            {
+                boostSpeedMod = l.boostSpeedMod;
+                boostDuration = l.boostDuration;
+                return;
+            }
         }
 
-        return true;
-    }
-
-    protected void RegenBoost()
-    {
-        currBoost += Time.deltaTime * boostRegenSpeed;
-        if (currBoost > maxBoost)
-            currBoost = maxBoost;
-
-        if (boostRecharging)
-            boostRecharging = currBoost < (boostMinToUse * maxBoost);
+        boostSpeedMod = 1;
+        boostDuration = 0;
     }
     #endregion
 
@@ -169,5 +175,13 @@ public class NetworkPlaneController : NetworkHealthBase
         erb.angularVelocity = rb.angularVelocity * 10 + transform.right * 5;
 
         base.RpcOnDeath(source, sourceType);
+    }
+
+    [System.Serializable]
+    protected struct BoostChargeLevel
+    {
+        public float chargeLevel;
+        public float boostSpeedMod;
+        public float boostDuration;
     }
 }

@@ -249,7 +249,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""f1fd22d8-98af-46c6-9f46-ad4d3b3bf40b"",
                     ""path"": ""<HID::Thrustmaster, Inc. USB Game Controllers>/z"",
                     ""interactions"": """",
-                    ""processors"": ""Invert,Clamp(max=1)"",
+                    ""processors"": ""Clamp(max=1)"",
                     ""groups"": """",
                     ""action"": ""Speed"",
                     ""isComposite"": false,

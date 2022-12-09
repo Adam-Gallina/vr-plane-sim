@@ -880,7 +880,7 @@ Rigidbody:
   m_GameObject: {fileID: 2318525437501457625}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.25
   m_AngularDrag: 1
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -916,13 +916,22 @@ MonoBehaviour:
     m_Bits: 1088
   damageable: 1
   maxHealth: 12
-  thrustSpeed: 75
+  thrustSpeed: 100
   turnSpeed: 150
   altSpeed: 150
-  maxBoost: 4
-  boostSpeed: 150
-  boostRegenSpeed: 0.5
-  boostMinToUse: 0.25
+  driftTurnSpeed: 250
+  driftAltSpeed: 250
+  driftGravity: 1.75
+  boostChargeLevels:
+  - chargeLevel: 3
+    boostSpeedMod: 3
+    boostDuration: 1
+  - chargeLevel: 2
+    boostSpeedMod: 2
+    boostDuration: 1
+  - chargeLevel: 1
+    boostSpeedMod: 1.5
+    boostDuration: 0.75
   body: {fileID: 9187135911283660822}
   model: {fileID: 2318525436569042146}
   modelRotMod: 25
